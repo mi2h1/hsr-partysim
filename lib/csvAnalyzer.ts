@@ -46,7 +46,7 @@ export class CSVAnalyzer {
       name: '',
       element: '',
       path: '',
-      version: '1.0', // デフォルトバージョン
+      version: null, // デフォルトはnull
       skills: []
     };
 

@@ -33,7 +33,7 @@ export async function POST(request: NextRequest) {
         ON CONFLICT (name) DO UPDATE SET
           element = EXCLUDED.element,
           path = EXCLUDED.path,
-          version = EXCLUDED.version
+          version = COALESCE(EXCLUDED.version, characters.version)
         RETURNING id
       `, [characterData.name, characterData.element, characterData.path, characterData.version]);
       
