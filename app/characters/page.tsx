@@ -131,13 +131,9 @@ export default function CharactersListPage() {
                     />
                   </div>
                   
-                  <div className="card-body text-center py-3">
-                    <h6 className="card-title mb-2 text-dark fw-bold">
-                      {character.name}
-                    </h6>
-                    
-                    {/* 属性・運命アイコンを名前の下に配置 */}
-                    <div className="d-flex justify-content-center gap-2">
+                  <div className="card-body py-3">
+                    {/* 属性・運命アイコンを名前の上に配置 */}
+                    <div className="d-flex gap-2 mb-2">
                       <img 
                         src={`/imgs/i_${character.element}.webp`}
                         alt={character.element}
@@ -167,6 +163,10 @@ export default function CharactersListPage() {
                         }}
                       />
                     </div>
+                    
+                    <h6 className="card-title mb-0 text-dark fw-bold text-start">
+                      {character.name}
+                    </h6>
                   </div>
                 </div>
               </Link>
