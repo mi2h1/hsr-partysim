@@ -187,8 +187,8 @@ export default function CharacterDetailPage() {
       {/* キャラクター情報ヘッダー */}
       <div className="card shadow-sm mb-4">
         <div className="row g-0" style={{ minHeight: '200px' }}>
-          <div className="col-4">
-            <div style={{ height: '200px', overflow: 'hidden' }}>
+          <div className="col-4" style={{ width: '20%' }}>
+            <div style={{ height: '200px', width: '250px', overflow: 'hidden' }}>
               <img 
                 src={`/imgs/${characterData.character.id}.webp`}
                 alt={characterData.character.name}
