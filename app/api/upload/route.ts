@@ -18,8 +18,9 @@ export async function POST(request: NextRequest) {
     const csvContent = await file.text();
     const analyzer = new CSVAnalyzer();
     
-    // CSV解析
-    const characterData = analyzer.parseCSV(csvContent);
+    // CSV解析（新フォーマット対応）
+    const parsedData = analyzer.parseCSV(csvContent);
+    const { buffsDebuffs, eidolonEnhancements, ...characterData } = parsedData;
     
     // トランザクション開始
     await query('BEGIN');
@@ -41,6 +42,8 @@ export async function POST(request: NextRequest) {
       await query('DELETE FROM skills WHERE character_id = $1', [characterId]);
       
       // スキル情報を保存
+      const skillIdMap = new Map<string, number>();
+      
       for (const skill of characterData.skills) {
         const skillResult = await query(`
           INSERT INTO skills (character_id, skill_type, skill_name, description)
@@ -49,36 +52,54 @@ export async function POST(request: NextRequest) {
         `, [characterId, skill.type, skill.name, skill.description]);
         
         const skillId = skillResult.rows[0].id;
+        skillIdMap.set(skill.type, skillId);
+      }
+      
+      // 構造化されたバフ・デバフ情報を保存
+      for (const buff of buffsDebuffs) {
+        const skillId = skillIdMap.get(buff.skillType || '');
+        if (!skillId) continue;
         
-        // バフ・デバフ解析と保存
-        const buffsDebuffs = analyzer.analyzeBuffsDebuffs(skill.type, skill.description);
+        const buffResult = await query(`
+          INSERT INTO buffs_debuffs 
+          (skill_id, effect_name, target_type, stat_affected, value_expression, 
+           duration, condition, is_stackable, max_stacks)
+          VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)
+          RETURNING id
+        `, [
+          skillId, buff.effectName, buff.targetType, buff.statAffected,
+          buff.valueExpression, buff.duration, buff.condition,
+          buff.isStackable, buff.maxStacks
+        ]);
+      }
+      
+      // 星魂強化情報を保存
+      for (const enhancement of eidolonEnhancements) {
+        // 対応するバフ・デバフを見つける
+        const matchingBuff = buffsDebuffs.find(buff => 
+          buff.skillType === `星魂${enhancement.eidolonLevel}`
+        );
         
-        for (const buff of buffsDebuffs) {
-          const buffResult = await query(`
-            INSERT INTO buffs_debuffs 
-            (skill_id, effect_name, target_type, stat_affected, value_expression, 
-             duration, condition, is_stackable, max_stacks)
-            VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)
-            RETURNING id
-          `, [
-            skillId, buff.effectName, buff.targetType, buff.statAffected,
-            buff.valueExpression, buff.duration, buff.condition,
-            buff.isStackable, buff.maxStacks
-          ]);
-          
-          // 星魂強化の処理
-          if (skill.type.startsWith('星魂')) {
-            const eidolonLevel = parseInt(skill.type.replace('星魂', ''));
-            if (!isNaN(eidolonLevel)) {
+        if (matchingBuff) {
+          const skillId = skillIdMap.get(matchingBuff.skillType || '');
+          if (skillId) {
+            // バフ・デバフIDを取得
+            const buffResult = await query(`
+              SELECT id FROM buffs_debuffs 
+              WHERE skill_id = $1 AND effect_name = $2
+              LIMIT 1
+            `, [skillId, matchingBuff.effectName]);
+            
+            if (buffResult.rows.length > 0) {
               await query(`
                 INSERT INTO eidolon_enhancements
                 (buff_debuff_id, eidolon_level, enhancement_type, enhanced_value)
                 VALUES ($1, $2, $3, $4)
               `, [
                 buffResult.rows[0].id,
-                eidolonLevel,
-                'new_effect',
-                buff.valueExpression
+                enhancement.eidolonLevel,
+                enhancement.enhancementType,
+                enhancement.enhancedValue
               ]);
             }
           }

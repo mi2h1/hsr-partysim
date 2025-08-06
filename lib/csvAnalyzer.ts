@@ -3,6 +3,7 @@ import Papa from 'papaparse';
 import { CSVCharacterData, BuffDebuff } from '@/types';
 
 interface ParsedBuffDebuff {
+  skillType?: string;
   effectName: string;
   targetType: string;
   statAffected: string;
@@ -11,6 +12,12 @@ interface ParsedBuffDebuff {
   condition?: string;
   isStackable: boolean;
   maxStacks?: number;
+}
+
+interface EidolonEnhancement {
+  eidolonLevel: number;
+  enhancementType: string;
+  enhancedValue: string;
 }
 
 export class CSVAnalyzer {
@@ -27,41 +34,78 @@ export class CSVAnalyzer {
     '防御無視': 'def_ignore'
   };
 
-  parseCSV(csvContent: string): CSVCharacterData {
+  parseCSV(csvContent: string): CSVCharacterData & { 
+    buffsDebuffs: ParsedBuffDebuff[], 
+    eidolonEnhancements: EidolonEnhancement[] 
+  } {
     const lines = csvContent.split('\n').map(line => line.trim()).filter(line => line);
     
     // 基本情報抽出
     const characterData: CSVCharacterData = {
-      name: this.extractValue(lines[0]),
-      element: this.extractValue(lines[1]),
-      path: this.extractValue(lines[2]),
+      name: '',
+      element: '',
+      path: '',
       skills: []
     };
 
-    // スキル情報抽出
-    const skillTypes = [
-      '通常攻撃', '戦闘スキル', '必殺技', '天賦', '秘技',
-      '追加効果1', '追加効果2', '追加効果3'
-    ];
+    const buffsDebuffs: ParsedBuffDebuff[] = [];
+    const eidolonEnhancements: EidolonEnhancement[] = [];
 
-    for (let i = 3; i < lines.length; i++) {
-      const parts = lines[i].split(',');
-      if (parts.length >= 3) {
-        const skillType = parts[0].trim();
-        const skillName = parts[1].trim();
-        const description = parts[2].trim();
+    for (const line of lines) {
+      const parts = line.split(',');
+      if (parts.length < 2) continue;
 
-        if (skillTypes.includes(skillType) || skillType.startsWith('星魂')) {
-          characterData.skills.push({
-            type: skillType,
-            name: skillName,
-            description: description
-          });
-        }
+      const type = parts[0].trim();
+      
+      // 基本情報
+      if (type === 'キャラクター名') {
+        characterData.name = parts[1].trim();
+      } else if (type === '属性') {
+        characterData.element = parts[1].trim();
+      } else if (type === '運命') {
+        characterData.path = parts[1].trim();
+      }
+      // スキル情報  
+      else if (type === 'スキル' && parts.length >= 4) {
+        characterData.skills.push({
+          type: parts[1].trim(),
+          name: parts[2].trim(),
+          description: parts[3].trim()
+        });
+      }
+      // バフ・デバフ情報（構造化済み）
+      else if (type === 'バフ' && parts.length >= 10) {
+        buffsDebuffs.push({
+          skillType: parts[1].trim(),
+          effectName: parts[2].trim(),
+          targetType: parts[3].trim(),
+          statAffected: parts[4].trim(),
+          valueExpression: parts[5].trim(),
+          duration: parts[6].trim(),
+          condition: parts[7].trim(),
+          isStackable: parts[8].trim() === 'true',
+          maxStacks: parts[9].trim() ? parseInt(parts[9].trim()) : undefined
+        });
+      }
+      // 星魂情報
+      else if (type === '星魂' && parts.length >= 4) {
+        characterData.skills.push({
+          type: `星魂${parts[1].trim()}`,
+          name: parts[2].trim(),
+          description: parts[3].trim()
+        });
+      }
+      // 星魂強化情報
+      else if (type === '星魂強化' && parts.length >= 4) {
+        eidolonEnhancements.push({
+          eidolonLevel: parseInt(parts[1].trim()),
+          enhancementType: parts[2].trim(),
+          enhancedValue: parts[3].trim()
+        });
       }
     }
 
-    return characterData;
+    return { ...characterData, buffsDebuffs, eidolonEnhancements };
   }
 
   analyzeBuffsDebuffs(skillType: string, description: string): ParsedBuffDebuff[] {
