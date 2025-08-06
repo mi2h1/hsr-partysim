@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { useParams } from 'next/navigation';
+import Link from 'next/link';
 
 interface BuffDebuff {
   skill: string;
@@ -12,6 +13,12 @@ interface BuffDebuff {
   stat: string;
   value: string;
   note: string;
+}
+
+interface Skill {
+  type: string;
+  name: string;
+  description: string;
 }
 
 interface CharacterData {
@@ -25,19 +32,44 @@ interface CharacterData {
   buffs_debuffs: BuffDebuff[];
 }
 
+interface SkillsData {
+  character: {
+    id: number;
+    name: string;
+    element: string;
+    path: string;
+  };
+  combat_skills: Skill[];
+  additional_effects: Skill[];
+  eidolons: Skill[];
+}
+
 export default function CharacterDetailPage() {
   const params = useParams();
   const characterId = params.id as string;
   
-  // デバッグ用コンソール出力
-  console.log('Character Detail Page - Params:', params);
-  console.log('Character Detail Page - ID:', characterId);
-  
   const [characterData, setCharacterData] = useState<CharacterData | null>(null);
+  const [skillsData, setSkillsData] = useState<SkillsData | null>(null);
+  const [activeTab, setActiveTab] = useState('buffs');
   const [eidolonLevel, setEidolonLevel] = useState(0);
   const [loading, setLoading] = useState(true);
   const [eidolonLoading, setEidolonLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+
+  const fetchSkillsData = async (id: string) => {
+    try {
+      const response = await fetch(`/api/characters/${id}/skills`);
+      const data = await response.json();
+      
+      if (data.success) {
+        setSkillsData(data);
+      } else {
+        console.error('Skills data fetch failed:', data.error);
+      }
+    } catch (err) {
+      console.error('Skills fetch error:', err);
+    }
+  };
 
   const fetchCharacterData = async (id: string, eidolon: number, isEidolonChange = false) => {
     try {
@@ -46,19 +78,11 @@ export default function CharacterDetailPage() {
       } else {
         setLoading(true);
       }
-      console.log('Fetching data for character ID:', id, 'eidolon:', eidolon);
+      
       const response = await fetch(`/api/characters/${id}/buffs?eidolon=${eidolon}`);
-      console.log('API Response status:', response.status);
       const data = await response.json();
-      console.log('API Response data for eidolon', eidolon + ':', data);
-      console.log('Buffs count:', data.buffs_debuffs?.length);
-      console.log('Combat buffs:', data.buffs_debuffs?.filter((b: any) => !b.skill.startsWith('星魂')).length);
-      console.log('Eidolon buffs:', data.buffs_debuffs?.filter((b: any) => b.skill.startsWith('星魂')).length);
       
       if (data.success) {
-        console.log('Setting character data with eidolon level:', eidolon);
-        console.log('Previous data buffs:', characterData?.buffs_debuffs?.length);
-        console.log('New data buffs:', data.buffs_debuffs?.length);
         setCharacterData(data);
         setError(null);
       } else {
@@ -79,6 +103,7 @@ export default function CharacterDetailPage() {
   useEffect(() => {
     if (characterId) {
       fetchCharacterData(characterId, 0);
+      fetchSkillsData(characterId);
     }
   }, [characterId]);
 
@@ -93,7 +118,7 @@ export default function CharacterDetailPage() {
     return (
       <div className="flex items-center justify-center min-h-64">
         <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-hsr-purple mx-auto mb-4"></div>
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500 mx-auto mb-4"></div>
           <p>データを読み込み中...</p>
         </div>
       </div>
@@ -102,28 +127,60 @@ export default function CharacterDetailPage() {
 
   if (error) {
     return (
-      <div className="hsr-card bg-red-50">
-        <h2 className="text-xl font-bold text-red-700 mb-4">
-          ❌ エラーが発生しました
-        </h2>
-        <p className="text-red-600">{error}</p>
-        <button 
-          onClick={() => fetchCharacterData(characterId, eidolonLevel)}
-          className="mt-4 bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700 transition-colors"
-        >
-          再試行
-        </button>
+      <div className="card bg-danger bg-opacity-10 border-danger">
+        <div className="card-body text-center">
+          <h2 className="text-danger mb-4">❌ エラーが発生しました</h2>
+          <p className="text-danger">{error}</p>
+          <button
+            onClick={() => characterId && fetchCharacterData(characterId, eidolonLevel)}
+            className="btn btn-primary"
+          >
+            再試行
+          </button>
+        </div>
       </div>
     );
   }
 
   if (!characterData) {
     return (
-      <div className="hsr-card">
-        <p>キャラクターデータが見つかりません</p>
+      <div className="card">
+        <div className="card-body">
+          <p>キャラクターデータが見つかりません</p>
+        </div>
       </div>
     );
   }
+
+  // バフ・デバフを分類
+  const combatBuffs = characterData.buffs_debuffs.filter(buff => 
+    !buff.skill.startsWith('星魂')
+  );
+  
+  const eidolonBuffs = characterData.buffs_debuffs.filter(buff => 
+    buff.skill.startsWith('星魂')
+  );
+
+  const renderSkillSection = (title: string, skills: Skill[]) => {
+    if (!skills || skills.length === 0) return null;
+    
+    return (
+      <div className="mb-5">
+        <h5 className="text-primary fw-bold border-bottom pb-2 mb-3">{title}</h5>
+        {skills.map((skill, index) => (
+          <div key={index} className="mb-4">
+            <div className="d-flex align-items-center mb-2">
+              <span className="badge bg-secondary me-2">{skill.type}</span>
+              <h6 className="mb-0 fw-bold">{skill.name}</h6>
+            </div>
+            <p className="text-muted" style={{ whiteSpace: 'pre-wrap', lineHeight: '1.6' }}>
+              {skill.description}
+            </p>
+          </div>
+        ))}
+      </div>
+    );
+  };
 
   return (
     <div>
@@ -139,14 +196,9 @@ export default function CharacterDetailPage() {
                 style={{ width: '80px', height: '80px', objectFit: 'cover' }}
                 onError={(e) => {
                   const img = e.target as HTMLImageElement;
-                  img.style.display = 'none';
-                  const fallback = img.nextElementSibling as HTMLDivElement;
-                  if (fallback) fallback.style.display = 'block';
+                  img.src = `/imgs/${characterData.character.name}.webp`;
                 }}
               />
-              <div style={{ display: 'none' }}>
-                <i className="bi bi-person-circle display-3 text-primary"></i>
-              </div>
             </div>
             <div className="col-md-6">
               <h1 className="display-5 text-primary fw-bold mb-3">
@@ -158,26 +210,16 @@ export default function CharacterDetailPage() {
                   alt={characterData.character.element}
                   title={`属性: ${characterData.character.element}`}
                   style={{ width: '32px', height: '32px' }}
-                  onError={(e) => {
-                    const img = e.target as HTMLImageElement;
-                    img.style.display = 'none';
-                  }}
                 />
                 <img 
                   src={`/imgs/i_${characterData.character.path}.webp`}
                   alt={characterData.character.path}
                   title={`運命: ${characterData.character.path}`}
                   style={{ width: '32px', height: '32px' }}
-                  onError={(e) => {
-                    const img = e.target as HTMLImageElement;
-                    img.style.display = 'none';
-                  }}
                 />
               </div>
             </div>
-            
-            {/* 星魂レベル選択 */}
-            <div className="col-md-4 text-center">
+            <div className="col-md-4">
               <label className="form-label fw-bold">
                 星魂レベル
                 {eidolonLoading && (
@@ -205,235 +247,225 @@ export default function CharacterDetailPage() {
         </div>
       </div>
 
-      {/* 戦闘バフ・デバフ一覧テーブル */}
+      {/* タブナビゲーション */}
       <div className="card shadow-sm mb-4">
-        <div className="card-header bg-success text-white">
-          <h3 className="mb-0">
-            <i className="bi bi-sword me-2"></i>
-            戦闘バフ・デバフ一覧
-          </h3>
+        <div className="card-header">
+          <ul className="nav nav-tabs card-header-tabs" role="tablist">
+            <li className="nav-item" role="presentation">
+              <button
+                className={`nav-link ${activeTab === 'buffs' ? 'active' : ''}`}
+                onClick={() => setActiveTab('buffs')}
+                type="button"
+                role="tab"
+              >
+                <i className="bi bi-sword me-2"></i>
+                戦闘バフ・デバフ
+              </button>
+            </li>
+            <li className="nav-item" role="presentation">
+              <button
+                className={`nav-link ${activeTab === 'eidolon' ? 'active' : ''}`}
+                onClick={() => setActiveTab('eidolon')}
+                type="button"
+                role="tab"
+              >
+                <i className="bi bi-star me-2"></i>
+                星魂効果
+              </button>
+            </li>
+            <li className="nav-item" role="presentation">
+              <button
+                className={`nav-link ${activeTab === 'skills' ? 'active' : ''}`}
+                onClick={() => setActiveTab('skills')}
+                type="button"
+                role="tab"
+              >
+                <i className="bi bi-book me-2"></i>
+                基本情報
+              </button>
+            </li>
+          </ul>
         </div>
-        <div className="card-body position-relative">
-          {eidolonLoading && (
-            <div className="position-absolute top-0 start-0 w-100 h-100 d-flex align-items-center justify-content-center bg-white bg-opacity-75" style={{ zIndex: 10 }}>
-              <div className="text-center">
-                <div className="spinner-border text-primary mb-2" role="status">
-                  <span className="visually-hidden">Loading...</span>
+        
+        <div className="card-body">
+          {/* 戦闘バフ・デバフタブ */}
+          {activeTab === 'buffs' && (
+            <div className="position-relative">
+              {eidolonLoading && (
+                <div className="position-absolute top-0 start-0 w-100 h-100 d-flex align-items-center justify-content-center bg-white bg-opacity-75" style={{ zIndex: 10 }}>
+                  <div className="text-center">
+                    <div className="spinner-border text-primary mb-2" role="status">
+                      <span className="visually-hidden">Loading...</span>
+                    </div>
+                    <small className="text-muted">データを更新中...</small>
+                  </div>
                 </div>
-                <small className="text-muted">データを更新中...</small>
-              </div>
-            </div>
-          )}
-          {(() => {
-            const combatBuffs = characterData.buffs_debuffs.filter(buff => 
-              !buff.skill.startsWith('星魂')
-            );
-            
-            return combatBuffs.length === 0 ? (
-              <div className="text-center py-5">
-                <i className="bi bi-info-circle text-muted fs-1"></i>
-                <p className="text-muted mt-3">戦闘バフ・デバフ情報が見つかりませんでした</p>
-              </div>
-            ) : (
-              <div className="table-responsive">
-                <table className="table table-hover table-striped">
-                  <thead className="table-dark">
-                    <tr>
-                      <th><i className="bi bi-gear me-1"></i>スキル</th>
-                      <th><i className="bi bi-magic me-1"></i>バフ名</th>
-                      <th><i className="bi bi-clock me-1"></i>継続</th>
-                      <th><i className="bi bi-people me-1"></i>付与対象</th>
-                      <th><i className="bi bi-bullseye me-1"></i>対象項目</th>
-                      <th><i className="bi bi-arrow-up-circle me-1"></i>バフ量</th>
-                      <th><i className="bi bi-info-circle me-1"></i>補足</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {combatBuffs.map((buff, index) => {
-                      const typeClass = buff.type === 'デバフ' ? 'text-danger' : 
-                                      buff.type === 'その他' ? 'text-secondary' : 'text-success';
-                      const typeBadge = buff.type === 'デバフ' ? 'bg-danger' : 
-                                      buff.type === 'その他' ? 'bg-secondary' : 'bg-success';
-                      
-                      return (
-                        <tr key={index}>
-                          <td className="fw-semibold">{buff.skill}</td>
-                          <td>
-                            <span className={`badge ${typeBadge} me-2`}>
-                              {buff.type || 'バフ'}
-                            </span>
-                            {buff.name}
-                          </td>
-                          <td><span className="badge bg-info">{buff.duration}</span></td>
-                          <td><span className="badge bg-warning text-dark">{buff.target}</span></td>
-                          <td className={`fw-bold ${typeClass}`}>{buff.stat}</td>
-                          <td><span className={`badge ${typeBadge} fs-6`}>{buff.value}</span></td>
-                          <td><small className="text-muted">{buff.note}</small></td>
-                        </tr>
-                      );
-                    })}
-                  </tbody>
-                </table>
-              </div>
-            );
-          })()}
-        </div>
-      </div>
-
-      {/* 星魂効果一覧テーブル */}
-      <div className="card shadow-sm mb-4">
-        <div className="card-header bg-warning text-dark">
-          <h3 className="mb-0">
-            <i className="bi bi-star-fill me-2"></i>
-            星魂効果一覧 ({eidolonLevel > 0 ? `${eidolonLevel}凸時` : '無凸'})
-          </h3>
-        </div>
-        <div className="card-body position-relative">
-          {eidolonLoading && (
-            <div className="position-absolute top-0 start-0 w-100 h-100 d-flex align-items-center justify-content-center bg-white bg-opacity-75" style={{ zIndex: 10 }}>
-              <div className="text-center">
-                <div className="spinner-border text-warning mb-2" role="status">
-                  <span className="visually-hidden">Loading...</span>
+              )}
+              
+              {combatBuffs.length === 0 ? (
+                <div className="text-center py-5">
+                  <i className="bi bi-exclamation-triangle text-muted fs-1"></i>
+                  <p className="text-muted mt-3">戦闘バフ・デバフ情報が見つかりませんでした</p>
                 </div>
-                <small className="text-muted">星魂データを更新中...</small>
-              </div>
-            </div>
-          )}
-          {(() => {
-            const eidolonBuffs = characterData.buffs_debuffs.filter(buff => 
-              buff.skill.startsWith('星魂')
-            );
-            
-            return eidolonBuffs.length === 0 ? (
-              <div className="text-center py-5">
-                <i className="bi bi-star text-muted fs-1"></i>
-                <p className="text-muted mt-3">星魂効果情報が見つかりませんでした</p>
-              </div>
-            ) : (
-              <div className="table-responsive">
-                <table className="table table-hover">
-                  <thead className="table-warning">
-                    <tr>
-                      <th><i className="bi bi-star me-1"></i>星魂</th>
-                      <th><i className="bi bi-magic me-1"></i>バフ名</th>
-                      <th><i className="bi bi-clock me-1"></i>継続</th>
-                      <th><i className="bi bi-people me-1"></i>付与対象</th>
-                      <th><i className="bi bi-bullseye me-1"></i>対象項目</th>
-                      <th><i className="bi bi-arrow-up-circle me-1"></i>バフ量</th>
-                      <th><i className="bi bi-info-circle me-1"></i>補足</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {eidolonBuffs.map((buff, index) => {
-                      const buffEidolonLevel = parseInt(buff.skill.replace('星魂', ''));
-                      const isActive = buffEidolonLevel <= eidolonLevel;
-                      
-                      let rowClass = "";
-                      if (isActive) {
-                        rowClass = "table-success";
-                      } else {
-                        rowClass = "table-light opacity-50";
-                      }
-                      
-                      return (
-                        <tr key={index} className={rowClass}>
-                          <td className="fw-semibold">
-                            {buff.skill}
-                            {isActive && (
-                              <span className="badge bg-success ms-2">
-                                有効
+              ) : (
+                <div className="table-responsive">
+                  <table className="table table-hover">
+                    <thead className="table-success">
+                      <tr>
+                        <th><i className="bi bi-list-ul me-1"></i>スキル</th>
+                        <th><i className="bi bi-magic me-1"></i>バフ名</th>
+                        <th><i className="bi bi-tag me-1"></i>種別</th>
+                        <th><i className="bi bi-clock me-1"></i>継続</th>
+                        <th><i className="bi bi-people me-1"></i>付与対象</th>
+                        <th><i className="bi bi-bullseye me-1"></i>対象項目</th>
+                        <th><i className="bi bi-arrow-up-circle me-1"></i>バフ量</th>
+                        <th><i className="bi bi-info-circle me-1"></i>補足</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {combatBuffs.map((buff, index) => {
+                        let typeClass = "";
+                        let typeIcon = "";
+                        switch (buff.type) {
+                          case 'バフ':
+                            typeClass = "bg-success";
+                            typeIcon = "bi-arrow-up";
+                            break;
+                          case 'デバフ':
+                            typeClass = "bg-danger";
+                            typeIcon = "bi-arrow-down";
+                            break;
+                          default:
+                            typeClass = "bg-info";
+                            typeIcon = "bi-info-circle";
+                        }
+                        
+                        return (
+                          <tr key={index}>
+                            <td className="fw-semibold">{buff.skill}</td>
+                            <td className="fw-semibold">{buff.name}</td>
+                            <td>
+                              <span className={`badge ${typeClass}`}>
+                                <i className={`bi ${typeIcon} me-1`}></i>
+                                {buff.type || 'バフ'}
                               </span>
-                            )}
-                          </td>
-                          <td className={isActive ? "fw-semibold" : ""}>{buff.name}</td>
-                          <td><span className="badge bg-info">{buff.duration}</span></td>
-                          <td><span className="badge bg-warning text-dark">{buff.target}</span></td>
-                          <td className="fw-bold text-primary">{buff.stat}</td>
-                          <td>
-                            <span className={`badge fs-6 ${isActive ? "bg-success" : "bg-secondary"}`}>
-                              {buff.value}
-                            </span>
-                          </td>
-                          <td><small className="text-muted">{buff.note}</small></td>
-                        </tr>
-                      );
-                    })}
-                  </tbody>
-                </table>
-              </div>
-            );
-          })()}
-        </div>
-      </div>
+                            </td>
+                            <td><span className="badge bg-info">{buff.duration}</span></td>
+                            <td><span className="badge bg-warning text-dark">{buff.target}</span></td>
+                            <td className="fw-bold text-primary">{buff.stat}</td>
+                            <td>
+                              <span className="badge bg-success fs-6">
+                                {buff.value}
+                              </span>
+                            </td>
+                            <td><small className="text-muted">{buff.note}</small></td>
+                          </tr>
+                        );
+                      })}
+                    </tbody>
+                  </table>
+                </div>
+              )}
+            </div>
+          )}
 
-      {/* 統計情報 */}
-      <div className="row g-4 mb-4">
-        <div className="col-md-4">
-          <div className="card bg-info text-white h-100">
-            <div className="card-body text-center">
-              <i className="bi bi-sword display-4"></i>
-              <h4 className="card-title mt-2">戦闘バフ・デバフ</h4>
-              <p className="display-6 fw-bold">
-                {characterData.buffs_debuffs.filter(b => !b.skill.startsWith('星魂')).length}個
-              </p>
-              <small className="opacity-75">
-                味方支援: {characterData.buffs_debuffs.filter(b => !b.skill.startsWith('星魂') && b.target.includes('味方')).length}個
-              </small>
+          {/* 星魂効果タブ */}
+          {activeTab === 'eidolon' && (
+            <div>
+              {eidolonBuffs.length === 0 ? (
+                <div className="text-center py-5">
+                  <i className="bi bi-star text-muted fs-1"></i>
+                  <p className="text-muted mt-3">星魂効果情報が見つかりませんでした</p>
+                </div>
+              ) : (
+                <div className="table-responsive">
+                  <table className="table table-hover">
+                    <thead className="table-warning">
+                      <tr>
+                        <th><i className="bi bi-star me-1"></i>星魂</th>
+                        <th><i className="bi bi-magic me-1"></i>バフ名</th>
+                        <th><i className="bi bi-clock me-1"></i>継続</th>
+                        <th><i className="bi bi-people me-1"></i>付与対象</th>
+                        <th><i className="bi bi-bullseye me-1"></i>対象項目</th>
+                        <th><i className="bi bi-arrow-up-circle me-1"></i>バフ量</th>
+                        <th><i className="bi bi-info-circle me-1"></i>補足</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {eidolonBuffs.map((buff, index) => {
+                        const buffEidolonLevel = parseInt(buff.skill.replace('星魂', ''));
+                        const isActive = buffEidolonLevel <= eidolonLevel;
+                        
+                        let rowClass = "";
+                        if (isActive) {
+                          rowClass = "table-success";
+                        } else {
+                          rowClass = "table-light opacity-50";
+                        }
+                        
+                        return (
+                          <tr key={index} className={rowClass}>
+                            <td className="fw-semibold">
+                              {buff.skill}
+                              {isActive && (
+                                <span className="badge bg-success ms-2">
+                                  有効
+                                </span>
+                              )}
+                            </td>
+                            <td className={isActive ? "fw-semibold" : ""}>{buff.name}</td>
+                            <td><span className="badge bg-info">{buff.duration}</span></td>
+                            <td><span className="badge bg-warning text-dark">{buff.target}</span></td>
+                            <td className="fw-bold text-primary">{buff.stat}</td>
+                            <td>
+                              <span className={`badge fs-6 ${isActive ? "bg-success" : "bg-secondary"}`}>
+                                {buff.value}
+                              </span>
+                            </td>
+                            <td><small className="text-muted">{buff.note}</small></td>
+                          </tr>
+                        );
+                      })}
+                    </tbody>
+                  </table>
+                </div>
+              )}
             </div>
-          </div>
-        </div>
-        
-        <div className="col-md-4">
-          <div className="card bg-success text-white h-100">
-            <div className="card-body text-center">
-              <i className="bi bi-star-fill display-4"></i>
-              <h4 className="card-title mt-2">星魂効果（有効）</h4>
-              <p className="display-6 fw-bold">
-                {characterData.buffs_debuffs.filter(b => b.skill.startsWith('星魂') && parseInt(b.skill.replace('星魂', '')) <= eidolonLevel).length}個
-              </p>
-              <small className="opacity-75">
-                全星魂効果: {characterData.buffs_debuffs.filter(b => b.skill.startsWith('星魂')).length}個
-              </small>
+          )}
+
+          {/* 基本情報タブ */}
+          {activeTab === 'skills' && (
+            <div>
+              {!skillsData ? (
+                <div className="text-center py-5">
+                  <div className="spinner-border text-primary mb-3" role="status">
+                    <span className="visually-hidden">Loading...</span>
+                  </div>
+                  <p className="text-muted">基本情報を読み込み中...</p>
+                </div>
+              ) : (
+                <div>
+                  {renderSkillSection("戦闘スキル", skillsData.combat_skills)}
+                  {renderSkillSection("追加効果", skillsData.additional_effects)}
+                  {renderSkillSection("星魂", skillsData.eidolons)}
+                </div>
+              )}
             </div>
-          </div>
-        </div>
-        
-        <div className="col-md-4">
-          <div className="card bg-primary text-white h-100">
-            <div className="card-body text-center">
-              <i className="bi bi-collection display-4"></i>
-              <h4 className="card-title mt-2">現在の総効果数</h4>
-              <p className="display-6 fw-bold">
-                {characterData.buffs_debuffs.filter(b => 
-                  !b.skill.startsWith('星魂') || 
-                  parseInt(b.skill.replace('星魂', '')) <= eidolonLevel
-                ).length}個
-              </p>
-              <small className="opacity-75">
-                戦闘+有効星魂効果
-              </small>
-            </div>
-          </div>
+          )}
         </div>
       </div>
 
       {/* ナビゲーション */}
-      <div className="text-center">
+      <div className="text-center mt-5">
         <div className="btn-group" role="group">
-          <a 
-            href="/"
-            className="btn btn-outline-secondary"
-          >
-            <i className="bi bi-house-fill me-1"></i>
-            メイン画面に戻る
-          </a>
-          <a 
-            href="/characters"
-            className="btn btn-outline-primary"
-          >
-            <i className="bi bi-list me-1"></i>
-            キャラクター一覧
-          </a>
+          <Link href="/characters" className="btn btn-outline-secondary">
+            <i className="bi bi-arrow-left me-2"></i>
+            キャラクター一覧に戻る
+          </Link>
+          <Link href="/party" className="btn btn-outline-primary">
+            <i className="bi bi-people me-2"></i>
+            パーティ編成
+          </Link>
         </div>
       </div>
     </div>
