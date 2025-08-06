@@ -113,11 +113,11 @@ export default function CharactersListPage() {
                 href={`/characters/${character.id}`}
                 className="text-decoration-none"
               >
-                <div className="card h-100 shadow-sm hover-card position-relative" style={{ minHeight: '240px' }}>
+                <div className="card h-100 shadow-sm hover-card position-relative" style={{ minHeight: '280px' }}>
                   <img 
                     src={`/imgs/${character.id}.webp`}
                     alt={character.name}
-                    className="img-fluid w-100 h-100"
+                    className="img-fluid w-100"
                     style={{ objectFit: 'cover', objectPosition: 'center top', height: '240px' }}
                     onError={(e) => {
                       const img = e.target as HTMLImageElement;
@@ -129,15 +129,15 @@ export default function CharactersListPage() {
                     }}
                   />
                   
-                  {/* オーバーレイテキスト - 画像の下部にかぶせる */}
-                  <div className="position-absolute bottom-0 start-0 p-2" style={{ zIndex: 10 }}>
+                  {/* 画像下の余白エリア */}
+                  <div className="p-2" style={{ height: '40px', backgroundColor: 'white' }}>
                     {/* 属性・運命アイコン */}
                     <div className="d-flex gap-2 mb-1">
                       <img 
                         src={`/imgs/i_${character.element}.webp`}
                         alt={character.element}
                         title={character.element}
-                        style={{ width: '20px', height: '20px', objectFit: 'contain', filter: 'drop-shadow(0 1px 2px rgba(0,0,0,0.8))' }}
+                        style={{ width: '16px', height: '16px', objectFit: 'contain' }}
                         onError={(e) => {
                           const img = e.target as HTMLImageElement;
                           console.log(`アイコン読み込み失敗: /imgs/i_${character.element}.webp`);
@@ -151,7 +151,7 @@ export default function CharactersListPage() {
                         src={`/imgs/i_${character.path}.webp`}
                         alt={character.path}
                         title={character.path}
-                        style={{ width: '20px', height: '20px', objectFit: 'contain', filter: 'drop-shadow(0 1px 2px rgba(0,0,0,0.8))' }}
+                        style={{ width: '16px', height: '16px', objectFit: 'contain' }}
                         onError={(e) => {
                           const img = e.target as HTMLImageElement;
                           console.log(`アイコン読み込み失敗: /imgs/i_${character.path}.webp`);
@@ -163,11 +163,7 @@ export default function CharactersListPage() {
                       />
                     </div>
                     
-                    <h6 className="mb-0 fw-bold" style={{ 
-                      color: 'white', 
-                      textShadow: '0 1px 3px rgba(0,0,0,0.8)',
-                      fontSize: '0.9rem'
-                    }}>
+                    <h6 className="mb-0 fw-bold text-dark" style={{ fontSize: '0.85rem' }}>
                       {character.name}
                     </h6>
                   </div>
