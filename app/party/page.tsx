@@ -393,54 +393,6 @@ export default function PartyPage() {
                   return (
                     <div key={character.id} className="col-lg-6 col-xl-3 mb-4">
                       <div className="card h-100">
-                        <div className="card-header">
-                          <div className="d-flex align-items-center">
-                            <div className="me-3">
-                              <img 
-                                src={`/imgs/${character.id}.webp`}
-                                alt={character.name}
-                                className="img-fluid rounded-circle"
-                                style={{ width: '50px', height: '50px', objectFit: 'cover' }}
-                                onError={(e) => {
-                                  const img = e.target as HTMLImageElement;
-                                  img.style.display = 'none';
-                                  const fallback = img.nextElementSibling as HTMLDivElement;
-                                  if (fallback) fallback.style.display = 'block';
-                                }}
-                              />
-                              <div style={{ display: 'none' }}>
-                                <i className="bi bi-person-circle" style={{ fontSize: '50px', color: '#0d6efd' }}></i>
-                              </div>
-                            </div>
-                            <div>
-                              <h5 className="card-title mb-0">
-                                <strong>{character.name}</strong>
-                              </h5>
-                              <div className="mt-2 d-flex gap-2">
-                                <img 
-                                  src={`/imgs/i_${character.element}.webp`}
-                                  alt={character.element}
-                                  title={character.element}
-                                  style={{ width: '18px', height: '18px' }}
-                                  onError={(e) => {
-                                    const img = e.target as HTMLImageElement;
-                                    img.style.display = 'none';
-                                  }}
-                                />
-                                <img 
-                                  src={`/imgs/i_${character.path}.webp`}
-                                  alt={character.path}
-                                  title={character.path}
-                                  style={{ width: '18px', height: '18px' }}
-                                  onError={(e) => {
-                                    const img = e.target as HTMLImageElement;
-                                    img.style.display = 'none';
-                                  }}
-                                />
-                              </div>
-                            </div>
-                          </div>
-                        </div>
                         <div className="card-body">
                           {/* バフ効果 */}
                           {buffEffects.length > 0 && (
