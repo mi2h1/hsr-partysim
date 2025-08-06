@@ -10,11 +10,19 @@ export default function UploadPage() {
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const selectedFile = e.target.files?.[0];
-    if (selectedFile && selectedFile.type === 'text/csv') {
-      setFile(selectedFile);
-      setError(null);
+    setError(null);
+    
+    if (selectedFile) {
+      // ファイル拡張子をチェック（より柔軟に）
+      const fileName = selectedFile.name.toLowerCase();
+      if (fileName.endsWith('.csv') || selectedFile.type === 'text/csv' || selectedFile.type === 'application/vnd.ms-excel') {
+        setFile(selectedFile);
+        console.log('File selected:', selectedFile.name, 'Type:', selectedFile.type);
+      } else {
+        setError(`選択されたファイル「${selectedFile.name}」はCSVファイルではありません`);
+        setFile(null);
+      }
     } else {
-      setError('CSVファイルを選択してください');
       setFile(null);
     }
   };
@@ -75,10 +83,24 @@ export default function UploadPage() {
             <input
               id="csvFile"
               type="file"
-              accept=".csv"
+              accept=".csv,text/csv,application/vnd.ms-excel"
               onChange={handleFileChange}
               className="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-hsr-purple file:text-white hover:file:bg-purple-600"
             />
+          </div>
+
+          {/* デバッグ情報表示 */}
+          <div className="text-xs text-gray-500 bg-gray-100 dark:bg-gray-800 p-2 rounded">
+            <p>デバッグ情報:</p>
+            <p>ファイル選択: {file ? '✅' : '❌'}</p>
+            {file && (
+              <>
+                <p>ファイル名: {file.name}</p>
+                <p>ファイルタイプ: {file.type || '不明'}</p>
+                <p>ファイルサイズ: {(file.size / 1024).toFixed(1)} KB</p>
+              </>
+            )}
+            <p>アップロードボタン: {(!file || uploading) ? '無効' : '有効'}</p>
           </div>
 
           {file && (
@@ -103,7 +125,11 @@ export default function UploadPage() {
           <button
             onClick={handleUpload}
             disabled={!file || uploading}
-            className="w-full bg-hsr-purple text-white py-3 px-6 rounded-lg font-semibold disabled:opacity-50 disabled:cursor-not-allowed hover:bg-purple-600 transition-colors"
+            className={`w-full py-3 px-6 rounded-lg font-semibold transition-colors ${
+              (!file || uploading) 
+                ? 'bg-gray-400 text-gray-600 cursor-not-allowed' 
+                : 'bg-hsr-purple text-white hover:bg-purple-600'
+            }`}
           >
             {uploading ? '🔄 アップロード中...' : '📤 アップロード'}
           </button>
@@ -133,15 +159,19 @@ export default function UploadPage() {
       )}
 
       <div className="hsr-card bg-gray-50 dark:bg-gray-800">
-        <h3 className="text-lg font-semibold mb-3">📋 CSVフォーマットについて</h3>
+        <h3 className="text-lg font-semibold mb-3">📋 トラブルシューティング</h3>
         <div className="text-sm text-gray-600 dark:text-gray-300 space-y-2">
-          <p>アップロードするCSVファイルは以下の形式に従ってください：</p>
+          <p><strong>ファイルが選択できない場合：</strong></p>
+          <ul className="list-disc list-inside space-y-1 ml-4">
+            <li>ファイル名が「.csv」で終わっているか確認</li>
+            <li>ファイルサイズが10MB以下か確認</li>
+            <li>ブラウザを更新して再試行</li>
+          </ul>
+          <p className="mt-4"><strong>CSVフォーマット例：</strong></p>
           <ul className="list-disc list-inside space-y-1 ml-4">
             <li>1行目: キャラクター名,ロビン,</li>
             <li>2行目: 属性,物理,</li>
             <li>3行目: 運命,調和,</li>
-            <li>4行目以降: 通常攻撃,スキル名,説明文</li>
-            <li>続いて: 戦闘スキル、必殺技、天賦、秘技、追加効果1-3、星魂1-6</li>
           </ul>
         </div>
       </div>
