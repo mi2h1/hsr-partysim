@@ -168,7 +168,7 @@ export default function SystemPage() {
                 <hr className="my-2">
                 <small>
                   例: 攻撃力+30%、与ダメージ+20%、炎属性+25%<br />
-                  &rarr; 1.30 × 1.20 × 1.25 = <strong>1.95倍</strong>
+                  &rarr; 1.30 &times; 1.20 &times; 1.25 = <strong>1.95倍</strong>
                 </small>
               </div>
             </div>
