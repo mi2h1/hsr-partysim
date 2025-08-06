@@ -52,8 +52,8 @@ export default function CharacterDetailPage() {
       const data = await response.json();
       console.log('API Response data for eidolon', eidolon + ':', data);
       console.log('Buffs count:', data.buffs_debuffs?.length);
-      console.log('Combat buffs:', data.buffs_debuffs?.filter(b => !b.skill.startsWith('星魂')).length);
-      console.log('Eidolon buffs:', data.buffs_debuffs?.filter(b => b.skill.startsWith('星魂')).length);
+      console.log('Combat buffs:', data.buffs_debuffs?.filter((b: any) => !b.skill.startsWith('星魂')).length);
+      console.log('Eidolon buffs:', data.buffs_debuffs?.filter((b: any) => b.skill.startsWith('星魂')).length);
       
       if (data.success) {
         console.log('Setting character data with eidolon level:', eidolon);
