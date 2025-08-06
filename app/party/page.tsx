@@ -9,6 +9,19 @@ interface Character {
   path: string;
 }
 
+interface BuffDebuff {
+  id: number;
+  effect_name: string;
+  buff_type: 'バフ' | 'デバフ' | 'その他';
+  target_type: string;
+  stat_affected: string;
+  value_expression: string;
+  duration: string;
+  condition?: string;
+  is_stackable: boolean;
+  max_stacks?: number;
+}
+
 interface PartySlot {
   id: number;
   character: Character | null;
@@ -22,6 +35,7 @@ export default function PartyPage() {
     { id: 4, character: null },
   ]);
   const [availableCharacters, setAvailableCharacters] = useState<Character[]>([]);
+  const [characterBuffs, setCharacterBuffs] = useState<Record<number, BuffDebuff[]>>({});
 
   useEffect(() => {
     fetchCharacters();
@@ -38,10 +52,31 @@ export default function PartyPage() {
     }
   };
 
+  const fetchCharacterBuffs = async (characterId: number) => {
+    try {
+      const response = await fetch(`/api/characters/${characterId}/buffs`);
+      const data = await response.json();
+      setCharacterBuffs(prev => ({
+        ...prev,
+        [characterId]: data.buffs || []
+      }));
+    } catch (error) {
+      console.error('バフ取得エラー:', error);
+      setCharacterBuffs(prev => ({
+        ...prev,
+        [characterId]: []
+      }));
+    }
+  };
+
   const handleCharacterSelect = (slotId: number, character: Character | null) => {
     setPartySlots(prev => prev.map(slot => 
       slot.id === slotId ? { ...slot, character } : slot
     ));
+    
+    if (character) {
+      fetchCharacterBuffs(character.id);
+    }
   };
 
   return (
@@ -104,41 +139,136 @@ export default function PartyPage() {
             ))}
           </div>
 
-          {/* パーティ情報表示 */}
-          <div className="row">
-            <div className="col">
-              <div className="card">
-                <div className="card-header">
-                  <h5>パーティ構成</h5>
-                </div>
-                <div className="card-body">
-                  {partySlots.some(slot => slot.character) ? (
-                    <div>
-                      <h6>選択中のキャラクター:</h6>
-                      <ul className="list-group">
+          {/* バフ・デバフ表示 */}
+          {partySlots.some(slot => slot.character) && (
+            <>
+              <div className="row mb-4">
+                <div className="col">
+                  <h3 className="mb-3">バフ効果</h3>
+                  <div className="table-responsive">
+                    <table className="table table-striped">
+                      <thead>
+                        <tr>
+                          <th>キャラクター</th>
+                          <th>効果名</th>
+                          <th>対象</th>
+                          <th>ステータス</th>
+                          <th>数値</th>
+                          <th>継続時間</th>
+                          <th>条件</th>
+                        </tr>
+                      </thead>
+                      <tbody>
                         {partySlots
                           .filter(slot => slot.character)
-                          .map(slot => (
-                          <li key={slot.id} className="list-group-item d-flex justify-content-between align-items-center">
-                            <span>
-                              <strong>{slot.character!.name}</strong>
-                              <span className="ms-2">
-                                <span className="badge bg-primary me-1">{slot.character!.element}</span>
-                                <span className="badge bg-secondary">{slot.character!.path}</span>
-                              </span>
-                            </span>
-                            <span className="badge bg-light text-dark">スロット {slot.id}</span>
-                          </li>
-                        ))}
-                      </ul>
-                    </div>
-                  ) : (
-                    <p className="text-muted">パーティにキャラクターが選択されていません。</p>
-                  )}
+                          .flatMap(slot => {
+                            const buffs = characterBuffs[slot.character!.id] || [];
+                            return buffs
+                              .filter(buff => buff.buff_type === 'バフ')
+                              .map(buff => ({ ...buff, characterName: slot.character!.name }));
+                          })
+                          .map((buff, index) => (
+                            <tr key={index}>
+                              <td><strong className="text-success">{buff.characterName}</strong></td>
+                              <td>{buff.effect_name}</td>
+                              <td>{buff.target_type}</td>
+                              <td>{buff.stat_affected}</td>
+                              <td>{buff.value_expression}</td>
+                              <td>{buff.duration}</td>
+                              <td>{buff.condition || '-'}</td>
+                            </tr>
+                          ))}
+                      </tbody>
+                    </table>
+                  </div>
                 </div>
               </div>
-            </div>
-          </div>
+
+              <div className="row mb-4">
+                <div className="col">
+                  <h3 className="mb-3">デバフ効果</h3>
+                  <div className="table-responsive">
+                    <table className="table table-striped">
+                      <thead>
+                        <tr>
+                          <th>キャラクター</th>
+                          <th>効果名</th>
+                          <th>対象</th>
+                          <th>ステータス</th>
+                          <th>数値</th>
+                          <th>継続時間</th>
+                          <th>条件</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {partySlots
+                          .filter(slot => slot.character)
+                          .flatMap(slot => {
+                            const buffs = characterBuffs[slot.character!.id] || [];
+                            return buffs
+                              .filter(buff => buff.buff_type === 'デバフ')
+                              .map(buff => ({ ...buff, characterName: slot.character!.name }));
+                          })
+                          .map((buff, index) => (
+                            <tr key={index}>
+                              <td><strong className="text-danger">{buff.characterName}</strong></td>
+                              <td>{buff.effect_name}</td>
+                              <td>{buff.target_type}</td>
+                              <td>{buff.stat_affected}</td>
+                              <td>{buff.value_expression}</td>
+                              <td>{buff.duration}</td>
+                              <td>{buff.condition || '-'}</td>
+                            </tr>
+                          ))}
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+
+              <div className="row">
+                <div className="col">
+                  <h3 className="mb-3">追加効果</h3>
+                  <div className="table-responsive">
+                    <table className="table table-striped">
+                      <thead>
+                        <tr>
+                          <th>キャラクター</th>
+                          <th>効果名</th>
+                          <th>対象</th>
+                          <th>ステータス</th>
+                          <th>数値</th>
+                          <th>継続時間</th>
+                          <th>条件</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {partySlots
+                          .filter(slot => slot.character)
+                          .flatMap(slot => {
+                            const buffs = characterBuffs[slot.character!.id] || [];
+                            return buffs
+                              .filter(buff => buff.buff_type === 'その他')
+                              .map(buff => ({ ...buff, characterName: slot.character!.name }));
+                          })
+                          .map((buff, index) => (
+                            <tr key={index}>
+                              <td><strong className="text-secondary">{buff.characterName}</strong></td>
+                              <td>{buff.effect_name}</td>
+                              <td>{buff.target_type}</td>
+                              <td>{buff.stat_affected}</td>
+                              <td>{buff.value_expression}</td>
+                              <td>{buff.duration}</td>
+                              <td>{buff.condition || '-'}</td>
+                            </tr>
+                          ))}
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+            </>
+          )}
         </div>
       </div>
     </div>
