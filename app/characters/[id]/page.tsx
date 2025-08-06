@@ -189,19 +189,21 @@ export default function CharacterDetailPage() {
         <div className="card-body">
           <div className="row align-items-center">
             <div className="col-md-2 text-center">
-              <img 
-                src={`/imgs/${characterData.character.id}.webp`}
-                alt={characterData.character.name}
-                className="img-fluid rounded-circle"
-                style={{ width: '80px', height: '80px', objectFit: 'cover' }}
-                onError={(e) => {
-                  const img = e.target as HTMLImageElement;
-                  img.src = `/imgs/${characterData.character.name}.webp`;
-                }}
-              />
+              <div style={{ width: '80px', height: '80px', overflow: 'hidden' }} className="mx-auto">
+                <img 
+                  src={`/imgs/${characterData.character.id}.webp`}
+                  alt={characterData.character.name}
+                  className="img-fluid"
+                  style={{ width: '100%', height: 'auto', objectFit: 'cover', objectPosition: 'center top' }}
+                  onError={(e) => {
+                    const img = e.target as HTMLImageElement;
+                    img.src = `/imgs/${characterData.character.name}.webp`;
+                  }}
+                />
+              </div>
             </div>
             <div className="col-md-6">
-              <h1 className="display-5 text-primary fw-bold mb-3">
+              <h1 className="display-5 text-dark fw-bold mb-3">
                 {characterData.character.name}
               </h1>
               <div className="d-flex gap-4 flex-wrap">
