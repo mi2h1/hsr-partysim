@@ -106,15 +106,15 @@ export default function CharactersListPage() {
           </div>
         </div>
       ) : (
-        <div className="row g-3" style={{ gridTemplateColumns: 'repeat(5, 1fr)' }}>
+        <div className="row g-2" style={{ gridTemplateColumns: 'repeat(7, 1fr)' }}>
           {characters.map((character) => (
-            <div key={character.id} style={{ flex: '0 0 calc(20% - 12px)', maxWidth: 'calc(20% - 12px)' }}>
+            <div key={character.id} style={{ flex: '0 0 calc(14.28% - 8px)', maxWidth: 'calc(14.28% - 8px)' }}>
               <Link 
                 href={`/characters/${character.id}`}
                 className="text-decoration-none"
               >
-                <div className="card h-100 shadow-sm hover-card" style={{ minHeight: '410px' }}>
-                  <div className="position-relative overflow-hidden" style={{ height: '310px' }}>
+                <div className="card h-100 shadow-sm hover-card" style={{ minHeight: '320px' }}>
+                  <div className="position-relative overflow-hidden" style={{ height: '240px' }}>
                     <img 
                       src={`/imgs/${character.id}.webp`}
                       alt={character.name}
