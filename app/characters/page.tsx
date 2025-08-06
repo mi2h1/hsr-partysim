@@ -132,12 +132,12 @@ export default function CharactersListPage() {
                   {/* 画像下の余白エリア */}
                   <div className="position-relative px-2" style={{ height: '30px', backgroundColor: 'white' }}>
                     {/* 属性・運命アイコン - 上段 */}
-                    <div className="d-flex gap-1 position-absolute" style={{ top: '-6px', left: '8px' }}>
+                    <div className="d-flex gap-2 position-absolute" style={{ top: '-10px', left: '8px' }}>
                       <img 
                         src={`/imgs/i_${character.element}.webp`}
                         alt={character.element}
                         title={character.element}
-                        style={{ width: '16px', height: '16px', objectFit: 'contain' }}
+                        style={{ width: '22px', height: '22px', objectFit: 'contain' }}
                         onError={(e) => {
                           const img = e.target as HTMLImageElement;
                           console.log(`アイコン読み込み失敗: /imgs/i_${character.element}.webp`);
@@ -151,7 +151,7 @@ export default function CharactersListPage() {
                         src={`/imgs/i_${character.path}.webp`}
                         alt={character.path}
                         title={character.path}
-                        style={{ width: '16px', height: '16px', objectFit: 'contain' }}
+                        style={{ width: '22px', height: '22px', objectFit: 'contain' }}
                         onError={(e) => {
                           const img = e.target as HTMLImageElement;
                           console.log(`アイコン読み込み失敗: /imgs/i_${character.path}.webp`);
@@ -165,7 +165,7 @@ export default function CharactersListPage() {
                     
                     {/* 名前テキスト - 下段 */}
                     <div className="position-absolute bottom-0 start-0 px-2 pb-1">
-                      <h6 className="mb-0 fw-bold text-dark" style={{ fontSize: '0.8rem' }}>
+                      <h6 className="mb-0 fw-bold text-dark" style={{ fontSize: '0.9rem' }}>
                         {character.name}
                       </h6>
                     </div>
