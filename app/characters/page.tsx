@@ -113,8 +113,8 @@ export default function CharactersListPage() {
                 href={`/characters/${character.id}`}
                 className="text-decoration-none"
               >
-                <div className="card h-100 shadow-sm hover-card" style={{ minHeight: '280px' }}>
-                  <div className="position-relative overflow-hidden" style={{ height: '180px' }}>
+                <div className="card h-100 shadow-sm hover-card" style={{ minHeight: '410px' }}>
+                  <div className="position-relative overflow-hidden" style={{ height: '310px' }}>
                     <img 
                       src={`/imgs/${character.id}.webp`}
                       alt={character.name}
