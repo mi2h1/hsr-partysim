@@ -110,53 +110,46 @@ export default function CharactersListPage() {
       ) : (
         <div className="row g-4">
           {characters.map((character) => (
-            <div key={character.id} className="col-md-6 col-lg-4">
-              <div className="card h-100 shadow-sm">
-                <div className="card-header bg-primary text-white">
-                  <h5 className="mb-0">
-                    <i className="bi bi-person-circle me-2"></i>
-                    {character.name}
-                  </h5>
-                </div>
-                <div className="card-body">
-                  <div className="mb-3">
-                    <div className="d-flex justify-content-between align-items-center mb-2">
-                      <span className="text-muted">
-                        <i className="bi bi-lightning-fill me-1"></i>
-                        属性:
-                      </span>
-                      <span className="badge bg-info">
+            <div key={character.id} className="col-sm-6 col-md-4 col-lg-3">
+              <Link 
+                href={`/characters/${character.id}`}
+                className="text-decoration-none"
+              >
+                <div className="card h-100 shadow-sm hover-card">
+                  <div className="card-body text-center py-4">
+                    <div className="mb-3">
+                      <img 
+                        src={`/imgs/${character.id}.webp`}
+                        alt={character.name}
+                        className="img-fluid rounded-circle"
+                        style={{ width: '100px', height: '100px', objectFit: 'cover' }}
+                        onError={(e) => {
+                          const img = e.target as HTMLImageElement;
+                          img.style.display = 'none';
+                          const fallback = img.nextElementSibling as HTMLDivElement;
+                          if (fallback) fallback.style.display = 'block';
+                        }}
+                      />
+                      <div style={{ display: 'none' }}>
+                        <i className="bi bi-person-circle" style={{ fontSize: '100px', color: '#0d6efd' }}></i>
+                      </div>
+                    </div>
+                    
+                    <h5 className="card-title mb-3 text-dark">
+                      {character.name}
+                    </h5>
+                    
+                    <div className="d-flex justify-content-center gap-2">
+                      <span className="badge bg-info px-2 py-1">
                         {character.element}
                       </span>
-                    </div>
-                    <div className="d-flex justify-content-between align-items-center mb-2">
-                      <span className="text-muted">
-                        <i className="bi bi-compass-fill me-1"></i>
-                        運命:
-                      </span>
-                      <span className="badge bg-secondary">
+                      <span className="badge bg-secondary px-2 py-1">
                         {character.path}
                       </span>
                     </div>
-                    <div className="d-flex justify-content-between align-items-center">
-                      <span className="text-muted">
-                        <i className="bi bi-calendar-fill me-1"></i>
-                        登録日:
-                      </span>
-                      <small className="text-muted">
-                        {new Date(character.created_at).toLocaleDateString('ja-JP')}
-                      </small>
-                    </div>
                   </div>
-                  <Link 
-                    href={`/characters/${character.id}`}
-                    className="btn btn-primary w-100"
-                  >
-                    <i className="bi bi-list-ul me-2"></i>
-                    バフ・デバフ詳細を見る
-                  </Link>
                 </div>
-              </div>
+              </Link>
             </div>
           ))}
         </div>
