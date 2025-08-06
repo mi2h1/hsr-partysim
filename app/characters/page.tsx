@@ -125,9 +125,13 @@ export default function CharactersListPage() {
                         style={{ width: '100px', height: '100px', objectFit: 'cover' }}
                         onError={(e) => {
                           const img = e.target as HTMLImageElement;
+                          console.log(`キャラクター画像読み込み失敗: /imgs/${character.id}.webp`);
                           img.style.display = 'none';
                           const fallback = img.nextElementSibling as HTMLDivElement;
                           if (fallback) fallback.style.display = 'block';
+                        }}
+                        onLoad={() => {
+                          console.log(`キャラクター画像読み込み成功: /imgs/${character.id}.webp`);
                         }}
                       />
                       <div style={{ display: 'none' }}>
@@ -147,7 +151,11 @@ export default function CharactersListPage() {
                           style={{ width: '16px', height: '16px', marginRight: '4px' }}
                           onError={(e) => {
                             const img = e.target as HTMLImageElement;
+                            console.log(`アイコン読み込み失敗: /imgs/i_${character.element}.webp`);
                             img.style.display = 'none';
+                          }}
+                          onLoad={() => {
+                            console.log(`アイコン読み込み成功: /imgs/i_${character.element}.webp`);
                           }}
                         />
                         {character.element}
@@ -159,7 +167,11 @@ export default function CharactersListPage() {
                           style={{ width: '16px', height: '16px', marginRight: '4px' }}
                           onError={(e) => {
                             const img = e.target as HTMLImageElement;
+                            console.log(`アイコン読み込み失敗: /imgs/i_${character.path}.webp`);
                             img.style.display = 'none';
+                          }}
+                          onLoad={() => {
+                            console.log(`アイコン読み込み成功: /imgs/i_${character.path}.webp`);
                           }}
                         />
                         {character.path}
