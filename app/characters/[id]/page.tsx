@@ -186,42 +186,41 @@ export default function CharacterDetailPage() {
     <div>
       {/* キャラクター情報ヘッダー */}
       <div className="card shadow-sm mb-4">
-        <div className="card-body">
-          <div className="row align-items-center">
-            <div className="col-md-2 text-center">
-              <div style={{ width: '80px', height: '80px', overflow: 'hidden' }} className="mx-auto">
-                <img 
-                  src={`/imgs/${characterData.character.id}.webp`}
-                  alt={characterData.character.name}
-                  className="img-fluid"
-                  style={{ width: '100%', height: 'auto', objectFit: 'cover', objectPosition: 'center top' }}
-                  onError={(e) => {
-                    const img = e.target as HTMLImageElement;
-                    img.src = `/imgs/${characterData.character.name}.webp`;
-                  }}
-                />
-              </div>
+        <div className="row align-items-center g-0">
+          <div className="col-md-3">
+            <div style={{ width: '200px', height: '200px', overflow: 'hidden' }}>
+              <img 
+                src={`/imgs/${characterData.character.id}.webp`}
+                alt={characterData.character.name}
+                className="img-fluid"
+                style={{ width: '100%', height: 'auto', objectFit: 'cover', objectPosition: 'center top' }}
+                onError={(e) => {
+                  const img = e.target as HTMLImageElement;
+                  img.src = `/imgs/${characterData.character.name}.webp`;
+                }}
+              />
             </div>
-            <div className="col-md-6">
-              <h1 className="display-5 text-dark fw-bold mb-3">
-                {characterData.character.name}
-              </h1>
-              <div className="d-flex gap-4 flex-wrap">
-                <img 
-                  src={`/imgs/i_${characterData.character.element}.webp`}
-                  alt={characterData.character.element}
-                  title={`属性: ${characterData.character.element}`}
-                  style={{ width: '32px', height: '32px' }}
-                />
-                <img 
-                  src={`/imgs/i_${characterData.character.path}.webp`}
-                  alt={characterData.character.path}
-                  title={`運命: ${characterData.character.path}`}
-                  style={{ width: '32px', height: '32px' }}
-                />
-              </div>
+          </div>
+          <div className="col-md-9 p-4">
+            <h1 className="display-5 text-dark fw-bold mb-3">
+              {characterData.character.name}
+            </h1>
+            <div className="d-flex gap-4 flex-wrap mb-4">
+              <img 
+                src={`/imgs/i_${characterData.character.element}.webp`}
+                alt={characterData.character.element}
+                title={`属性: ${characterData.character.element}`}
+                style={{ width: '32px', height: '32px' }}
+              />
+              <img 
+                src={`/imgs/i_${characterData.character.path}.webp`}
+                alt={characterData.character.path}
+                title={`運命: ${characterData.character.path}`}
+                style={{ width: '32px', height: '32px' }}
+              />
             </div>
-            <div className="col-md-4">
+            
+            <div>
               <label className="form-label fw-bold">
                 星魂レベル
                 {eidolonLoading && (
