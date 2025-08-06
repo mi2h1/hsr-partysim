@@ -1,13 +1,18 @@
-// 指定キャラクターのバフ・デバフ取得API
+// 指定キャラクターのバフ・デバフ取得API（Next.js 15対応）
 import { NextRequest, NextResponse } from 'next/server';
 import { query } from '@/lib/db';
 
+interface RouteParams {
+  params: Promise<{ id: string }>
+}
+
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: RouteParams
 ) {
   try {
-    const characterId = parseInt(params.id);
+    const { id } = await params;
+    const characterId = parseInt(id);
     const searchParams = request.nextUrl.searchParams;
     const eidolonLevel = parseInt(searchParams.get('eidolon') || '0');
 
