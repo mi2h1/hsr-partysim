@@ -10,16 +10,14 @@ interface Character {
 }
 
 interface BuffDebuff {
-  id: number;
-  effect_name: string;
-  buff_type: 'バフ' | 'デバフ' | 'その他';
-  target_type: string;
-  stat_affected: string;
-  value_expression: string;
+  skill: string;
+  name: string;
+  type: 'バフ' | 'デバフ' | 'その他';
+  target: string;
+  stat: string;
+  value: string;
   duration: string;
-  condition?: string;
-  is_stackable: boolean;
-  max_stacks?: number;
+  note?: string;
 }
 
 interface PartySlot {
@@ -212,7 +210,7 @@ export default function PartyPage() {
                         .filter(slot => slot.character)
                         .flatMap(slot => {
                           const buffs = characterBuffs[slot.character!.id] || [];
-                          return buffs.filter(buff => buff.buff_type === 'バフ');
+                          return buffs.filter(buff => buff.type === 'バフ');
                         }).length}件)
                     </small>
                   </h3>
@@ -237,8 +235,8 @@ export default function PartyPage() {
                             console.log(`${slot.character!.name}のバフ:`, buffs);
                             console.log(`バフタイプでフィルタ前:`, buffs.length);
                             const filtered = buffs.filter(buff => {
-                              console.log(`バフチェック:`, buff.effect_name, 'タイプ:', buff.buff_type);
-                              return buff.buff_type === 'バフ';
+                              console.log(`バフチェック:`, buff.name, 'タイプ:', buff.type);
+                              return buff.type === 'バフ';
                             });
                             console.log(`バフタイプでフィルタ後:`, filtered.length);
                             return filtered.map(buff => ({ ...buff, characterName: slot.character!.name }));
@@ -246,12 +244,12 @@ export default function PartyPage() {
                           .map((buff, index) => (
                             <tr key={index}>
                               <td><strong className="text-success">{buff.characterName}</strong></td>
-                              <td>{buff.effect_name}</td>
-                              <td>{buff.target_type}</td>
-                              <td>{buff.stat_affected}</td>
-                              <td>{buff.value_expression}</td>
+                              <td>{buff.name}</td>
+                              <td>{buff.target}</td>
+                              <td>{buff.stat}</td>
+                              <td>{buff.value}</td>
                               <td>{buff.duration}</td>
-                              <td>{buff.condition || '-'}</td>
+                              <td>{buff.note || '-'}</td>
                             </tr>
                           ))}
                       </tbody>
@@ -268,7 +266,7 @@ export default function PartyPage() {
                         .filter(slot => slot.character)
                         .flatMap(slot => {
                           const buffs = characterBuffs[slot.character!.id] || [];
-                          return buffs.filter(buff => buff.buff_type === 'デバフ');
+                          return buffs.filter(buff => buff.type === 'デバフ');
                         }).length}件)
                     </small>
                   </h3>
@@ -291,18 +289,18 @@ export default function PartyPage() {
                           .flatMap(slot => {
                             const buffs = characterBuffs[slot.character!.id] || [];
                             return buffs
-                              .filter(buff => buff.buff_type === 'デバフ')
+                              .filter(buff => buff.type === 'デバフ')
                               .map(buff => ({ ...buff, characterName: slot.character!.name }));
                           })
                           .map((buff, index) => (
                             <tr key={index}>
                               <td><strong className="text-danger">{buff.characterName}</strong></td>
-                              <td>{buff.effect_name}</td>
-                              <td>{buff.target_type}</td>
-                              <td>{buff.stat_affected}</td>
-                              <td>{buff.value_expression}</td>
+                              <td>{buff.name}</td>
+                              <td>{buff.target}</td>
+                              <td>{buff.stat}</td>
+                              <td>{buff.value}</td>
                               <td>{buff.duration}</td>
-                              <td>{buff.condition || '-'}</td>
+                              <td>{buff.note || '-'}</td>
                             </tr>
                           ))}
                       </tbody>
@@ -319,7 +317,7 @@ export default function PartyPage() {
                         .filter(slot => slot.character)
                         .flatMap(slot => {
                           const buffs = characterBuffs[slot.character!.id] || [];
-                          return buffs.filter(buff => buff.buff_type === 'その他');
+                          return buffs.filter(buff => buff.type === 'その他');
                         }).length}件)
                     </small>
                   </h3>
@@ -342,18 +340,18 @@ export default function PartyPage() {
                           .flatMap(slot => {
                             const buffs = characterBuffs[slot.character!.id] || [];
                             return buffs
-                              .filter(buff => buff.buff_type === 'その他')
+                              .filter(buff => buff.type === 'その他')
                               .map(buff => ({ ...buff, characterName: slot.character!.name }));
                           })
                           .map((buff, index) => (
                             <tr key={index}>
                               <td><strong className="text-secondary">{buff.characterName}</strong></td>
-                              <td>{buff.effect_name}</td>
-                              <td>{buff.target_type}</td>
-                              <td>{buff.stat_affected}</td>
-                              <td>{buff.value_expression}</td>
+                              <td>{buff.name}</td>
+                              <td>{buff.target}</td>
+                              <td>{buff.stat}</td>
+                              <td>{buff.value}</td>
                               <td>{buff.duration}</td>
-                              <td>{buff.condition || '-'}</td>
+                              <td>{buff.note || '-'}</td>
                             </tr>
                           ))}
                       </tbody>
@@ -370,9 +368,9 @@ export default function PartyPage() {
                 .map((slot, index) => {
                   const character = slot.character!;
                   const buffs = characterBuffs[character.id] || [];
-                  const buffEffects = buffs.filter(buff => buff.buff_type === 'バフ');
-                  const debuffEffects = buffs.filter(buff => buff.buff_type === 'デバフ');
-                  const otherEffects = buffs.filter(buff => buff.buff_type === 'その他');
+                  const buffEffects = buffs.filter(buff => buff.type === 'バフ');
+                  const debuffEffects = buffs.filter(buff => buff.type === 'デバフ');
+                  const otherEffects = buffs.filter(buff => buff.type === 'その他');
 
                   return (
                     <div key={character.id} className="col-lg-6 col-xl-3 mb-4">
@@ -422,9 +420,9 @@ export default function PartyPage() {
                                       <tr key={buffIndex}>
                                         <td className="border-0 p-1">
                                           <small>
-                                            <strong>{buff.effect_name}</strong><br/>
+                                            <strong>{buff.name}</strong><br/>
                                             <span className="text-muted">
-                                              {buff.target_type} | {buff.stat_affected} {buff.value_expression}
+                                              {buff.target} | {buff.stat} {buff.value}
                                               {buff.duration && ` (${buff.duration})`}
                                             </span>
                                           </small>
@@ -451,9 +449,9 @@ export default function PartyPage() {
                                       <tr key={buffIndex}>
                                         <td className="border-0 p-1">
                                           <small>
-                                            <strong>{buff.effect_name}</strong><br/>
+                                            <strong>{buff.name}</strong><br/>
                                             <span className="text-muted">
-                                              {buff.target_type} | {buff.stat_affected} {buff.value_expression}
+                                              {buff.target} | {buff.stat} {buff.value}
                                               {buff.duration && ` (${buff.duration})`}
                                             </span>
                                           </small>
@@ -480,9 +478,9 @@ export default function PartyPage() {
                                       <tr key={buffIndex}>
                                         <td className="border-0 p-1">
                                           <small>
-                                            <strong>{buff.effect_name}</strong><br/>
+                                            <strong>{buff.name}</strong><br/>
                                             <span className="text-muted">
-                                              {buff.target_type} | {buff.stat_affected} {buff.value_expression}
+                                              {buff.target} | {buff.stat} {buff.value}
                                               {buff.duration && ` (${buff.duration})`}
                                             </span>
                                           </small>
