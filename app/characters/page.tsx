@@ -46,10 +46,12 @@ export default function CharactersListPage() {
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center min-h-64">
+      <div className="d-flex justify-content-center align-items-center" style={{ minHeight: '400px' }}>
         <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-hsr-purple mx-auto mb-4"></div>
-          <p>キャラクター一覧を読み込み中...</p>
+          <div className="spinner-border text-primary mb-3" role="status">
+            <span className="visually-hidden">Loading...</span>
+          </div>
+          <p className="text-muted">キャラクター一覧を読み込み中...</p>
         </div>
       </div>
     );
@@ -57,15 +59,18 @@ export default function CharactersListPage() {
 
   if (error) {
     return (
-      <div className="hsr-card bg-red-50">
-        <h2 className="text-xl font-bold text-red-700 mb-4">
-          ❌ エラーが発生しました
-        </h2>
-        <p className="text-red-600 mb-4">{error}</p>
+      <div className="alert alert-danger" role="alert">
+        <h4 className="alert-heading">
+          <i className="bi bi-exclamation-triangle-fill me-2"></i>
+          エラーが発生しました
+        </h4>
+        <p>{error}</p>
+        <hr />
         <Link 
           href="/upload"
-          className="inline-block bg-hsr-purple text-white px-4 py-2 rounded hover:bg-purple-600 transition-colors"
+          className="btn btn-primary"
         >
+          <i className="bi bi-upload me-2"></i>
           CSVをアップロードする
         </Link>
       </div>
@@ -73,81 +78,108 @@ export default function CharactersListPage() {
   }
 
   return (
-    <div className="space-y-6">
-      <div className="hsr-card">
-        <h1 className="text-3xl font-bold text-hsr-purple mb-4">
-          📋 キャラクター一覧
-        </h1>
-        <p className="text-gray-600 mb-6">
-          アップロードされたキャラクターのバフ・デバフ情報を確認できます。
-        </p>
+    <div>
+      {/* ページヘッダー */}
+      <div className="card shadow-sm mb-4">
+        <div className="card-body">
+          <h1 className="display-5 fw-bold text-primary mb-3">
+            <i className="bi bi-people-fill me-2"></i>
+            キャラクター一覧
+          </h1>
+          <p className="text-muted">
+            アップロードされたキャラクターのバフ・デバフ情報を確認できます。
+          </p>
+        </div>
       </div>
 
       {characters.length === 0 ? (
-        <div className="hsr-card bg-blue-50">
-          <div className="text-center py-8">
-            <p className="text-blue-700 mb-4">
-              まだキャラクターがアップロードされていません
-            </p>
+        <div className="alert alert-info" role="alert">
+          <div className="text-center py-4">
+            <i className="bi bi-inbox display-1 text-info mb-3"></i>
+            <h4>まだキャラクターがアップロードされていません</h4>
+            <p className="text-muted mb-4">CSVファイルをアップロードしてキャラクターを追加してください。</p>
             <Link 
               href="/upload"
-              className="inline-block bg-hsr-purple text-white px-6 py-3 rounded-lg hover:bg-purple-600 transition-colors"
+              className="btn btn-primary btn-lg"
             >
-              📤 キャラクターをアップロード
+              <i className="bi bi-upload me-2"></i>
+              キャラクターをアップロード
             </Link>
           </div>
         </div>
       ) : (
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
+        <div className="row g-4">
           {characters.map((character) => (
-            <div key={character.id} className="hsr-card bg-gradient-to-br from-blue-50 to-purple-50">
-              <h3 className="text-xl font-bold text-hsr-purple mb-3">
-                {character.name}
-              </h3>
-              <div className="space-y-2 mb-4">
-                <div className="flex justify-between items-center">
-                  <span className="text-sm text-gray-600">属性:</span>
-                  <span className="bg-blue-100 text-blue-800 px-2 py-1 rounded text-sm">
-                    {character.element}
-                  </span>
+            <div key={character.id} className="col-md-6 col-lg-4">
+              <div className="card h-100 shadow-sm">
+                <div className="card-header bg-primary text-white">
+                  <h5 className="mb-0">
+                    <i className="bi bi-person-circle me-2"></i>
+                    {character.name}
+                  </h5>
                 </div>
-                <div className="flex justify-between items-center">
-                  <span className="text-sm text-gray-600">運命:</span>
-                  <span className="bg-purple-100 text-purple-800 px-2 py-1 rounded text-sm">
-                    {character.path}
-                  </span>
-                </div>
-                <div className="flex justify-between items-center">
-                  <span className="text-sm text-gray-600">登録日:</span>
-                  <span className="text-sm">
-                    {new Date(character.created_at).toLocaleDateString('ja-JP')}
-                  </span>
+                <div className="card-body">
+                  <div className="mb-3">
+                    <div className="d-flex justify-content-between align-items-center mb-2">
+                      <span className="text-muted">
+                        <i className="bi bi-lightning-fill me-1"></i>
+                        属性:
+                      </span>
+                      <span className="badge bg-info">
+                        {character.element}
+                      </span>
+                    </div>
+                    <div className="d-flex justify-content-between align-items-center mb-2">
+                      <span className="text-muted">
+                        <i className="bi bi-compass-fill me-1"></i>
+                        運命:
+                      </span>
+                      <span className="badge bg-secondary">
+                        {character.path}
+                      </span>
+                    </div>
+                    <div className="d-flex justify-content-between align-items-center">
+                      <span className="text-muted">
+                        <i className="bi bi-calendar-fill me-1"></i>
+                        登録日:
+                      </span>
+                      <small className="text-muted">
+                        {new Date(character.created_at).toLocaleDateString('ja-JP')}
+                      </small>
+                    </div>
+                  </div>
+                  <Link 
+                    href={`/characters/${character.id}`}
+                    className="btn btn-primary w-100"
+                  >
+                    <i className="bi bi-list-ul me-2"></i>
+                    バフ・デバフ詳細を見る
+                  </Link>
                 </div>
               </div>
-              <Link 
-                href={`/characters/${character.id}`}
-                className="block w-full bg-hsr-purple text-white text-center py-2 rounded hover:bg-purple-600 transition-colors"
-              >
-                バフ・デバフ詳細 →
-              </Link>
             </div>
           ))}
         </div>
       )}
 
-      <div className="text-center">
-        <Link 
-          href="/"
-          className="inline-block bg-gray-600 text-white px-6 py-2 rounded hover:bg-gray-700 transition-colors mr-4"
-        >
-          ← メイン画面に戻る
-        </Link>
-        <Link 
-          href="/upload"
-          className="inline-block bg-hsr-purple text-white px-6 py-2 rounded hover:bg-purple-600 transition-colors"
-        >
-          📤 新しいキャラクターをアップロード
-        </Link>
+      {/* ナビゲーション */}
+      <div className="text-center mt-5">
+        <div className="btn-group" role="group">
+          <Link 
+            href="/"
+            className="btn btn-outline-secondary"
+          >
+            <i className="bi bi-house-fill me-2"></i>
+            メイン画面に戻る
+          </Link>
+          <Link 
+            href="/upload"
+            className="btn btn-outline-primary"
+          >
+            <i className="bi bi-upload me-2"></i>
+            新しいキャラクターをアップロード
+          </Link>
+        </div>
       </div>
     </div>
   );
