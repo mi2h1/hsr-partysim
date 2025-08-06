@@ -36,11 +36,16 @@ export default function CharacterDetailPage() {
   const [characterData, setCharacterData] = useState<CharacterData | null>(null);
   const [eidolonLevel, setEidolonLevel] = useState(0);
   const [loading, setLoading] = useState(true);
+  const [eidolonLoading, setEidolonLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const fetchCharacterData = async (id: string, eidolon: number) => {
+  const fetchCharacterData = async (id: string, eidolon: number, isEidolonChange = false) => {
     try {
-      setLoading(true);
+      if (isEidolonChange) {
+        setEidolonLoading(true);
+      } else {
+        setLoading(true);
+      }
       console.log('Fetching data for character ID:', id, 'eidolon:', eidolon);
       const response = await fetch(`/api/characters/${id}/buffs?eidolon=${eidolon}`);
       console.log('API Response status:', response.status);
@@ -57,18 +62,25 @@ export default function CharacterDetailPage() {
       setError('ネットワークエラーが発生しました');
       console.error('Fetch error:', err);
     } finally {
-      setLoading(false);
+      if (isEidolonChange) {
+        setEidolonLoading(false);
+      } else {
+        setLoading(false);
+      }
     }
   };
 
   useEffect(() => {
     if (characterId) {
-      fetchCharacterData(characterId, eidolonLevel);
+      fetchCharacterData(characterId, 0);
     }
-  }, [characterId, eidolonLevel]);
+  }, [characterId]);
 
   const handleEidolonChange = (newLevel: number) => {
     setEidolonLevel(newLevel);
+    if (characterId) {
+      fetchCharacterData(characterId, newLevel, true);
+    }
   };
 
   if (loading) {
@@ -160,11 +172,21 @@ export default function CharacterDetailPage() {
             
             {/* 星魂レベル選択 */}
             <div className="col-md-4 text-center">
-              <label className="form-label fw-bold">星魂レベル</label>
+              <label className="form-label fw-bold">
+                星魂レベル
+                {eidolonLoading && (
+                  <span className="ms-2">
+                    <div className="spinner-border spinner-border-sm text-primary" role="status">
+                      <span className="visually-hidden">Loading...</span>
+                    </div>
+                  </span>
+                )}
+              </label>
               <select
                 value={eidolonLevel}
                 onChange={(e) => handleEidolonChange(parseInt(e.target.value))}
                 className="form-select form-select-lg"
+                disabled={eidolonLoading}
               >
                 {[0, 1, 2, 3, 4, 5, 6].map(level => (
                   <option key={level} value={level}>
@@ -185,7 +207,17 @@ export default function CharacterDetailPage() {
             戦闘バフ・デバフ一覧
           </h3>
         </div>
-        <div className="card-body">
+        <div className="card-body position-relative">
+          {eidolonLoading && (
+            <div className="position-absolute top-0 start-0 w-100 h-100 d-flex align-items-center justify-content-center bg-white bg-opacity-75" style={{ zIndex: 10 }}>
+              <div className="text-center">
+                <div className="spinner-border text-primary mb-2" role="status">
+                  <span className="visually-hidden">Loading...</span>
+                </div>
+                <small className="text-muted">データを更新中...</small>
+              </div>
+            </div>
+          )}
           {(() => {
             const combatBuffs = characterData.buffs_debuffs.filter(buff => 
               !buff.skill.startsWith('星魂')
@@ -250,7 +282,17 @@ export default function CharacterDetailPage() {
             星魂効果一覧 ({eidolonLevel > 0 ? `${eidolonLevel}凸時` : '無凸'})
           </h3>
         </div>
-        <div className="card-body">
+        <div className="card-body position-relative">
+          {eidolonLoading && (
+            <div className="position-absolute top-0 start-0 w-100 h-100 d-flex align-items-center justify-content-center bg-white bg-opacity-75" style={{ zIndex: 10 }}>
+              <div className="text-center">
+                <div className="spinner-border text-warning mb-2" role="status">
+                  <span className="visually-hidden">Loading...</span>
+                </div>
+                <small className="text-muted">星魂データを更新中...</small>
+              </div>
+            </div>
+          )}
           {(() => {
             const eidolonBuffs = characterData.buffs_debuffs.filter(buff => 
               buff.skill.startsWith('星魂')
