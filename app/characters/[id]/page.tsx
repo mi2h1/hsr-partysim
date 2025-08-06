@@ -122,7 +122,8 @@ export default function CharacterDetailPage() {
                 onError={(e) => {
                   const img = e.target as HTMLImageElement;
                   img.style.display = 'none';
-                  img.nextElementSibling!.style.display = 'block';
+                  const fallback = img.nextElementSibling as HTMLDivElement;
+                  if (fallback) fallback.style.display = 'block';
                 }}
               />
               <div style={{ display: 'none' }}>
