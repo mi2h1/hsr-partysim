@@ -164,10 +164,10 @@ export default function SystemPage() {
             <div className="col-md-6">
               <h5 className="text-success">バフの計算ルール</h5>
               <div className="alert alert-success">
-                <strong>重要:</strong> 異種バフは乗算で計算されます
-                <hr className="my-2">
+                <strong>重要&colon;</strong> 異種バフは乗算で計算されます
+                <hr className="my-2" />
                 <small>
-                  例: 攻撃力+30%、与ダメージ+20%、炎属性+25%<br />
+                  例&colon; 攻撃力+30%、与ダメージ+20%、炎属性+25%<br />
                   &rarr; 1.30 &times; 1.20 &times; 1.25 = <strong>1.95倍</strong>
                 </small>
               </div>
