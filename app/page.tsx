@@ -79,11 +79,11 @@ export default function Home() {
                 ゲームシステムの仕組みと計算式について
               </p>
               <Link 
-                href="/about" 
+                href="/system" 
                 className="btn btn-secondary"
               >
-                <i className="bi bi-book me-1"></i>
-                詳細を見る
+                <i className="bi bi-gear-fill me-1"></i>
+                システム解説
               </Link>
             </div>
           </div>
