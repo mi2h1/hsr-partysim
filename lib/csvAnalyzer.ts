@@ -217,6 +217,7 @@ export class CSVAnalyzer {
       if (hpMatch) {
         effects.push({
           effectName: '最大HP増加',
+          buffType: 'バフ',
           targetType: this.extractTarget(description),
           statAffected: '最大HP',
           valueExpression: `+味方全体HP合計×${hpMatch[1]}%`,
@@ -232,6 +233,7 @@ export class CSVAnalyzer {
       if (defIgnoreMatch) {
         effects.push({
           effectName: '防御無視',
+          buffType: 'バフ',
           targetType: '味方全体',
           statAffected: '防御無視',
           valueExpression: `${defIgnoreMatch[1]}%`,
