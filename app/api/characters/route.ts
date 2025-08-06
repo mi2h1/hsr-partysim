@@ -9,17 +9,17 @@ export async function GET() {
       return NextResponse.json({
         success: true,
         characters: [
-          { id: 1, name: 'ロビン', element: '物理', path: '調和', created_at: new Date() },
-          { id: 2, name: 'トリビー', element: '量子', path: '調和', created_at: new Date() }
+          { id: 1, name: 'ロビン', element: '物理', path: '調和', version: '1.0', created_at: new Date() },
+          { id: 2, name: 'トリビー', element: '量子', path: '調和', version: '1.1', created_at: new Date() }
         ]
       });
     }
 
     const result = await query(`
       SELECT 
-        id, name, element, path, created_at
+        id, name, element, path, version, created_at
       FROM characters
-      ORDER BY created_at DESC
+      ORDER BY version ASC, id ASC
     `);
 
     return NextResponse.json({

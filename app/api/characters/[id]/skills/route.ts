@@ -16,7 +16,7 @@ export async function GET(
 
     // キャラクター基本情報取得
     const characterResult = await query(`
-      SELECT id, name, element, path
+      SELECT id, name, element, path, version
       FROM characters
       WHERE id = $1
     `, [characterId]);

@@ -28,13 +28,14 @@ export async function POST(request: NextRequest) {
     try {
       // キャラクター情報を保存
       const characterResult = await query(`
-        INSERT INTO characters (name, element, path)
-        VALUES ($1, $2, $3)
+        INSERT INTO characters (name, element, path, version)
+        VALUES ($1, $2, $3, $4)
         ON CONFLICT (name) DO UPDATE SET
           element = EXCLUDED.element,
-          path = EXCLUDED.path
+          path = EXCLUDED.path,
+          version = EXCLUDED.version
         RETURNING id
-      `, [characterData.name, characterData.element, characterData.path]);
+      `, [characterData.name, characterData.element, characterData.path, characterData.version]);
       
       const characterId = characterResult.rows[0].id;
       

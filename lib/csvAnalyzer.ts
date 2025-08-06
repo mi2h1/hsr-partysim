@@ -46,6 +46,7 @@ export class CSVAnalyzer {
       name: '',
       element: '',
       path: '',
+      version: '1.0', // デフォルトバージョン
       skills: []
     };
 
@@ -65,6 +66,8 @@ export class CSVAnalyzer {
         characterData.element = parts[1].trim();
       } else if (type === '運命') {
         characterData.path = parts[1].trim();
+      } else if (type === 'バージョン') {
+        characterData.version = parts[1].trim();
       }
       // スキル情報  
       else if (type === 'スキル' && parts.length >= 4) {

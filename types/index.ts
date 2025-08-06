@@ -5,6 +5,7 @@ export interface Character {
   name: string;
   element: string;
   path: string;
+  version: string;
   created_at: string;
 }
 
@@ -60,6 +61,7 @@ export interface CSVCharacterData {
   name: string;
   element: string;
   path: string;
+  version: string;
   skills: {
     type: string;
     name: string;
