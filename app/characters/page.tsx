@@ -130,14 +130,14 @@ export default function CharactersListPage() {
                   />
                   
                   {/* 画像下の余白エリア */}
-                  <div className="px-2 pt-1" style={{ height: '30px', backgroundColor: 'white' }}>
-                    {/* 属性・運命アイコン */}
-                    <div className="d-flex gap-1 align-items-center mb-0">
+                  <div className="position-relative px-2" style={{ height: '30px', backgroundColor: 'white' }}>
+                    {/* 属性・運命アイコン - 上段 */}
+                    <div className="d-flex gap-1 position-absolute" style={{ top: '-6px', left: '8px' }}>
                       <img 
                         src={`/imgs/i_${character.element}.webp`}
                         alt={character.element}
                         title={character.element}
-                        style={{ width: '14px', height: '14px', objectFit: 'contain' }}
+                        style={{ width: '16px', height: '16px', objectFit: 'contain' }}
                         onError={(e) => {
                           const img = e.target as HTMLImageElement;
                           console.log(`アイコン読み込み失敗: /imgs/i_${character.element}.webp`);
@@ -151,7 +151,7 @@ export default function CharactersListPage() {
                         src={`/imgs/i_${character.path}.webp`}
                         alt={character.path}
                         title={character.path}
-                        style={{ width: '14px', height: '14px', objectFit: 'contain' }}
+                        style={{ width: '16px', height: '16px', objectFit: 'contain' }}
                         onError={(e) => {
                           const img = e.target as HTMLImageElement;
                           console.log(`アイコン読み込み失敗: /imgs/i_${character.path}.webp`);
@@ -161,8 +161,11 @@ export default function CharactersListPage() {
                           console.log(`アイコン読み込み成功: /imgs/i_${character.path}.webp`);
                         }}
                       />
-                      
-                      <h6 className="mb-0 fw-bold text-dark ms-1" style={{ fontSize: '0.8rem' }}>
+                    </div>
+                    
+                    {/* 名前テキスト - 下段 */}
+                    <div className="position-absolute bottom-0 start-0 px-2 pb-1">
+                      <h6 className="mb-0 fw-bold text-dark" style={{ fontSize: '0.8rem' }}>
                         {character.name}
                       </h6>
                     </div>
