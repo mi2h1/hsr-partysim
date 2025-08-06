@@ -1,5 +1,6 @@
 import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
+import 'bootstrap/dist/css/bootstrap.min.css'
 import './globals.css'
 
 const inter = Inter({ subsets: ['latin'] })
@@ -16,18 +17,25 @@ export default function RootLayout({
 }) {
   return (
     <html lang="ja">
+      <head>
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css" />
+      </head>
       <body className={inter.className}>
-        <div className="min-h-screen bg-gradient-to-br from-blue-50 to-purple-50 dark:from-gray-900 dark:to-gray-800">
-          <nav className="bg-hsr-purple text-white p-4 shadow-lg">
-            <div className="container mx-auto">
-              <h1 className="text-2xl font-bold">崩壊スターレイル パーティシミュレーター</h1>
-              <p className="text-sm opacity-90">キャラクターのバフ・デバフ効果を分析</p>
+        <div className="min-vh-100 bg-light">
+          <nav className="navbar navbar-dark bg-primary shadow-sm">
+            <div className="container">
+              <span className="navbar-brand mb-0 h1">
+                <i className="bi bi-stars me-2"></i>
+                崩壊スターレイル パーティシミュレーター
+              </span>
+              <small className="text-light opacity-75">キャラクターのバフ・デバフ効果を分析</small>
             </div>
           </nav>
-          <main className="container mx-auto py-8 px-4">
+          <main className="container my-4">
             {children}
           </main>
         </div>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
       </body>
     </html>
   )
