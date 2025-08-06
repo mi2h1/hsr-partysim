@@ -113,32 +113,31 @@ export default function CharactersListPage() {
                 href={`/characters/${character.id}`}
                 className="text-decoration-none"
               >
-                <div className="card h-100 shadow-sm hover-card" style={{ minHeight: '320px' }}>
-                  <div className="position-relative overflow-hidden" style={{ height: '240px' }}>
-                    <img 
-                      src={`/imgs/${character.id}.webp`}
-                      alt={character.name}
-                      className="img-fluid w-100 h-100"
-                      style={{ objectFit: 'cover', objectPosition: 'center top' }}
-                      onError={(e) => {
-                        const img = e.target as HTMLImageElement;
-                        console.log(`キャラクター画像読み込み失敗: /imgs/${character.id}.webp`);
-                        img.src = `/imgs/${character.name}.webp`;
-                      }}
-                      onLoad={() => {
-                        console.log(`キャラクター画像読み込み成功: /imgs/${character.id}.webp`);
-                      }}
-                    />
-                  </div>
+                <div className="card h-100 shadow-sm hover-card position-relative" style={{ minHeight: '240px' }}>
+                  <img 
+                    src={`/imgs/${character.id}.webp`}
+                    alt={character.name}
+                    className="img-fluid w-100 h-100"
+                    style={{ objectFit: 'cover', objectPosition: 'center top', height: '240px' }}
+                    onError={(e) => {
+                      const img = e.target as HTMLImageElement;
+                      console.log(`キャラクター画像読み込み失敗: /imgs/${character.id}.webp`);
+                      img.src = `/imgs/${character.name}.webp`;
+                    }}
+                    onLoad={() => {
+                      console.log(`キャラクター画像読み込み成功: /imgs/${character.id}.webp`);
+                    }}
+                  />
                   
-                  <div className="card-body py-3">
-                    {/* 属性・運命アイコンを名前の上に配置 */}
-                    <div className="d-flex gap-2 mb-2">
+                  {/* オーバーレイテキスト - 画像の下部にかぶせる */}
+                  <div className="position-absolute bottom-0 start-0 p-2" style={{ zIndex: 10 }}>
+                    {/* 属性・運命アイコン */}
+                    <div className="d-flex gap-2 mb-1">
                       <img 
                         src={`/imgs/i_${character.element}.webp`}
                         alt={character.element}
                         title={character.element}
-                        style={{ width: '20px', height: '20px', objectFit: 'contain' }}
+                        style={{ width: '20px', height: '20px', objectFit: 'contain', filter: 'drop-shadow(0 1px 2px rgba(0,0,0,0.8))' }}
                         onError={(e) => {
                           const img = e.target as HTMLImageElement;
                           console.log(`アイコン読み込み失敗: /imgs/i_${character.element}.webp`);
@@ -152,7 +151,7 @@ export default function CharactersListPage() {
                         src={`/imgs/i_${character.path}.webp`}
                         alt={character.path}
                         title={character.path}
-                        style={{ width: '20px', height: '20px', objectFit: 'contain' }}
+                        style={{ width: '20px', height: '20px', objectFit: 'contain', filter: 'drop-shadow(0 1px 2px rgba(0,0,0,0.8))' }}
                         onError={(e) => {
                           const img = e.target as HTMLImageElement;
                           console.log(`アイコン読み込み失敗: /imgs/i_${character.path}.webp`);
@@ -164,7 +163,11 @@ export default function CharactersListPage() {
                       />
                     </div>
                     
-                    <h6 className="card-title mb-0 text-dark fw-bold text-start">
+                    <h6 className="mb-0 fw-bold" style={{ 
+                      color: 'white', 
+                      textShadow: '0 1px 3px rgba(0,0,0,0.8)',
+                      fontSize: '0.9rem'
+                    }}>
                       {character.name}
                     </h6>
                   </div>
