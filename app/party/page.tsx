@@ -152,8 +152,30 @@ export default function PartyPage() {
                         </div>
                         <h5 className="card-title">{slot.character.name}</h5>
                         <p className="card-text">
-                          <span className="badge bg-primary me-2">{slot.character.element}</span>
-                          <span className="badge bg-secondary">{slot.character.path}</span>
+                          <span className="badge bg-primary me-2 d-flex align-items-center" style={{ display: 'inline-flex !important' }}>
+                            <img 
+                              src={`/imgs/i_${slot.character.element}.webp`}
+                              alt={slot.character.element}
+                              style={{ width: '16px', height: '16px', marginRight: '4px' }}
+                              onError={(e) => {
+                                const img = e.target as HTMLImageElement;
+                                img.style.display = 'none';
+                              }}
+                            />
+                            {slot.character.element}
+                          </span>
+                          <span className="badge bg-secondary d-flex align-items-center" style={{ display: 'inline-flex !important' }}>
+                            <img 
+                              src={`/imgs/i_${slot.character.path}.webp`}
+                              alt={slot.character.path}
+                              style={{ width: '16px', height: '16px', marginRight: '4px' }}
+                              onError={(e) => {
+                                const img = e.target as HTMLImageElement;
+                                img.style.display = 'none';
+                              }}
+                            />
+                            {slot.character.path}
+                          </span>
                         </p>
                         <button 
                           className="btn btn-outline-danger btn-sm"
@@ -399,8 +421,30 @@ export default function PartyPage() {
                                 <strong>{character.name}</strong>
                               </h5>
                               <div className="mt-1">
-                                <span className="badge bg-primary me-1">{character.element}</span>
-                                <span className="badge bg-secondary">{character.path}</span>
+                                <span className="badge bg-primary me-1 d-flex align-items-center" style={{ display: 'inline-flex !important' }}>
+                                  <img 
+                                    src={`/imgs/i_${character.element}.webp`}
+                                    alt={character.element}
+                                    style={{ width: '14px', height: '14px', marginRight: '3px' }}
+                                    onError={(e) => {
+                                      const img = e.target as HTMLImageElement;
+                                      img.style.display = 'none';
+                                    }}
+                                  />
+                                  {character.element}
+                                </span>
+                                <span className="badge bg-secondary d-flex align-items-center" style={{ display: 'inline-flex !important' }}>
+                                  <img 
+                                    src={`/imgs/i_${character.path}.webp`}
+                                    alt={character.path}
+                                    style={{ width: '14px', height: '14px', marginRight: '3px' }}
+                                    onError={(e) => {
+                                      const img = e.target as HTMLImageElement;
+                                      img.style.display = 'none';
+                                    }}
+                                  />
+                                  {character.path}
+                                </span>
                               </div>
                             </div>
                           </div>

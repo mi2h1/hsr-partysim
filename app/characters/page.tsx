@@ -140,10 +140,28 @@ export default function CharactersListPage() {
                     </h5>
                     
                     <div className="d-flex justify-content-center gap-2">
-                      <span className="badge bg-info px-2 py-1">
+                      <span className="badge bg-info px-2 py-1 d-flex align-items-center">
+                        <img 
+                          src={`/imgs/i_${character.element}.webp`}
+                          alt={character.element}
+                          style={{ width: '16px', height: '16px', marginRight: '4px' }}
+                          onError={(e) => {
+                            const img = e.target as HTMLImageElement;
+                            img.style.display = 'none';
+                          }}
+                        />
                         {character.element}
                       </span>
-                      <span className="badge bg-secondary px-2 py-1">
+                      <span className="badge bg-secondary px-2 py-1 d-flex align-items-center">
+                        <img 
+                          src={`/imgs/i_${character.path}.webp`}
+                          alt={character.path}
+                          style={{ width: '16px', height: '16px', marginRight: '4px' }}
+                          onError={(e) => {
+                            const img = e.target as HTMLImageElement;
+                            img.style.display = 'none';
+                          }}
+                        />
                         {character.path}
                       </span>
                     </div>
