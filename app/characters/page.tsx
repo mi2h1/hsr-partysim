@@ -106,7 +106,7 @@ export default function CharactersListPage() {
           </div>
         </div>
       ) : (
-        <div className="row g-2" style={{ gridTemplateColumns: 'repeat(7, 1fr)' }}>
+        <div className="d-flex flex-wrap justify-content-center gap-2">
           {characters.map((character) => (
             <div key={character.id} style={{ flex: '0 0 calc(14.28% - 8px)', maxWidth: 'calc(14.28% - 8px)' }}>
               <Link 
