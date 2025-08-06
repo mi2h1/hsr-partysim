@@ -61,7 +61,7 @@ export default function PartyPage() {
       setCharacterBuffs(prev => {
         const newState = {
           ...prev,
-          [characterId]: data.buffs || []
+          [characterId]: data.buffs_debuffs || []
         };
         console.log('バフステート更新:', newState);
         return newState;
