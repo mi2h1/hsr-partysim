@@ -151,32 +151,28 @@ export default function PartyPage() {
                           </div>
                         </div>
                         <h5 className="card-title">{slot.character.name}</h5>
-                        <p className="card-text">
-                          <span className="badge bg-primary me-2 d-flex align-items-center" style={{ display: 'inline-flex !important' }}>
-                            <img 
-                              src={`/imgs/i_${slot.character.element}.webp`}
-                              alt={slot.character.element}
-                              style={{ width: '16px', height: '16px', marginRight: '4px' }}
-                              onError={(e) => {
-                                const img = e.target as HTMLImageElement;
-                                img.style.display = 'none';
-                              }}
-                            />
-                            {slot.character.element}
-                          </span>
-                          <span className="badge bg-secondary d-flex align-items-center" style={{ display: 'inline-flex !important' }}>
-                            <img 
-                              src={`/imgs/i_${slot.character.path}.webp`}
-                              alt={slot.character.path}
-                              style={{ width: '16px', height: '16px', marginRight: '4px' }}
-                              onError={(e) => {
-                                const img = e.target as HTMLImageElement;
-                                img.style.display = 'none';
-                              }}
-                            />
-                            {slot.character.path}
-                          </span>
-                        </p>
+                        <div className="d-flex justify-content-center gap-3 mb-2">
+                          <img 
+                            src={`/imgs/i_${slot.character.element}.webp`}
+                            alt={slot.character.element}
+                            title={slot.character.element}
+                            style={{ width: '20px', height: '20px' }}
+                            onError={(e) => {
+                              const img = e.target as HTMLImageElement;
+                              img.style.display = 'none';
+                            }}
+                          />
+                          <img 
+                            src={`/imgs/i_${slot.character.path}.webp`}
+                            alt={slot.character.path}
+                            title={slot.character.path}
+                            style={{ width: '20px', height: '20px' }}
+                            onError={(e) => {
+                              const img = e.target as HTMLImageElement;
+                              img.style.display = 'none';
+                            }}
+                          />
+                        </div>
                         <button 
                           className="btn btn-outline-danger btn-sm"
                           onClick={() => handleCharacterSelect(slot.id, null)}
@@ -420,31 +416,27 @@ export default function PartyPage() {
                               <h5 className="card-title mb-0">
                                 <strong>{character.name}</strong>
                               </h5>
-                              <div className="mt-1">
-                                <span className="badge bg-primary me-1 d-flex align-items-center" style={{ display: 'inline-flex !important' }}>
-                                  <img 
-                                    src={`/imgs/i_${character.element}.webp`}
-                                    alt={character.element}
-                                    style={{ width: '14px', height: '14px', marginRight: '3px' }}
-                                    onError={(e) => {
-                                      const img = e.target as HTMLImageElement;
-                                      img.style.display = 'none';
-                                    }}
-                                  />
-                                  {character.element}
-                                </span>
-                                <span className="badge bg-secondary d-flex align-items-center" style={{ display: 'inline-flex !important' }}>
-                                  <img 
-                                    src={`/imgs/i_${character.path}.webp`}
-                                    alt={character.path}
-                                    style={{ width: '14px', height: '14px', marginRight: '3px' }}
-                                    onError={(e) => {
-                                      const img = e.target as HTMLImageElement;
-                                      img.style.display = 'none';
-                                    }}
-                                  />
-                                  {character.path}
-                                </span>
+                              <div className="mt-2 d-flex gap-2">
+                                <img 
+                                  src={`/imgs/i_${character.element}.webp`}
+                                  alt={character.element}
+                                  title={character.element}
+                                  style={{ width: '18px', height: '18px' }}
+                                  onError={(e) => {
+                                    const img = e.target as HTMLImageElement;
+                                    img.style.display = 'none';
+                                  }}
+                                />
+                                <img 
+                                  src={`/imgs/i_${character.path}.webp`}
+                                  alt={character.path}
+                                  title={character.path}
+                                  style={{ width: '18px', height: '18px' }}
+                                  onError={(e) => {
+                                    const img = e.target as HTMLImageElement;
+                                    img.style.display = 'none';
+                                  }}
+                                />
                               </div>
                             </div>
                           </div>

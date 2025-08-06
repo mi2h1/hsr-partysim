@@ -143,39 +143,35 @@ export default function CharactersListPage() {
                       {character.name}
                     </h5>
                     
-                    <div className="d-flex justify-content-center gap-2">
-                      <span className="badge bg-info px-2 py-1 d-flex align-items-center">
-                        <img 
-                          src={`/imgs/i_${character.element}.webp`}
-                          alt={character.element}
-                          style={{ width: '16px', height: '16px', marginRight: '4px' }}
-                          onError={(e) => {
-                            const img = e.target as HTMLImageElement;
-                            console.log(`アイコン読み込み失敗: /imgs/i_${character.element}.webp`);
-                            img.style.display = 'none';
-                          }}
-                          onLoad={() => {
-                            console.log(`アイコン読み込み成功: /imgs/i_${character.element}.webp`);
-                          }}
-                        />
-                        {character.element}
-                      </span>
-                      <span className="badge bg-secondary px-2 py-1 d-flex align-items-center">
-                        <img 
-                          src={`/imgs/i_${character.path}.webp`}
-                          alt={character.path}
-                          style={{ width: '16px', height: '16px', marginRight: '4px' }}
-                          onError={(e) => {
-                            const img = e.target as HTMLImageElement;
-                            console.log(`アイコン読み込み失敗: /imgs/i_${character.path}.webp`);
-                            img.style.display = 'none';
-                          }}
-                          onLoad={() => {
-                            console.log(`アイコン読み込み成功: /imgs/i_${character.path}.webp`);
-                          }}
-                        />
-                        {character.path}
-                      </span>
+                    <div className="d-flex justify-content-center gap-3">
+                      <img 
+                        src={`/imgs/i_${character.element}.webp`}
+                        alt={character.element}
+                        title={character.element}
+                        style={{ width: '24px', height: '24px' }}
+                        onError={(e) => {
+                          const img = e.target as HTMLImageElement;
+                          console.log(`アイコン読み込み失敗: /imgs/i_${character.element}.webp`);
+                          img.style.display = 'none';
+                        }}
+                        onLoad={() => {
+                          console.log(`アイコン読み込み成功: /imgs/i_${character.element}.webp`);
+                        }}
+                      />
+                      <img 
+                        src={`/imgs/i_${character.path}.webp`}
+                        alt={character.path}
+                        title={character.path}
+                        style={{ width: '24px', height: '24px' }}
+                        onError={(e) => {
+                          const img = e.target as HTMLImageElement;
+                          console.log(`アイコン読み込み失敗: /imgs/i_${character.path}.webp`);
+                          img.style.display = 'none';
+                        }}
+                        onLoad={() => {
+                          console.log(`アイコン読み込み成功: /imgs/i_${character.path}.webp`);
+                        }}
+                      />
                     </div>
                   </div>
                 </div>

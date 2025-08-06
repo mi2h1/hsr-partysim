@@ -134,37 +134,27 @@ export default function CharacterDetailPage() {
               <h1 className="display-5 text-primary fw-bold mb-3">
                 {characterData.character.name}
               </h1>
-              <div className="d-flex gap-3 flex-wrap">
-                <span className="badge bg-info px-3 py-2 d-flex align-items-center">
-                  <img 
-                    src={`/imgs/i_${characterData.character.element}.webp`}
-                    alt={characterData.character.element}
-                    style={{ width: '20px', height: '20px', marginRight: '8px' }}
-                    onError={(e) => {
-                      const img = e.target as HTMLImageElement;
-                      img.style.display = 'none';
-                      const fallback = img.nextElementSibling as HTMLElement;
-                      if (fallback) fallback.style.display = 'inline';
-                    }}
-                  />
-                  <i className="bi bi-lightning me-1" style={{ display: 'none' }}></i>
-                  属性: {characterData.character.element}
-                </span>
-                <span className="badge bg-secondary px-3 py-2 d-flex align-items-center">
-                  <img 
-                    src={`/imgs/i_${characterData.character.path}.webp`}
-                    alt={characterData.character.path}
-                    style={{ width: '20px', height: '20px', marginRight: '8px' }}
-                    onError={(e) => {
-                      const img = e.target as HTMLImageElement;
-                      img.style.display = 'none';
-                      const fallback = img.nextElementSibling as HTMLElement;
-                      if (fallback) fallback.style.display = 'inline';
-                    }}
-                  />
-                  <i className="bi bi-compass me-1" style={{ display: 'none' }}></i>
-                  運命: {characterData.character.path}
-                </span>
+              <div className="d-flex gap-4 flex-wrap">
+                <img 
+                  src={`/imgs/i_${characterData.character.element}.webp`}
+                  alt={characterData.character.element}
+                  title={`属性: ${characterData.character.element}`}
+                  style={{ width: '32px', height: '32px' }}
+                  onError={(e) => {
+                    const img = e.target as HTMLImageElement;
+                    img.style.display = 'none';
+                  }}
+                />
+                <img 
+                  src={`/imgs/i_${characterData.character.path}.webp`}
+                  alt={characterData.character.path}
+                  title={`運命: ${characterData.character.path}`}
+                  style={{ width: '32px', height: '32px' }}
+                  onError={(e) => {
+                    const img = e.target as HTMLImageElement;
+                    img.style.display = 'none';
+                  }}
+                />
               </div>
             </div>
             
