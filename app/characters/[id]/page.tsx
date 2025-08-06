@@ -186,9 +186,9 @@ export default function CharacterDetailPage() {
     <div>
       {/* キャラクター情報ヘッダー */}
       <div className="card shadow-sm mb-4">
-        <div className="row align-items-center g-0">
-          <div className="col-md-3">
-            <div style={{ width: '200px', height: '200px', overflow: 'hidden' }}>
+        <div className="row g-0" style={{ minHeight: '200px' }}>
+          <div className="col-4">
+            <div style={{ height: '200px', overflow: 'hidden' }}>
               <img 
                 src={`/imgs/${characterData.character.id}.webp`}
                 alt={characterData.character.name}
@@ -201,40 +201,37 @@ export default function CharacterDetailPage() {
               />
             </div>
           </div>
-          <div className="col-md-9 p-4">
-            <h1 className="display-5 text-dark fw-bold mb-3">
-              {characterData.character.name}
-            </h1>
-            <div className="d-flex gap-4 flex-wrap mb-4">
-              <img 
-                src={`/imgs/i_${characterData.character.element}.webp`}
-                alt={characterData.character.element}
-                title={`属性: ${characterData.character.element}`}
-                style={{ width: '32px', height: '32px' }}
-              />
-              <img 
-                src={`/imgs/i_${characterData.character.path}.webp`}
-                alt={characterData.character.path}
-                title={`運命: ${characterData.character.path}`}
-                style={{ width: '32px', height: '32px' }}
-              />
+          <div className="col-8 d-flex align-items-center">
+            <div className="flex-grow-1 px-4">
+              <h1 className="display-6 text-dark fw-bold mb-2">
+                {characterData.character.name}
+              </h1>
+              <div className="d-flex gap-3 mb-3">
+                <img 
+                  src={`/imgs/i_${characterData.character.element}.webp`}
+                  alt={characterData.character.element}
+                  title={`属性: ${characterData.character.element}`}
+                  style={{ width: '24px', height: '24px' }}
+                />
+                <img 
+                  src={`/imgs/i_${characterData.character.path}.webp`}
+                  alt={characterData.character.path}
+                  title={`運命: ${characterData.character.path}`}
+                  style={{ width: '24px', height: '24px' }}
+                />
+              </div>
             </div>
-            
-            <div>
-              <label className="form-label fw-bold">
-                星魂レベル
-                {eidolonLoading && (
-                  <span className="ms-2">
-                    <div className="spinner-border spinner-border-sm text-primary" role="status">
-                      <span className="visually-hidden">Loading...</span>
-                    </div>
-                  </span>
-                )}
-              </label>
+            <div className="pe-4">
+              <label className="form-label fw-bold mb-2">星魂レベル</label>
+              {eidolonLoading && (
+                <div className="spinner-border spinner-border-sm text-primary mb-2" role="status">
+                  <span className="visually-hidden">Loading...</span>
+                </div>
+              )}
               <select
                 value={eidolonLevel}
                 onChange={(e) => handleEidolonChange(parseInt(e.target.value))}
-                className="form-select form-select-lg"
+                className="form-select"
                 disabled={eidolonLoading}
               >
                 {[0, 1, 2, 3, 4, 5, 6].map(level => (
