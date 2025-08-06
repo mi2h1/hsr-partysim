@@ -120,6 +120,7 @@ export class CSVAnalyzer {
       if (dmgMatch) {
         effects.push({
           effectName: '与ダメージ増加',
+          buffType: 'バフ',
           targetType: this.extractTarget(description),
           statAffected: '与ダメージ',
           valueExpression: `+${dmgMatch[1]}%`,
@@ -133,6 +134,7 @@ export class CSVAnalyzer {
       if (resMatch) {
         effects.push({
           effectName: '全属性耐性貫通',
+          buffType: 'バフ',
           targetType: this.extractTarget(description),
           statAffected: '全属性耐性貫通',
           valueExpression: `+${resMatch[1]}%`,
@@ -150,6 +152,7 @@ export class CSVAnalyzer {
       if (enemyDmgMatch) {
         effects.push({
           effectName: '敵被ダメージ増加',
+          buffType: 'デバフ',
           targetType: '敵全体',
           statAffected: '受けるダメージ',
           valueExpression: `+${enemyDmgMatch[1]}%`,
@@ -164,6 +167,7 @@ export class CSVAnalyzer {
       if (atkBuffMatch) {
         effects.push({
           effectName: '攻撃力増加',
+          buffType: 'バフ',
           targetType: this.extractTarget(description),
           statAffected: '攻撃力',
           valueExpression: `+${atkBuffMatch[2]} + 攻撃力×${atkBuffMatch[1]}%`,
@@ -181,6 +185,7 @@ export class CSVAnalyzer {
       if (critMatch) {
         effects.push({
           effectName: '会心ダメージ増加',
+          buffType: 'バフ',
           targetType: this.extractTarget(description),
           statAffected: '会心ダメージ',
           valueExpression: `+${critMatch[1]}%`,
@@ -197,6 +202,7 @@ export class CSVAnalyzer {
       if (stackMatch) {
         effects.push({
           effectName: '与ダメージ増加（累積）',
+          buffType: 'バフ',
           targetType: this.extractTarget(description),
           statAffected: '与ダメージ',
           valueExpression: `+${stackMatch[1]}%`,
