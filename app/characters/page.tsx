@@ -113,12 +113,12 @@ export default function CharactersListPage() {
                 href={`/characters/${character.id}`}
                 className="text-decoration-none"
               >
-                <div className="card h-100 shadow-sm hover-card position-relative" style={{ minHeight: '270px' }}>
+                <div className="card h-100 shadow-sm hover-card position-relative" style={{ minHeight: '280px' }}>
                   <img 
                     src={`/imgs/${character.id}.webp`}
                     alt={character.name}
                     className="img-fluid w-100"
-                    style={{ objectFit: 'cover', objectPosition: 'center top', height: '240px' }}
+                    style={{ objectFit: 'cover', objectPosition: 'center top', height: '250px' }}
                     onError={(e) => {
                       const img = e.target as HTMLImageElement;
                       console.log(`キャラクター画像読み込み失敗: /imgs/${character.id}.webp`);
