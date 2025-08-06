@@ -19,7 +19,7 @@ export async function GET() {
       SELECT 
         id, name, element, path, version, created_at
       FROM characters
-      ORDER BY version ASC NULLS LAST, id ASC
+      ORDER BY version DESC NULLS LAST, id ASC
     `);
 
     return NextResponse.json({
