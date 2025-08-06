@@ -130,7 +130,7 @@ export default function CharactersListPage() {
                   />
                   
                   {/* 画像下の余白エリア */}
-                  <div className="position-relative px-2" style={{ height: '30px', backgroundColor: 'white' }}>
+                  <div className="position-relative px-2" style={{ height: '30px' }}>
                     {/* 属性・運命アイコン - 上段 */}
                     <div className="d-flex gap-2 position-absolute" style={{ top: '-20px', left: '8px' }}>
                       <img 
