@@ -183,7 +183,7 @@ export default function CharacterDetailPage() {
   };
 
   return (
-    <div className="container-fluid" style={{ maxWidth: '1400px', margin: '0 auto', padding: '0 20px' }}>
+    <div>
       {/* キャラクター情報ヘッダー */}
       <div className="card shadow-sm mb-4">
         <div className="row g-0" style={{ minHeight: '200px' }}>
