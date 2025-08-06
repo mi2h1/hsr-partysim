@@ -54,12 +54,18 @@ export default function PartyPage() {
 
   const fetchCharacterBuffs = async (characterId: number) => {
     try {
+      console.log('バフ取得開始 - キャラクターID:', characterId);
       const response = await fetch(`/api/characters/${characterId}/buffs`);
       const data = await response.json();
-      setCharacterBuffs(prev => ({
-        ...prev,
-        [characterId]: data.buffs || []
-      }));
+      console.log('バフ取得結果:', data);
+      setCharacterBuffs(prev => {
+        const newState = {
+          ...prev,
+          [characterId]: data.buffs || []
+        };
+        console.log('バフステート更新:', newState);
+        return newState;
+      });
     } catch (error) {
       console.error('バフ取得エラー:', error);
       setCharacterBuffs(prev => ({
@@ -84,6 +90,18 @@ export default function PartyPage() {
       <div className="row">
         <div className="col">
           <h1 className="mb-4">パーティ編成</h1>
+          
+          {/* デバッグ情報 */}
+          <div className="alert alert-info mb-4">
+            <small>
+              <strong>デバッグ情報:</strong> 
+              選択キャラクター: {partySlots.filter(slot => slot.character).length}人, 
+              バフデータ取得済み: {Object.keys(characterBuffs).length}人
+              {Object.keys(characterBuffs).length > 0 && (
+                <span> ({Object.keys(characterBuffs).join(', ')})</span>
+              )}
+            </small>
+          </div>
           
           {/* パーティスロット */}
           <div className="row g-3 mb-4">
@@ -144,7 +162,16 @@ export default function PartyPage() {
             <>
               <div className="row mb-4">
                 <div className="col">
-                  <h3 className="mb-3">バフ効果</h3>
+                  <h3 className="mb-3">バフ効果 
+                    <small className="text-muted">
+                      ({partySlots
+                        .filter(slot => slot.character)
+                        .flatMap(slot => {
+                          const buffs = characterBuffs[slot.character!.id] || [];
+                          return buffs.filter(buff => buff.buff_type === 'バフ');
+                        }).length}件)
+                    </small>
+                  </h3>
                   <div className="table-responsive">
                     <table className="table table-striped">
                       <thead>
@@ -186,7 +213,16 @@ export default function PartyPage() {
 
               <div className="row mb-4">
                 <div className="col">
-                  <h3 className="mb-3">デバフ効果</h3>
+                  <h3 className="mb-3">デバフ効果
+                    <small className="text-muted">
+                      ({partySlots
+                        .filter(slot => slot.character)
+                        .flatMap(slot => {
+                          const buffs = characterBuffs[slot.character!.id] || [];
+                          return buffs.filter(buff => buff.buff_type === 'デバフ');
+                        }).length}件)
+                    </small>
+                  </h3>
                   <div className="table-responsive">
                     <table className="table table-striped">
                       <thead>
@@ -228,7 +264,16 @@ export default function PartyPage() {
 
               <div className="row">
                 <div className="col">
-                  <h3 className="mb-3">追加効果</h3>
+                  <h3 className="mb-3">追加効果
+                    <small className="text-muted">
+                      ({partySlots
+                        .filter(slot => slot.character)
+                        .flatMap(slot => {
+                          const buffs = characterBuffs[slot.character!.id] || [];
+                          return buffs.filter(buff => buff.buff_type === 'その他');
+                        }).length}件)
+                    </small>
+                  </h3>
                   <div className="table-responsive">
                     <table className="table table-striped">
                       <thead>
