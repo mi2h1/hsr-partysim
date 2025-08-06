@@ -10,9 +10,9 @@
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --foreground-rgb: 255, 255, 255;
-    --background-start-rgb: 0, 0, 0;
-    --background-end-rgb: 0, 0, 0;
+    --foreground-rgb: 0, 0, 0;
+    --background-start-rgb: 255, 255, 255;
+    --background-end-rgb: 255, 255, 255;
   }
 }
 
@@ -36,9 +36,18 @@ body {
 }
 
 .hsr-table td {
-  @apply px-4 py-2 text-sm border border-gray-300 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-800;
+  @apply px-4 py-2 text-sm border border-gray-300 hover:bg-gray-50;
 }
 
 .hsr-card {
-  @apply bg-white dark:bg-gray-800 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700 p-6;
+  @apply bg-white rounded-lg shadow-lg border border-gray-200 p-6;
+}
+
+/* 星魂効果ハイライト */
+.eidolon-highlight {
+  @apply bg-yellow-100 border-yellow-400 text-yellow-900 font-medium;
+}
+
+.eidolon-new-effect {
+  @apply bg-green-100 border-green-400 text-green-900 font-medium;
 }

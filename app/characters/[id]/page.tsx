@@ -83,11 +83,11 @@ export default function CharacterDetailPage() {
 
   if (error) {
     return (
-      <div className="hsr-card bg-red-50 dark:bg-red-900/20">
-        <h2 className="text-xl font-bold text-red-700 dark:text-red-300 mb-4">
+      <div className="hsr-card bg-red-50">
+        <h2 className="text-xl font-bold text-red-700 mb-4">
           ❌ エラーが発生しました
         </h2>
-        <p className="text-red-600 dark:text-red-400">{error}</p>
+        <p className="text-red-600">{error}</p>
         <button 
           onClick={() => fetchCharacterData(characterId, eidolonLevel)}
           className="mt-4 bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700 transition-colors"
@@ -131,7 +131,7 @@ export default function CharacterDetailPage() {
             <select
               value={eidolonLevel}
               onChange={(e) => handleEidolonChange(parseInt(e.target.value))}
-              className="bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded px-3 py-2 text-sm focus:ring-2 focus:ring-hsr-purple focus:border-transparent"
+              className="bg-white border border-gray-300 rounded px-3 py-2 text-sm focus:ring-2 focus:ring-hsr-purple focus:border-transparent"
             >
               {[0, 1, 2, 3, 4, 5, 6].map(level => (
                 <option key={level} value={level}>
@@ -169,17 +169,36 @@ export default function CharacterDetailPage() {
                 </tr>
               </thead>
               <tbody>
-                {characterData.buffs_debuffs.map((buff, index) => (
-                  <tr key={index} className="hover:bg-gray-50 dark:hover:bg-gray-700">
-                    <td className="font-medium">{buff.skill}</td>
-                    <td>{buff.name}</td>
-                    <td>{buff.duration}</td>
-                    <td>{buff.target}</td>
-                    <td className="font-medium text-hsr-purple">{buff.stat}</td>
-                    <td className="font-bold text-green-600">{buff.value}</td>
-                    <td className="text-sm text-gray-600 dark:text-gray-400">{buff.note}</td>
-                  </tr>
-                ))}
+                {characterData.buffs_debuffs.map((buff, index) => {
+                  // 星魂効果のハイライト判定
+                  const isEidolonEffect = buff.skill.startsWith('星魂');
+                  const buffEidolonLevel = isEidolonEffect ? parseInt(buff.skill.replace('星魂', '')) : 0;
+                  const shouldHighlight = isEidolonEffect && buffEidolonLevel <= eidolonLevel;
+                  
+                  let rowClass = "hover:bg-gray-50";
+                  if (shouldHighlight) {
+                    rowClass += " eidolon-new-effect";
+                  }
+                  
+                  return (
+                    <tr key={index} className={rowClass}>
+                      <td className="font-medium">{buff.skill}</td>
+                      <td className={isEidolonEffect ? "font-semibold" : ""}>{buff.name}</td>
+                      <td>{buff.duration}</td>
+                      <td>{buff.target}</td>
+                      <td className="font-medium text-hsr-purple">{buff.stat}</td>
+                      <td className={`font-bold ${isEidolonEffect ? "text-green-700" : "text-green-600"}`}>
+                        {buff.value}
+                        {isEidolonEffect && (
+                          <span className="ml-2 text-xs bg-green-200 text-green-800 px-2 py-1 rounded-full">
+                            {buffEidolonLevel}凸効果
+                          </span>
+                        )}
+                      </td>
+                      <td className="text-sm text-gray-600">{buff.note}</td>
+                    </tr>
+                  );
+                })}
               </tbody>
             </table>
           </div>
@@ -188,31 +207,34 @@ export default function CharacterDetailPage() {
 
       {/* 統計情報 */}
       <div className="grid md:grid-cols-3 gap-4">
-        <div className="hsr-card bg-blue-50 dark:bg-blue-900/20">
-          <h3 className="font-semibold text-blue-700 dark:text-blue-300 mb-2">
+        <div className="hsr-card bg-blue-50">
+          <h3 className="font-semibold text-blue-700 mb-2">
             バフ・デバフ総数
           </h3>
-          <p className="text-2xl font-bold text-blue-800 dark:text-blue-200">
+          <p className="text-2xl font-bold text-blue-800">
             {characterData.buffs_debuffs.length}
           </p>
         </div>
         
-        <div className="hsr-card bg-green-50 dark:bg-green-900/20">
-          <h3 className="font-semibold text-green-700 dark:text-green-300 mb-2">
+        <div className="hsr-card bg-green-50">
+          <h3 className="font-semibold text-green-700 mb-2">
             味方支援効果
           </h3>
-          <p className="text-2xl font-bold text-green-800 dark:text-green-200">
+          <p className="text-2xl font-bold text-green-800">
             {characterData.buffs_debuffs.filter(b => b.target.includes('味方')).length}
           </p>
         </div>
         
-        <div className="hsr-card bg-red-50 dark:bg-red-900/20">
-          <h3 className="font-semibold text-red-700 dark:text-red-300 mb-2">
+        <div className="hsr-card bg-red-50">
+          <h3 className="font-semibold text-red-700 mb-2">
             敵弱体効果
           </h3>
-          <p className="text-2xl font-bold text-red-800 dark:text-red-200">
+          <p className="text-2xl font-bold text-red-800">
             {characterData.buffs_debuffs.filter(b => b.target.includes('敵')).length}
           </p>
+          <div className="mt-2 text-sm text-gray-600">
+            星魂効果: {characterData.buffs_debuffs.filter(b => b.skill.startsWith('星魂') && parseInt(b.skill.replace('星魂', '')) <= eidolonLevel).length}個
+          </div>
         </div>
       </div>
 
