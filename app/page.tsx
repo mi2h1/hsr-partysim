@@ -3,19 +3,6 @@ import Link from 'next/link'
 export default function Home() {
   return (
     <div>
-      {/* ヒーローセクション */}
-      <div className="card border-0 shadow-sm mb-4">
-        <div className="card-body text-center py-5">
-          <h1 className="display-4 text-primary fw-bold mb-3">
-            <i className="bi bi-stars me-2"></i>
-            HSR パーティシミュレーター
-          </h1>
-          <p className="lead text-muted">
-            崩壊スターレイルのキャラクターのバフ・デバフ効果を分析し、最適なパーティ編成をシミュレートできます。
-          </p>
-        </div>
-      </div>
-
       {/* 機能カード */}
       <div className="row g-4 mb-4">
         <div className="col-md-6">
