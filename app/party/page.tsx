@@ -36,6 +36,7 @@ export default function PartyPage() {
   ]);
   const [availableCharacters, setAvailableCharacters] = useState<Character[]>([]);
   const [characterBuffs, setCharacterBuffs] = useState<Record<number, BuffDebuff[]>>({});
+  const [displayMode, setDisplayMode] = useState<'unified' | 'individual'>('unified');
 
   useEffect(() => {
     fetchCharacters();
@@ -91,17 +92,38 @@ export default function PartyPage() {
         <div className="col">
           <h1 className="mb-4">パーティ編成</h1>
           
-          {/* デバッグ情報 */}
-          <div className="alert alert-info mb-4">
-            <small>
-              <strong>デバッグ情報:</strong> 
-              選択キャラクター: {partySlots.filter(slot => slot.character).length}人, 
-              バフデータ取得済み: {Object.keys(characterBuffs).length}人
-              {Object.keys(characterBuffs).length > 0 && (
-                <span> ({Object.keys(characterBuffs).join(', ')})</span>
-              )}
-            </small>
-          </div>
+          {/* 表示切り替え */}
+          {partySlots.some(slot => slot.character) && (
+            <div className="mb-4">
+              <div className="btn-group" role="group">
+                <input 
+                  type="radio" 
+                  className="btn-check" 
+                  name="displayMode" 
+                  id="unified" 
+                  checked={displayMode === 'unified'}
+                  onChange={() => setDisplayMode('unified')}
+                />
+                <label className="btn btn-outline-primary" htmlFor="unified">
+                  <i className="bi bi-list-ul me-1"></i>
+                  統合表示
+                </label>
+
+                <input 
+                  type="radio" 
+                  className="btn-check" 
+                  name="displayMode" 
+                  id="individual" 
+                  checked={displayMode === 'individual'}
+                  onChange={() => setDisplayMode('individual')}
+                />
+                <label className="btn btn-outline-primary" htmlFor="individual">
+                  <i className="bi bi-people me-1"></i>
+                  キャラクター別表示
+                </label>
+              </div>
+            </div>
+          )}
           
           {/* パーティスロット */}
           <div className="row g-3 mb-4">
@@ -111,6 +133,22 @@ export default function PartyPage() {
                   <div className="card-body d-flex flex-column justify-content-center align-items-center" style={{ minHeight: '200px' }}>
                     {slot.character ? (
                       <div className="text-center">
+                        <div className="mb-3">
+                          <img 
+                            src={`/assets/imgs/${slot.character.id}.webp`}
+                            alt={slot.character.name}
+                            className="img-fluid rounded-circle"
+                            style={{ width: '80px', height: '80px', objectFit: 'cover' }}
+                            onError={(e) => {
+                              const img = e.target as HTMLImageElement;
+                              img.style.display = 'none';
+                              img.nextElementSibling!.style.display = 'block';
+                            }}
+                          />
+                          <div style={{ display: 'none' }}>
+                            <i className="bi bi-person-circle" style={{ fontSize: '80px', color: '#0d6efd' }}></i>
+                          </div>
+                        </div>
                         <h5 className="card-title">{slot.character.name}</h5>
                         <p className="card-text">
                           <span className="badge bg-primary me-2">{slot.character.element}</span>
@@ -160,7 +198,10 @@ export default function PartyPage() {
           {/* バフ・デバフ表示 */}
           {partySlots.some(slot => slot.character) && (
             <>
-              <div className="row mb-4">
+              {displayMode === 'unified' ? (
+                // 統合表示
+                <>
+                  <div className="row mb-4">
                 <div className="col">
                   <h3 className="mb-3">バフ効果 
                     <small className="text-muted">
@@ -312,6 +353,152 @@ export default function PartyPage() {
                   </div>
                 </div>
               </div>
+            </>
+          ) : (
+            // キャラクター別表示
+            <div className="row">
+              {partySlots
+                .filter(slot => slot.character)
+                .map((slot, index) => {
+                  const character = slot.character!;
+                  const buffs = characterBuffs[character.id] || [];
+                  const buffEffects = buffs.filter(buff => buff.buff_type === 'バフ');
+                  const debuffEffects = buffs.filter(buff => buff.buff_type === 'デバフ');
+                  const otherEffects = buffs.filter(buff => buff.buff_type === 'その他');
+
+                  return (
+                    <div key={character.id} className="col-lg-6 col-xl-3 mb-4">
+                      <div className="card h-100">
+                        <div className="card-header">
+                          <div className="d-flex align-items-center">
+                            <div className="me-3">
+                              <img 
+                                src={`/assets/imgs/${character.id}.webp`}
+                                alt={character.name}
+                                className="img-fluid rounded-circle"
+                                style={{ width: '50px', height: '50px', objectFit: 'cover' }}
+                                onError={(e) => {
+                                  const img = e.target as HTMLImageElement;
+                                  img.style.display = 'none';
+                                  img.nextElementSibling!.style.display = 'block';
+                                }}
+                              />
+                              <div style={{ display: 'none' }}>
+                                <i className="bi bi-person-circle" style={{ fontSize: '50px', color: '#0d6efd' }}></i>
+                              </div>
+                            </div>
+                            <div>
+                              <h5 className="card-title mb-0">
+                                <strong>{character.name}</strong>
+                              </h5>
+                              <div className="mt-1">
+                                <span className="badge bg-primary me-1">{character.element}</span>
+                                <span className="badge bg-secondary">{character.path}</span>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        <div className="card-body">
+                          {/* バフ効果 */}
+                          {buffEffects.length > 0 && (
+                            <div className="mb-3">
+                              <h6 className="text-success mb-2">
+                                <i className="bi bi-arrow-up-circle me-1"></i>
+                                バフ効果 ({buffEffects.length})
+                              </h6>
+                              <div className="table-responsive">
+                                <table className="table table-sm">
+                                  <tbody>
+                                    {buffEffects.map((buff, buffIndex) => (
+                                      <tr key={buffIndex}>
+                                        <td className="border-0 p-1">
+                                          <small>
+                                            <strong>{buff.effect_name}</strong><br/>
+                                            <span className="text-muted">
+                                              {buff.target_type} | {buff.stat_affected} {buff.value_expression}
+                                              {buff.duration && ` (${buff.duration})`}
+                                            </span>
+                                          </small>
+                                        </td>
+                                      </tr>
+                                    ))}
+                                  </tbody>
+                                </table>
+                              </div>
+                            </div>
+                          )}
+
+                          {/* デバフ効果 */}
+                          {debuffEffects.length > 0 && (
+                            <div className="mb-3">
+                              <h6 className="text-danger mb-2">
+                                <i className="bi bi-arrow-down-circle me-1"></i>
+                                デバフ効果 ({debuffEffects.length})
+                              </h6>
+                              <div className="table-responsive">
+                                <table className="table table-sm">
+                                  <tbody>
+                                    {debuffEffects.map((buff, buffIndex) => (
+                                      <tr key={buffIndex}>
+                                        <td className="border-0 p-1">
+                                          <small>
+                                            <strong>{buff.effect_name}</strong><br/>
+                                            <span className="text-muted">
+                                              {buff.target_type} | {buff.stat_affected} {buff.value_expression}
+                                              {buff.duration && ` (${buff.duration})`}
+                                            </span>
+                                          </small>
+                                        </td>
+                                      </tr>
+                                    ))}
+                                  </tbody>
+                                </table>
+                              </div>
+                            </div>
+                          )}
+
+                          {/* 追加効果 */}
+                          {otherEffects.length > 0 && (
+                            <div className="mb-3">
+                              <h6 className="text-secondary mb-2">
+                                <i className="bi bi-plus-circle me-1"></i>
+                                追加効果 ({otherEffects.length})
+                              </h6>
+                              <div className="table-responsive">
+                                <table className="table table-sm">
+                                  <tbody>
+                                    {otherEffects.map((buff, buffIndex) => (
+                                      <tr key={buffIndex}>
+                                        <td className="border-0 p-1">
+                                          <small>
+                                            <strong>{buff.effect_name}</strong><br/>
+                                            <span className="text-muted">
+                                              {buff.target_type} | {buff.stat_affected} {buff.value_expression}
+                                              {buff.duration && ` (${buff.duration})`}
+                                            </span>
+                                          </small>
+                                        </td>
+                                      </tr>
+                                    ))}
+                                  </tbody>
+                                </table>
+                              </div>
+                            </div>
+                          )}
+
+                          {/* 効果がない場合 */}
+                          {buffs.length === 0 && (
+                            <p className="text-muted mb-0">
+                              <small>効果データがありません</small>
+                            </p>
+                          )}
+                        </div>
+                      </div>
+                    </div>
+                  );
+                })}
+            </div>
+          )}
             </>
           )}
         </div>

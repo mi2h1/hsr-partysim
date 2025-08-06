@@ -113,9 +113,24 @@ export default function CharacterDetailPage() {
       <div className="card shadow-sm mb-4">
         <div className="card-body">
           <div className="row align-items-center">
-            <div className="col-md-8">
+            <div className="col-md-2 text-center">
+              <img 
+                src={`/assets/imgs/${characterData.character.id}.webp`}
+                alt={characterData.character.name}
+                className="img-fluid rounded-circle"
+                style={{ width: '80px', height: '80px', objectFit: 'cover' }}
+                onError={(e) => {
+                  const img = e.target as HTMLImageElement;
+                  img.style.display = 'none';
+                  img.nextElementSibling!.style.display = 'block';
+                }}
+              />
+              <div style={{ display: 'none' }}>
+                <i className="bi bi-person-circle display-3 text-primary"></i>
+              </div>
+            </div>
+            <div className="col-md-6">
               <h1 className="display-5 text-primary fw-bold mb-3">
-                <i className="bi bi-person-circle me-2"></i>
                 {characterData.character.name}
               </h1>
               <div className="d-flex gap-3 flex-wrap">
