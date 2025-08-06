@@ -28,6 +28,10 @@ export default function CharacterDetailPage() {
   const params = useParams();
   const characterId = params.id as string;
   
+  // デバッグ用コンソール出力
+  console.log('Character Detail Page - Params:', params);
+  console.log('Character Detail Page - ID:', characterId);
+  
   const [characterData, setCharacterData] = useState<CharacterData | null>(null);
   const [eidolonLevel, setEidolonLevel] = useState(0);
   const [loading, setLoading] = useState(true);
@@ -36,8 +40,11 @@ export default function CharacterDetailPage() {
   const fetchCharacterData = async (id: string, eidolon: number) => {
     try {
       setLoading(true);
+      console.log('Fetching data for character ID:', id, 'eidolon:', eidolon);
       const response = await fetch(`/api/characters/${id}/buffs?eidolon=${eidolon}`);
+      console.log('API Response status:', response.status);
       const data = await response.json();
+      console.log('API Response data:', data);
       
       if (data.success) {
         setCharacterData(data);
