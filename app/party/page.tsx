@@ -30,10 +30,11 @@ export default function PartyPage() {
   const fetchCharacters = async () => {
     try {
       const response = await fetch('/api/characters');
-      const characters = await response.json();
-      setAvailableCharacters(characters);
+      const data = await response.json();
+      setAvailableCharacters(data.characters || []);
     } catch (error) {
       console.error('キャラクター取得エラー:', error);
+      setAvailableCharacters([]);
     }
   };
 
