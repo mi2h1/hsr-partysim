@@ -59,12 +59,14 @@ export default function PartyPage() {
       const response = await fetch(`/api/characters/${characterId}/buffs`);
       const data = await response.json();
       console.log('バフ取得結果:', data);
+      console.log('バフデータサンプル:', data.buffs_debuffs?.[0]);
       setCharacterBuffs(prev => {
         const newState = {
           ...prev,
           [characterId]: data.buffs_debuffs || []
         };
         console.log('バフステート更新:', newState);
+        console.log('バフステート更新サンプル:', newState[characterId]?.[0]);
         return newState;
       });
     } catch (error) {
@@ -232,9 +234,14 @@ export default function PartyPage() {
                           .filter(slot => slot.character)
                           .flatMap(slot => {
                             const buffs = characterBuffs[slot.character!.id] || [];
-                            return buffs
-                              .filter(buff => buff.buff_type === 'バフ')
-                              .map(buff => ({ ...buff, characterName: slot.character!.name }));
+                            console.log(`${slot.character!.name}のバフ:`, buffs);
+                            console.log(`バフタイプでフィルタ前:`, buffs.length);
+                            const filtered = buffs.filter(buff => {
+                              console.log(`バフチェック:`, buff.effect_name, 'タイプ:', buff.buff_type);
+                              return buff.buff_type === 'バフ';
+                            });
+                            console.log(`バフタイプでフィルタ後:`, filtered.length);
+                            return filtered.map(buff => ({ ...buff, characterName: slot.character!.name }));
                           })
                           .map((buff, index) => (
                             <tr key={index}>
