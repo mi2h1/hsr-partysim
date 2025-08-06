@@ -135,7 +135,7 @@ export default function PartyPage() {
                       <div className="text-center">
                         <div className="mb-3">
                           <img 
-                            src={`/assets/imgs/${slot.character.id}.webp`}
+                            src={`/imgs/${slot.character.id}.webp`}
                             alt={slot.character.name}
                             className="img-fluid rounded-circle"
                             style={{ width: '80px', height: '80px', objectFit: 'cover' }}
@@ -379,7 +379,7 @@ export default function PartyPage() {
                           <div className="d-flex align-items-center">
                             <div className="me-3">
                               <img 
-                                src={`/assets/imgs/${character.id}.webp`}
+                                src={`/imgs/${character.id}.webp`}
                                 alt={character.name}
                                 className="img-fluid rounded-circle"
                                 style={{ width: '50px', height: '50px', objectFit: 'cover' }}

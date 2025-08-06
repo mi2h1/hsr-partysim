@@ -115,7 +115,7 @@ export default function CharacterDetailPage() {
           <div className="row align-items-center">
             <div className="col-md-2 text-center">
               <img 
-                src={`/assets/imgs/${characterData.character.id}.webp`}
+                src={`/imgs/${characterData.character.id}.webp`}
                 alt={characterData.character.name}
                 className="img-fluid rounded-circle"
                 style={{ width: '80px', height: '80px', objectFit: 'cover' }}
