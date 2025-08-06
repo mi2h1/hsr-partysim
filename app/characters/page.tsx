@@ -129,48 +129,44 @@ export default function CharactersListPage() {
                         console.log(`キャラクター画像読み込み成功: /imgs/${character.id}.webp`);
                       }}
                     />
-                    
-                    {/* 属性・運命アイコンを画像上に配置 */}
-                    <div className="position-absolute bottom-2 end-2 d-flex gap-1">
-                      <div className="bg-white rounded-circle p-1 shadow-sm d-flex align-items-center justify-content-center" style={{ width: '28px', height: '28px' }}>
-                        <img 
-                          src={`/imgs/i_${character.element}.webp`}
-                          alt={character.element}
-                          title={character.element}
-                          style={{ width: '20px', height: '20px', objectFit: 'contain' }}
-                          onError={(e) => {
-                            const img = e.target as HTMLImageElement;
-                            console.log(`アイコン読み込み失敗: /imgs/i_${character.element}.webp`);
-                            img.style.visibility = 'hidden';
-                          }}
-                          onLoad={() => {
-                            console.log(`アイコン読み込み成功: /imgs/i_${character.element}.webp`);
-                          }}
-                        />
-                      </div>
-                      <div className="bg-white rounded-circle p-1 shadow-sm d-flex align-items-center justify-content-center" style={{ width: '28px', height: '28px' }}>
-                        <img 
-                          src={`/imgs/i_${character.path}.webp`}
-                          alt={character.path}
-                          title={character.path}
-                          style={{ width: '20px', height: '20px', objectFit: 'contain' }}
-                          onError={(e) => {
-                            const img = e.target as HTMLImageElement;
-                            console.log(`アイコン読み込み失敗: /imgs/i_${character.path}.webp`);
-                            img.style.visibility = 'hidden';
-                          }}
-                          onLoad={() => {
-                            console.log(`アイコン読み込み成功: /imgs/i_${character.path}.webp`);
-                          }}
-                        />
-                      </div>
-                    </div>
                   </div>
                   
-                  <div className="card-body text-center py-3 d-flex align-items-center justify-content-center">
-                    <h6 className="card-title mb-0 text-dark fw-bold">
+                  <div className="card-body text-center py-3">
+                    <h6 className="card-title mb-2 text-dark fw-bold">
                       {character.name}
                     </h6>
+                    
+                    {/* 属性・運命アイコンを名前の下に配置 */}
+                    <div className="d-flex justify-content-center gap-2">
+                      <img 
+                        src={`/imgs/i_${character.element}.webp`}
+                        alt={character.element}
+                        title={character.element}
+                        style={{ width: '20px', height: '20px', objectFit: 'contain' }}
+                        onError={(e) => {
+                          const img = e.target as HTMLImageElement;
+                          console.log(`アイコン読み込み失敗: /imgs/i_${character.element}.webp`);
+                          img.style.visibility = 'hidden';
+                        }}
+                        onLoad={() => {
+                          console.log(`アイコン読み込み成功: /imgs/i_${character.element}.webp`);
+                        }}
+                      />
+                      <img 
+                        src={`/imgs/i_${character.path}.webp`}
+                        alt={character.path}
+                        title={character.path}
+                        style={{ width: '20px', height: '20px', objectFit: 'contain' }}
+                        onError={(e) => {
+                          const img = e.target as HTMLImageElement;
+                          console.log(`アイコン読み込み失敗: /imgs/i_${character.path}.webp`);
+                          img.style.visibility = 'hidden';
+                        }}
+                        onLoad={() => {
+                          console.log(`アイコン読み込み成功: /imgs/i_${character.path}.webp`);
+                        }}
+                      />
+                    </div>
                   </div>
                 </div>
               </Link>
