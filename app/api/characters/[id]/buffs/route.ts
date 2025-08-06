@@ -38,6 +38,7 @@ export async function GET(
         s.skill_type,
         s.skill_name,
         bd.effect_name,
+        bd.buff_type,
         bd.target_type,
         bd.stat_affected,
         bd.value_expression,
@@ -81,6 +82,7 @@ export async function GET(
     const buffsDebuffs = buffsResult.rows.map(row => ({
       skill: row.skill_type,
       name: row.effect_name,
+      type: row.buff_type || 'バフ',
       duration: row.duration,
       target: row.target_type,
       stat: row.stat_affected,

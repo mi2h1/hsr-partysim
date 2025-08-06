@@ -62,12 +62,12 @@ export async function POST(request: NextRequest) {
         
         const buffResult = await query(`
           INSERT INTO buffs_debuffs 
-          (skill_id, effect_name, target_type, stat_affected, value_expression, 
+          (skill_id, effect_name, buff_type, target_type, stat_affected, value_expression, 
            duration, condition, is_stackable, max_stacks)
-          VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)
+          VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)
           RETURNING id
         `, [
-          skillId, buff.effectName, buff.targetType, buff.statAffected,
+          skillId, buff.effectName, buff.buffType, buff.targetType, buff.statAffected,
           buff.valueExpression, buff.duration, buff.condition,
           buff.isStackable, buff.maxStacks
         ]);

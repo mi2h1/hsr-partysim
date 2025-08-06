@@ -6,6 +6,7 @@ import { useParams } from 'next/navigation';
 interface BuffDebuff {
   skill: string;
   name: string;
+  type?: 'バフ' | 'デバフ' | 'その他';
   duration: string;
   target: string;
   stat: string;
@@ -182,17 +183,29 @@ export default function CharacterDetailPage() {
                     </tr>
                   </thead>
                   <tbody>
-                    {combatBuffs.map((buff, index) => (
-                      <tr key={index}>
-                        <td className="fw-semibold">{buff.skill}</td>
-                        <td>{buff.name}</td>
-                        <td><span className="badge bg-info">{buff.duration}</span></td>
-                        <td><span className="badge bg-warning text-dark">{buff.target}</span></td>
-                        <td className="fw-bold text-primary">{buff.stat}</td>
-                        <td><span className="badge bg-success fs-6">{buff.value}</span></td>
-                        <td><small className="text-muted">{buff.note}</small></td>
-                      </tr>
-                    ))}
+                    {combatBuffs.map((buff, index) => {
+                      const typeClass = buff.type === 'デバフ' ? 'text-danger' : 
+                                      buff.type === 'その他' ? 'text-secondary' : 'text-success';
+                      const typeBadge = buff.type === 'デバフ' ? 'bg-danger' : 
+                                      buff.type === 'その他' ? 'bg-secondary' : 'bg-success';
+                      
+                      return (
+                        <tr key={index}>
+                          <td className="fw-semibold">{buff.skill}</td>
+                          <td>
+                            <span className={`badge ${typeBadge} me-2`}>
+                              {buff.type || 'バフ'}
+                            </span>
+                            {buff.name}
+                          </td>
+                          <td><span className="badge bg-info">{buff.duration}</span></td>
+                          <td><span className="badge bg-warning text-dark">{buff.target}</span></td>
+                          <td className={`fw-bold ${typeClass}`}>{buff.stat}</td>
+                          <td><span className={`badge ${typeBadge} fs-6`}>{buff.value}</span></td>
+                          <td><small className="text-muted">{buff.note}</small></td>
+                        </tr>
+                      );
+                    })}
                   </tbody>
                 </table>
               </div>

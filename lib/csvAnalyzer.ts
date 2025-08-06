@@ -5,6 +5,7 @@ import { CSVCharacterData, BuffDebuff } from '@/types';
 interface ParsedBuffDebuff {
   skillType?: string;
   effectName: string;
+  buffType: 'バフ' | 'デバフ' | 'その他';
   targetType: string;
   statAffected: string;
   valueExpression: string;
@@ -74,17 +75,18 @@ export class CSVAnalyzer {
         });
       }
       // バフ・デバフ情報（構造化済み）
-      else if (type === 'バフ' && parts.length >= 10) {
+      else if (type === 'バフ' && parts.length >= 11) {
         buffsDebuffs.push({
           skillType: parts[1].trim(),
           effectName: parts[2].trim(),
-          targetType: parts[3].trim(),
-          statAffected: parts[4].trim(),
-          valueExpression: parts[5].trim(),
-          duration: parts[6].trim(),
-          condition: parts[7].trim(),
-          isStackable: parts[8].trim() === 'true',
-          maxStacks: parts[9].trim() ? parseInt(parts[9].trim()) : undefined
+          buffType: parts[3].trim() as 'バフ' | 'デバフ' | 'その他',
+          targetType: parts[4].trim(),
+          statAffected: parts[5].trim(),
+          valueExpression: parts[6].trim(),
+          duration: parts[7].trim(),
+          condition: parts[8].trim(),
+          isStackable: parts[9].trim() === 'true',
+          maxStacks: parts[10].trim() ? parseInt(parts[10].trim()) : undefined
         });
       }
       // 星魂情報
