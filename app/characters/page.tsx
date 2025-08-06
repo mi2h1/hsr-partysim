@@ -123,50 +123,47 @@ export default function CharactersListPage() {
                       onError={(e) => {
                         const img = e.target as HTMLImageElement;
                         console.log(`キャラクター画像読み込み失敗: /imgs/${character.id}.webp`);
-                        img.style.display = 'none';
-                        const fallback = img.nextElementSibling as HTMLDivElement;
-                        if (fallback) fallback.style.display = 'flex';
+                        img.src = `/imgs/${character.name}.webp`;
                       }}
                       onLoad={() => {
                         console.log(`キャラクター画像読み込み成功: /imgs/${character.id}.webp`);
                       }}
                     />
-                    <div className="position-absolute top-0 start-0 w-100 h-100 d-flex align-items-center justify-content-center bg-light" style={{ display: 'none' }}>
-                      <i className="bi bi-person-circle text-primary" style={{ fontSize: '4rem' }}></i>
-                    </div>
                     
                     {/* 属性・運命アイコンを画像上に配置 */}
                     <div className="position-absolute bottom-2 end-2 d-flex gap-1">
-                      <img 
-                        src={`/imgs/i_${character.element}.webp`}
-                        alt={character.element}
-                        title={character.element}
-                        className="rounded-circle bg-white p-1"
-                        style={{ width: '28px', height: '28px' }}
-                        onError={(e) => {
-                          const img = e.target as HTMLImageElement;
-                          console.log(`アイコン読み込み失敗: /imgs/i_${character.element}.webp`);
-                          img.style.display = 'none';
-                        }}
-                        onLoad={() => {
-                          console.log(`アイコン読み込み成功: /imgs/i_${character.element}.webp`);
-                        }}
-                      />
-                      <img 
-                        src={`/imgs/i_${character.path}.webp`}
-                        alt={character.path}
-                        title={character.path}
-                        className="rounded-circle bg-white p-1"
-                        style={{ width: '28px', height: '28px' }}
-                        onError={(e) => {
-                          const img = e.target as HTMLImageElement;
-                          console.log(`アイコン読み込み失敗: /imgs/i_${character.path}.webp`);
-                          img.style.display = 'none';
-                        }}
-                        onLoad={() => {
-                          console.log(`アイコン読み込み成功: /imgs/i_${character.path}.webp`);
-                        }}
-                      />
+                      <div className="bg-white rounded-circle p-1 shadow-sm d-flex align-items-center justify-content-center" style={{ width: '28px', height: '28px' }}>
+                        <img 
+                          src={`/imgs/i_${character.element}.webp`}
+                          alt={character.element}
+                          title={character.element}
+                          style={{ width: '20px', height: '20px', objectFit: 'contain' }}
+                          onError={(e) => {
+                            const img = e.target as HTMLImageElement;
+                            console.log(`アイコン読み込み失敗: /imgs/i_${character.element}.webp`);
+                            img.style.visibility = 'hidden';
+                          }}
+                          onLoad={() => {
+                            console.log(`アイコン読み込み成功: /imgs/i_${character.element}.webp`);
+                          }}
+                        />
+                      </div>
+                      <div className="bg-white rounded-circle p-1 shadow-sm d-flex align-items-center justify-content-center" style={{ width: '28px', height: '28px' }}>
+                        <img 
+                          src={`/imgs/i_${character.path}.webp`}
+                          alt={character.path}
+                          title={character.path}
+                          style={{ width: '20px', height: '20px', objectFit: 'contain' }}
+                          onError={(e) => {
+                            const img = e.target as HTMLImageElement;
+                            console.log(`アイコン読み込み失敗: /imgs/i_${character.path}.webp`);
+                            img.style.visibility = 'hidden';
+                          }}
+                          onLoad={() => {
+                            console.log(`アイコン読み込み成功: /imgs/i_${character.path}.webp`);
+                          }}
+                        />
+                      </div>
                     </div>
                   </div>
                   
