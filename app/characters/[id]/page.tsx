@@ -240,9 +240,9 @@ export default function CharacterDetailPage() {
     <div>
       {/* キャラクター情報ヘッダー */}
       <div className="card shadow-sm mb-4">
-        <div className="row g-0" style={{ minHeight: '200px' }}>
+        <div className="row g-0" style={{ minHeight: '230px' }}>
           <div className="col-4" style={{ width: '20%' }}>
-            <div style={{ height: '200px', width: '250px', overflow: 'hidden' }}>
+            <div style={{ height: '230px', width: '280px', overflow: 'hidden' }}>
               <img 
                 src={`/imgs/${characterData.character.id}.webp`}
                 alt={characterData.character.name}
@@ -284,8 +284,8 @@ export default function CharacterDetailPage() {
                       src="/imgs/i_stat_HP.webp" 
                       alt="HP" 
                       style={{ 
-                        width: '16px', 
-                        height: '16px',
+                        width: '20px', 
+                        height: '20px',
                         filter: 'brightness(0) saturate(100%) invert(30%)',
                         marginRight: '4px'
                       }}
@@ -302,8 +302,8 @@ export default function CharacterDetailPage() {
                       src="/imgs/i_stat_攻撃力.webp" 
                       alt="攻撃力" 
                       style={{ 
-                        width: '16px', 
-                        height: '16px',
+                        width: '20px', 
+                        height: '20px',
                         filter: 'brightness(0) saturate(100%) invert(30%)',
                         marginRight: '4px'
                       }}
@@ -320,8 +320,8 @@ export default function CharacterDetailPage() {
                       src="/imgs/i_stat_防御力.webp" 
                       alt="防御力" 
                       style={{ 
-                        width: '16px', 
-                        height: '16px',
+                        width: '20px', 
+                        height: '20px',
                         filter: 'brightness(0) saturate(100%) invert(30%)',
                         marginRight: '4px'
                       }}
@@ -338,8 +338,8 @@ export default function CharacterDetailPage() {
                       src="/imgs/i_stat_速度.webp" 
                       alt="速度" 
                       style={{ 
-                        width: '16px', 
-                        height: '16px',
+                        width: '20px', 
+                        height: '20px',
                         filter: 'brightness(0) saturate(100%) invert(30%)',
                         marginRight: '4px'
                       }}
@@ -356,8 +356,8 @@ export default function CharacterDetailPage() {
                       src="/imgs/i_stat_EP.webp" 
                       alt="EP" 
                       style={{ 
-                        width: '16px', 
-                        height: '16px',
+                        width: '20px', 
+                        height: '20px',
                         filter: 'brightness(0) saturate(100%) invert(30%)',
                         marginRight: '4px'
                       }}
@@ -382,8 +382,8 @@ export default function CharacterDetailPage() {
                             src={`/imgs/i_sb_${characterData.character.stat_boost_1_type}.webp`}
                             alt={characterData.character.stat_boost_1_type}
                             style={{ 
-                              width: '16px', 
-                              height: '16px',
+                              width: '20px', 
+                              height: '20px',
                               filter: 'brightness(0) saturate(100%) invert(30%)',
                               marginRight: '4px'
                             }}
@@ -402,8 +402,8 @@ export default function CharacterDetailPage() {
                             src={`/imgs/i_sb_${characterData.character.stat_boost_2_type}.webp`}
                             alt={characterData.character.stat_boost_2_type}
                             style={{ 
-                              width: '16px', 
-                              height: '16px',
+                              width: '20px', 
+                              height: '20px',
                               filter: 'brightness(0) saturate(100%) invert(30%)',
                               marginRight: '4px'
                             }}
@@ -422,8 +422,8 @@ export default function CharacterDetailPage() {
                             src={`/imgs/i_sb_${characterData.character.stat_boost_3_type}.webp`}
                             alt={characterData.character.stat_boost_3_type}
                             style={{ 
-                              width: '16px', 
-                              height: '16px',
+                              width: '20px', 
+                              height: '20px',
                               filter: 'brightness(0) saturate(100%) invert(30%)',
                               marginRight: '4px'
                             }}
