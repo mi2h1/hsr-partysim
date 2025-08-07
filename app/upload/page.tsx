@@ -65,114 +65,174 @@ export default function UploadPage() {
   };
 
   return (
-    <div className="max-w-2xl mx-auto space-y-6">
-      <div className="hsr-card">
-        <h2 className="text-2xl font-bold text-hsr-purple mb-4">
-          📤 キャラクター CSV アップロード
-        </h2>
-        <p className="text-gray-600 dark:text-gray-300 mb-6">
-          ロビン.csvやトリビー.csvなどのキャラクターデータをアップロードして、
-          バフ・デバフ情報を自動解析します。
-        </p>
-
-        <div className="space-y-4">
-          <div>
-            <label htmlFor="csvFile" className="block text-sm font-medium mb-2">
-              CSVファイルを選択
-            </label>
-            <input
-              id="csvFile"
-              type="file"
-              accept=".csv,text/csv,application/vnd.ms-excel"
-              onChange={handleFileChange}
-              className="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-hsr-purple file:text-white hover:file:bg-purple-600"
-            />
-          </div>
-
-          {/* デバッグ情報表示 */}
-          <div className="text-xs text-gray-500 bg-gray-100 dark:bg-gray-800 p-2 rounded">
-            <p>デバッグ情報:</p>
-            <p>ファイル選択: {file ? '✅' : '❌'}</p>
-            {file && (
-              <>
-                <p>ファイル名: {file.name}</p>
-                <p>ファイルタイプ: {file.type || '不明'}</p>
-                <p>ファイルサイズ: {(file.size / 1024).toFixed(1)} KB</p>
-              </>
-            )}
-            <p>アップロードボタン: {(!file || uploading) ? '無効' : '有効'}</p>
-          </div>
-
-          {file && (
-            <div className="bg-blue-50 dark:bg-blue-900/20 p-4 rounded-lg">
-              <p className="text-sm text-blue-700 dark:text-blue-300">
-                選択されたファイル: <strong>{file.name}</strong>
-              </p>
-              <p className="text-xs text-blue-600 dark:text-blue-400 mt-1">
-                サイズ: {(file.size / 1024).toFixed(1)} KB
-              </p>
+    <div className="container mt-4">
+      <div className="row justify-content-center">
+        <div className="col-lg-8 col-xl-6">
+          <div className="card shadow-lg">
+            <div className="card-header bg-primary text-white text-center">
+              <h2 className="card-title mb-0">
+                <i className="bi bi-upload me-2"></i>
+                キャラクター CSV アップロード
+              </h2>
+              <small className="text-light opacity-75">データ解析・自動取り込み</small>
             </div>
-          )}
+            <div className="card-body p-4">
+              <div className="alert alert-info" role="alert">
+                <i className="bi bi-info-circle me-2"></i>
+                <strong>使用方法:</strong> 花火.csvや銀狼.csvなどのキャラクターデータをアップロードして、
+                バフ・デバフ情報を自動解析・データベースに取り込みます。
+              </div>
 
-          {error && (
-            <div className="bg-red-50 dark:bg-red-900/20 p-4 rounded-lg">
-              <p className="text-sm text-red-700 dark:text-red-300">
-                ❌ {error}
-              </p>
+              <div className="mb-4">
+                <label htmlFor="csvFile" className="form-label fw-semibold">
+                  <i className="bi bi-file-earmark-text me-2"></i>
+                  CSVファイルを選択
+                </label>
+                <input
+                  id="csvFile"
+                  type="file"
+                  accept=".csv,text/csv,application/vnd.ms-excel"
+                  onChange={handleFileChange}
+                  className="form-control"
+                />
+              </div>
+
+              {file && (
+                <div className="alert alert-primary" role="alert">
+                  <div className="d-flex align-items-center">
+                    <i className="bi bi-file-check me-2"></i>
+                    <div>
+                      <strong>選択されたファイル:</strong> {file.name}
+                      <br />
+                      <small>サイズ: {(file.size / 1024).toFixed(1)} KB</small>
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {error && (
+                <div className="alert alert-danger" role="alert">
+                  <i className="bi bi-exclamation-triangle me-2"></i>
+                  <strong>エラー:</strong> {error}
+                </div>
+              )}
+
+              <div className="d-grid">
+                <button
+                  onClick={handleUpload}
+                  disabled={!file || uploading}
+                  className={`btn ${
+                    (!file || uploading) 
+                      ? 'btn-secondary disabled' 
+                      : 'btn-success'
+                  } btn-lg`}
+                >
+                  {uploading ? (
+                    <>
+                      <span className="spinner-border spinner-border-sm me-2" role="status"></span>
+                      アップロード中...
+                    </>
+                  ) : (
+                    <>
+                      <i className="bi bi-upload me-2"></i>
+                      アップロード実行
+                    </>
+                  )}
+                </button>
+              </div>
             </div>
-          )}
-
-          <button
-            onClick={handleUpload}
-            disabled={!file || uploading}
-            className={`w-full py-3 px-6 rounded-lg font-semibold transition-colors ${
-              (!file || uploading) 
-                ? 'bg-gray-400 text-gray-600 cursor-not-allowed' 
-                : 'bg-hsr-purple text-white hover:bg-purple-600'
-            }`}
-          >
-            {uploading ? '🔄 アップロード中...' : '📤 アップロード'}
-          </button>
-        </div>
+          </div>
       </div>
 
-      {result && (
-        <div className="hsr-card bg-green-50 dark:bg-green-900/20">
-          <h3 className="text-lg font-semibold text-green-700 dark:text-green-300 mb-3">
-            ✅ アップロード成功！
-          </h3>
-          <div className="space-y-2 text-sm">
-            <p><strong>キャラクター名:</strong> {result.character.name}</p>
-            <p><strong>属性:</strong> {result.character.element}</p>
-            <p><strong>運命:</strong> {result.character.path}</p>
-            <p><strong>スキル数:</strong> {result.character.skills_count}</p>
+        {result && (
+          <div className="row justify-content-center mt-4">
+            <div className="col-lg-8 col-xl-6">
+              <div className="card border-success">
+                <div className="card-header bg-success text-white">
+                  <h4 className="card-title mb-0">
+                    <i className="bi bi-check-circle me-2"></i>
+                    アップロード成功！
+                  </h4>
+                </div>
+                <div className="card-body">
+                  <div className="row g-3">
+                    <div className="col-sm-6">
+                      <strong>キャラクター名:</strong> {result.character.name}
+                    </div>
+                    <div className="col-sm-6">
+                      <strong>属性:</strong> {result.character.element}
+                    </div>
+                    <div className="col-sm-6">
+                      <strong>運命:</strong> {result.character.path}
+                    </div>
+                    <div className="col-sm-6">
+                      <strong>スキル数:</strong> {result.character.skills_count}個
+                    </div>
+                  </div>
+                  <hr />
+                  <div className="text-center">
+                    <a 
+                      href={`/characters/${result.character.id}`}
+                      className="btn btn-primary"
+                    >
+                      <i className="bi bi-eye me-2"></i>
+                      バフ・デバフ詳細を見る
+                    </a>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
-          <div className="mt-4 pt-4 border-t border-green-200 dark:border-green-700">
-            <a 
-              href={`/characters/${result.character.id}`}
-              className="inline-block bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700 transition-colors"
-            >
-              バフ・デバフ詳細を見る →
-            </a>
-          </div>
-        </div>
-      )}
+        )}
 
-      <div className="hsr-card bg-gray-50 dark:bg-gray-800">
-        <h3 className="text-lg font-semibold mb-3">📋 トラブルシューティング</h3>
-        <div className="text-sm text-gray-600 dark:text-gray-300 space-y-2">
-          <p><strong>ファイルが選択できない場合：</strong></p>
-          <ul className="list-disc list-inside space-y-1 ml-4">
-            <li>ファイル名が「.csv」で終わっているか確認</li>
-            <li>ファイルサイズが10MB以下か確認</li>
-            <li>ブラウザを更新して再試行</li>
-          </ul>
-          <p className="mt-4"><strong>CSVフォーマット例：</strong></p>
-          <ul className="list-disc list-inside space-y-1 ml-4">
-            <li>1行目: キャラクター名,ロビン,</li>
-            <li>2行目: 属性,物理,</li>
-            <li>3行目: 運命,調和,</li>
-          </ul>
+        <div className="row justify-content-center mt-4">
+          <div className="col-lg-8 col-xl-6">
+            <div className="card">
+              <div className="card-header">
+                <h5 className="card-title mb-0">
+                  <i className="bi bi-question-circle me-2"></i>
+                  トラブルシューティング
+                </h5>
+              </div>
+              <div className="card-body">
+                <div className="accordion" id="helpAccordion">
+                  <div className="accordion-item">
+                    <h2 className="accordion-header">
+                      <button className="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFile">
+                        ファイル選択の問題
+                      </button>
+                    </h2>
+                    <div id="collapseFile" className="accordion-collapse collapse" data-bs-parent="#helpAccordion">
+                      <div className="accordion-body">
+                        <ul className="list-unstyled">
+                          <li><i className="bi bi-check-circle text-success me-2"></i>ファイル名が「.csv」で終わっているか確認</li>
+                          <li><i className="bi bi-check-circle text-success me-2"></i>ファイルサイズが10MB以下か確認</li>
+                          <li><i className="bi bi-check-circle text-success me-2"></i>ブラウザを更新して再試行</li>
+                        </ul>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="accordion-item">
+                    <h2 className="accordion-header">
+                      <button className="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFormat">
+                        CSVフォーマット例
+                      </button>
+                    </h2>
+                    <div id="collapseFormat" className="accordion-collapse collapse" data-bs-parent="#helpAccordion">
+                      <div className="accordion-body">
+                        <code>
+                          キャラクター名,花火,<br />
+                          属性,量子,<br />
+                          運命,調和,<br />
+                          通常攻撃,独り芝居,説明文...
+                        </code>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
