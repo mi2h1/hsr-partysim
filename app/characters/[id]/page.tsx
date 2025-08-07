@@ -55,6 +55,9 @@ export default function CharacterDetailPage() {
   const [loading, setLoading] = useState(true);
   const [eidolonLoading, setEidolonLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [showReimportModal, setShowReimportModal] = useState(false);
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const [reimportLoading, setReimportLoading] = useState(false);
 
   const fetchSkillsData = async (id: string) => {
     try {
@@ -111,6 +114,47 @@ export default function CharacterDetailPage() {
     setEidolonLevel(newLevel);
     if (characterId) {
       fetchCharacterData(characterId, newLevel, true);
+    }
+  };
+
+  const handleReimportCSV = async () => {
+    if (!selectedFile || !characterId) return;
+
+    setReimportLoading(true);
+    try {
+      // まず既存データを削除
+      const deleteResponse = await fetch(`/api/characters/${characterId}`, {
+        method: 'DELETE',
+      });
+
+      if (!deleteResponse.ok) {
+        throw new Error('既存データの削除に失敗しました');
+      }
+
+      // CSVファイルを再アップロード
+      const formData = new FormData();
+      formData.append('csvFile', selectedFile);
+
+      const uploadResponse = await fetch('/api/upload', {
+        method: 'POST',
+        body: formData,
+      });
+
+      const result = await uploadResponse.json();
+
+      if (result.success) {
+        // 成功時は画面を更新
+        window.location.reload();
+      } else {
+        throw new Error(result.error || 'CSV取り込みに失敗しました');
+      }
+    } catch (err) {
+      console.error('CSV再取り込みエラー:', err);
+      alert('CSV再取り込み中にエラーが発生しました: ' + (err instanceof Error ? err.message : String(err)));
+    } finally {
+      setReimportLoading(false);
+      setShowReimportModal(false);
+      setSelectedFile(null);
     }
   };
 
@@ -465,6 +509,94 @@ export default function CharacterDetailPage() {
             パーティ編成
           </Link>
         </div>
+
+        {/* CSV再取り込みボタン */}
+        <div className="position-fixed" style={{ bottom: '20px', right: '20px', zIndex: 1000 }}>
+          <button 
+            className="btn btn-outline-warning btn-sm"
+            onClick={() => setShowReimportModal(true)}
+            title="CSVファイルを再取り込みしてキャラクターデータを更新"
+          >
+            <i className="bi bi-arrow-clockwise me-1"></i>
+            CSV再取り込み
+          </button>
+        </div>
+
+        {/* CSV再取り込み確認モーダル */}
+        {showReimportModal && (
+          <div className="modal fade show d-block" style={{ backgroundColor: 'rgba(0,0,0,0.5)' }}>
+            <div className="modal-dialog">
+              <div className="modal-content">
+                <div className="modal-header">
+                  <h5 className="modal-title">
+                    <i className="bi bi-exclamation-triangle-fill text-warning me-2"></i>
+                    CSV再取り込み確認
+                  </h5>
+                  <button 
+                    type="button" 
+                    className="btn-close" 
+                    onClick={() => setShowReimportModal(false)}
+                  ></button>
+                </div>
+                <div className="modal-body">
+                  <p className="mb-3">
+                    <strong>{characterData?.character.name}</strong> の既存データを完全に削除し、
+                    CSVファイルから再取り込みします。
+                  </p>
+                  <div className="alert alert-warning">
+                    <i className="bi bi-exclamation-triangle me-2"></i>
+                    <strong>注意:</strong> この操作は取り消せません。
+                    <br />以下のデータが削除されます：
+                    <ul className="mt-2 mb-0">
+                      <li>スキル情報（通常攻撃、戦闘スキル、必殺技等）</li>
+                      <li>バフ・デバフ効果</li>
+                      <li>星魂効果</li>
+                    </ul>
+                  </div>
+                  <div className="mb-3">
+                    <label className="form-label">CSVファイルを選択:</label>
+                    <input 
+                      type="file" 
+                      className="form-control"
+                      accept=".csv"
+                      onChange={(e) => setSelectedFile(e.target.files?.[0] || null)}
+                    />
+                  </div>
+                </div>
+                <div className="modal-footer">
+                  <button 
+                    type="button" 
+                    className="btn btn-secondary" 
+                    onClick={() => {
+                      setShowReimportModal(false);
+                      setSelectedFile(null);
+                    }}
+                  >
+                    キャンセル
+                  </button>
+                  <button 
+                    type="button" 
+                    className="btn btn-warning" 
+                    onClick={handleReimportCSV}
+                    disabled={!selectedFile || reimportLoading}
+                  >
+                    {reimportLoading ? (
+                      <>
+                        <span className="spinner-border spinner-border-sm me-2"></span>
+                        処理中...
+                      </>
+                    ) : (
+                      <>
+                        <i className="bi bi-arrow-clockwise me-1"></i>
+                        再取り込み実行
+                      </>
+                    )}
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );
