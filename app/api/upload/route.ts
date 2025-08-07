@@ -38,7 +38,11 @@ export async function POST(request: NextRequest) {
         // 1. 星魂強化データを削除（buffs_debuffsを参照している）
         const deleteEidolonEnhancementsResult = await query(`
           DELETE FROM eidolon_enhancements 
-          WHERE character_id = $1
+          WHERE buff_debuff_id IN (
+            SELECT bd.id FROM buffs_debuffs bd
+            JOIN skills s ON bd.skill_id = s.id
+            WHERE s.character_id = $1
+          )
         `, [characterId]);
         
         // 2. バフ・デバフデータを削除
@@ -80,7 +84,14 @@ export async function POST(request: NextRequest) {
 
         // 既存データを正しい順序で削除（通常の更新時）
         // 1. 星魂強化データを削除
-        await query('DELETE FROM eidolon_enhancements WHERE character_id = $1', [characterId]);
+        await query(`
+          DELETE FROM eidolon_enhancements 
+          WHERE buff_debuff_id IN (
+            SELECT bd.id FROM buffs_debuffs bd
+            JOIN skills s ON bd.skill_id = s.id
+            WHERE s.character_id = $1
+          )
+        `, [characterId]);
         
         // 2. バフ・デバフデータを削除
         await query(`
