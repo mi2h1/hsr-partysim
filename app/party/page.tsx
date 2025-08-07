@@ -237,7 +237,7 @@ export default function PartyPage() {
                       <thead>
                         <tr>
                           <th>キャラクター</th>
-                          <th>効果名</th>
+                          <th>技の種類</th>
                           <th>対象</th>
                           <th>ステータス</th>
                           <th>数値</th>
@@ -262,7 +262,7 @@ export default function PartyPage() {
                           .map((buff, index) => (
                             <tr key={index}>
                               <td><strong className="text-success">{buff.characterName}</strong></td>
-                              <td>{buff.name}</td>
+                              <td>{buff.skill}</td>
                               <td>{buff.target}</td>
                               <td>{buff.stat}</td>
                               <td>{buff.value}</td>
@@ -293,7 +293,7 @@ export default function PartyPage() {
                       <thead>
                         <tr>
                           <th>キャラクター</th>
-                          <th>効果名</th>
+                          <th>技の種類</th>
                           <th>対象</th>
                           <th>ステータス</th>
                           <th>数値</th>
@@ -313,7 +313,7 @@ export default function PartyPage() {
                           .map((buff, index) => (
                             <tr key={index}>
                               <td><strong className="text-danger">{buff.characterName}</strong></td>
-                              <td>{buff.name}</td>
+                              <td>{buff.skill}</td>
                               <td>{buff.target}</td>
                               <td>{buff.stat}</td>
                               <td>{buff.value}</td>
@@ -344,7 +344,7 @@ export default function PartyPage() {
                       <thead>
                         <tr>
                           <th>キャラクター</th>
-                          <th>効果名</th>
+                          <th>技の種類</th>
                           <th>対象</th>
                           <th>ステータス</th>
                           <th>数値</th>
@@ -364,7 +364,7 @@ export default function PartyPage() {
                           .map((buff, index) => (
                             <tr key={index}>
                               <td><strong className="text-secondary">{buff.characterName}</strong></td>
-                              <td>{buff.name}</td>
+                              <td>{buff.skill}</td>
                               <td>{buff.target}</td>
                               <td>{buff.stat}</td>
                               <td>{buff.value}</td>
@@ -408,7 +408,7 @@ export default function PartyPage() {
                                       <tr key={buffIndex}>
                                         <td className="border-0 p-1">
                                           <small>
-                                            <strong>{buff.name}</strong><br/>
+                                            <strong>[{buff.skill}]</strong><br/>
                                             <span className="text-muted">
                                               {buff.target} | {buff.stat} {buff.value}
                                               {buff.duration && ` (${buff.duration})`}
@@ -437,7 +437,7 @@ export default function PartyPage() {
                                       <tr key={buffIndex}>
                                         <td className="border-0 p-1">
                                           <small>
-                                            <strong>{buff.name}</strong><br/>
+                                            <strong>[{buff.skill}]</strong><br/>
                                             <span className="text-muted">
                                               {buff.target} | {buff.stat} {buff.value}
                                               {buff.duration && ` (${buff.duration})`}
@@ -466,7 +466,7 @@ export default function PartyPage() {
                                       <tr key={buffIndex}>
                                         <td className="border-0 p-1">
                                           <small>
-                                            <strong>{buff.name}</strong><br/>
+                                            <strong>[{buff.skill}]</strong><br/>
                                             <span className="text-muted">
                                               {buff.target} | {buff.stat} {buff.value}
                                               {buff.duration && ` (${buff.duration})`}
