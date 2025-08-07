@@ -194,9 +194,13 @@ export default function CharacterDetailPage() {
     !buff.skill.startsWith('星魂')
   );
   
-  const eidolonBuffs = characterData.buffs_debuffs.filter(buff => 
-    buff.skill.startsWith('星魂')
-  );
+  const eidolonBuffs = characterData.buffs_debuffs
+    .filter(buff => buff.skill.startsWith('星魂'))
+    .sort((a, b) => {
+      const levelA = parseInt(a.skill.replace('星魂', ''));
+      const levelB = parseInt(b.skill.replace('星魂', ''));
+      return levelA - levelB;
+    });
 
   const renderSkillSection = (title: string, skills: Skill[]) => {
     if (!skills || skills.length === 0) return null;
@@ -294,18 +298,7 @@ export default function CharacterDetailPage() {
                 role="tab"
               >
                 <i className="bi bi-sword me-2"></i>
-                戦闘バフ・デバフ
-              </button>
-            </li>
-            <li className="nav-item" role="presentation">
-              <button
-                className={`nav-link ${activeTab === 'eidolon' ? 'active' : ''}`}
-                onClick={() => setActiveTab('eidolon')}
-                type="button"
-                role="tab"
-              >
-                <i className="bi bi-star me-2"></i>
-                星魂効果
+                戦闘バフ・デバフ・星魂効果
               </button>
             </li>
             <li className="nav-item" role="presentation">
@@ -401,72 +394,92 @@ export default function CharacterDetailPage() {
                   </table>
                 </div>
               )}
-            </div>
-          )}
 
-          {/* 星魂効果タブ */}
-          {activeTab === 'eidolon' && (
-            <div>
-              {eidolonBuffs.length === 0 ? (
-                <div className="text-center py-5">
-                  <i className="bi bi-star text-muted fs-1"></i>
-                  <p className="text-muted mt-3">星魂効果情報が見つかりませんでした</p>
-                </div>
-              ) : (
-                <div className="table-responsive">
-                  <table className="table table-hover">
-                    <thead className="table-warning">
-                      <tr>
-                        <th><i className="bi bi-star me-1"></i>星魂</th>
-                        <th><i className="bi bi-magic me-1"></i>バフ名</th>
-                        <th><i className="bi bi-clock me-1"></i>継続</th>
-                        <th><i className="bi bi-people me-1"></i>付与対象</th>
-                        <th><i className="bi bi-bullseye me-1"></i>対象項目</th>
-                        <th><i className="bi bi-arrow-up-circle me-1"></i>バフ量</th>
-                        <th><i className="bi bi-info-circle me-1"></i>補足</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {eidolonBuffs.map((buff, index) => {
-                        const buffEidolonLevel = parseInt(buff.skill.replace('星魂', ''));
-                        const isActive = buffEidolonLevel <= eidolonLevel;
-                        
-                        let rowClass = "";
-                        if (isActive) {
-                          rowClass = "table-success";
-                        } else {
-                          rowClass = "table-light opacity-50";
-                        }
-                        
-                        return (
-                          <tr key={index} className={rowClass}>
-                            <td className="fw-semibold">
-                              {buff.skill}
-                              {isActive && (
-                                <span className="badge bg-success ms-2">
-                                  有効
+              {/* 星魂効果セクション */}
+              {eidolonBuffs.length > 0 && (
+                <div className="mt-5">
+                  <h4 className="text-warning fw-bold border-bottom pb-2 mb-4">
+                    <i className="bi bi-star me-2"></i>
+                    星魂効果
+                    <small className="text-muted ms-2">({eidolonBuffs.length})</small>
+                  </h4>
+                  <div className="table-responsive">
+                    <table className="table table-hover">
+                      <thead className="table-warning">
+                        <tr>
+                          <th><i className="bi bi-star me-1"></i>星魂</th>
+                          <th><i className="bi bi-magic me-1"></i>バフ名</th>
+                          <th><i className="bi bi-tag me-1"></i>種別</th>
+                          <th><i className="bi bi-clock me-1"></i>継続</th>
+                          <th><i className="bi bi-people me-1"></i>付与対象</th>
+                          <th><i className="bi bi-bullseye me-1"></i>対象項目</th>
+                          <th><i className="bi bi-arrow-up-circle me-1"></i>バフ量</th>
+                          <th><i className="bi bi-info-circle me-1"></i>補足</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {eidolonBuffs.map((buff, index) => {
+                          const buffEidolonLevel = parseInt(buff.skill.replace('星魂', ''));
+                          const isActive = buffEidolonLevel <= eidolonLevel;
+                          
+                          let rowClass = "";
+                          if (isActive) {
+                            rowClass = "table-success";
+                          } else {
+                            rowClass = "table-light text-muted";
+                          }
+                          
+                          let typeClass = "";
+                          let typeIcon = "";
+                          switch (buff.type) {
+                            case 'バフ':
+                              typeClass = "bg-success";
+                              typeIcon = "bi-arrow-up";
+                              break;
+                            case 'デバフ':
+                              typeClass = "bg-danger";
+                              typeIcon = "bi-arrow-down";
+                              break;
+                            default:
+                              typeClass = "bg-info";
+                              typeIcon = "bi-info-circle";
+                          }
+                          
+                          return (
+                            <tr key={index} className={rowClass}>
+                              <td>
+                                <span className={`badge ${isActive ? 'bg-warning text-dark' : 'bg-secondary'}`}>
+                                  <i className="bi bi-star me-1"></i>
+                                  {buff.skill}
                                 </span>
-                              )}
-                            </td>
-                            <td className={isActive ? "fw-semibold" : ""}>{buff.name}</td>
-                            <td><span className="badge bg-info">{buff.duration}</span></td>
-                            <td><span className="badge bg-warning text-dark">{buff.target}</span></td>
-                            <td className="fw-bold text-primary">{buff.stat}</td>
-                            <td>
-                              <span className={`badge fs-6 ${isActive ? "bg-success" : "bg-secondary"}`}>
-                                {buff.value}
-                              </span>
-                            </td>
-                            <td><small className="text-muted">{buff.note}</small></td>
-                          </tr>
-                        );
-                      })}
-                    </tbody>
-                  </table>
+                              </td>
+                              <td className="fw-bold">{buff.name}</td>
+                              <td>
+                                <span className={`badge ${typeClass} text-white`}>
+                                  <i className={`bi ${typeIcon} me-1`}></i>
+                                  {buff.type}
+                                </span>
+                              </td>
+                              <td><span className="badge bg-info">{buff.duration}</span></td>
+                              <td><span className="badge bg-warning text-dark">{buff.target}</span></td>
+                              <td className="fw-bold text-primary">{buff.stat}</td>
+                              <td>
+                                <span className="badge bg-success fs-6">
+                                  {buff.value}
+                                </span>
+                              </td>
+                              <td><small className="text-muted">{buff.note}</small></td>
+                            </tr>
+                          );
+                        })}
+                      </tbody>
+                    </table>
+                  </div>
                 </div>
               )}
             </div>
           )}
+
 
           {/* 基本情報タブ */}
           {activeTab === 'skills' && (
