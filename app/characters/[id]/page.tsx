@@ -13,6 +13,8 @@ interface BuffDebuff {
   stat: string;
   value: string;
   note: string;
+  is_stackable: boolean;
+  max_stacks: number;
 }
 
 interface Skill {

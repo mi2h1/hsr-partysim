@@ -18,6 +18,8 @@ interface BuffDebuff {
   value: string;
   duration: string;
   note?: string;
+  is_stackable: boolean;
+  max_stacks: number;
 }
 
 interface PartySlot {
@@ -35,6 +37,14 @@ export default function PartyPage() {
   const [availableCharacters, setAvailableCharacters] = useState<Character[]>([]);
   const [characterBuffs, setCharacterBuffs] = useState<Record<number, BuffDebuff[]>>({});
   const [displayMode, setDisplayMode] = useState<'unified' | 'individual'>('unified');
+
+  // 最大積層数表示のヘルパー関数
+  const formatMaxStacks = (buff: BuffDebuff) => {
+    if (buff.is_stackable && buff.max_stacks && buff.max_stacks > 1) {
+      return `最大${buff.max_stacks}層 ${buff.value}`;
+    }
+    return buff.value;
+  };
 
   useEffect(() => {
     fetchCharacters();
@@ -265,7 +275,7 @@ export default function PartyPage() {
                               <td>{buff.skill}</td>
                               <td>{buff.target}</td>
                               <td>{buff.stat}</td>
-                              <td>{buff.value}</td>
+                              <td>{formatMaxStacks(buff)}</td>
                               <td>{buff.duration}</td>
                               <td>{buff.note || '-'}</td>
                             </tr>
@@ -316,7 +326,7 @@ export default function PartyPage() {
                               <td>{buff.skill}</td>
                               <td>{buff.target}</td>
                               <td>{buff.stat}</td>
-                              <td>{buff.value}</td>
+                              <td>{formatMaxStacks(buff)}</td>
                               <td>{buff.duration}</td>
                               <td>{buff.note || '-'}</td>
                             </tr>
@@ -367,7 +377,7 @@ export default function PartyPage() {
                               <td>{buff.skill}</td>
                               <td>{buff.target}</td>
                               <td>{buff.stat}</td>
-                              <td>{buff.value}</td>
+                              <td>{formatMaxStacks(buff)}</td>
                               <td>{buff.duration}</td>
                               <td>{buff.note || '-'}</td>
                             </tr>
@@ -410,7 +420,7 @@ export default function PartyPage() {
                                           <small>
                                             <strong>[{buff.skill}]</strong><br/>
                                             <span className="text-muted">
-                                              {buff.target} | {buff.stat} {buff.value}
+                                              {buff.target} | {buff.stat} {formatMaxStacks(buff)}
                                               {buff.duration && ` (${buff.duration})`}
                                             </span>
                                           </small>
@@ -439,7 +449,7 @@ export default function PartyPage() {
                                           <small>
                                             <strong>[{buff.skill}]</strong><br/>
                                             <span className="text-muted">
-                                              {buff.target} | {buff.stat} {buff.value}
+                                              {buff.target} | {buff.stat} {formatMaxStacks(buff)}
                                               {buff.duration && ` (${buff.duration})`}
                                             </span>
                                           </small>
@@ -468,7 +478,7 @@ export default function PartyPage() {
                                           <small>
                                             <strong>[{buff.skill}]</strong><br/>
                                             <span className="text-muted">
-                                              {buff.target} | {buff.stat} {buff.value}
+                                              {buff.target} | {buff.stat} {formatMaxStacks(buff)}
                                               {buff.duration && ` (${buff.duration})`}
                                             </span>
                                           </small>

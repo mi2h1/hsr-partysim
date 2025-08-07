@@ -87,7 +87,9 @@ export async function GET(
       target: row.target_type,
       stat: row.stat_affected,
       value: row.value_expression,
-      note: row.condition || ''
+      note: row.condition || '',
+      is_stackable: row.is_stackable,
+      max_stacks: row.max_stacks
     }));
 
     // 星魂による追加バフ・デバフ
@@ -100,7 +102,9 @@ export async function GET(
         target: row.target_type,
         stat: row.stat_affected,
         value: row.enhanced_value || '',
-        note: `星魂${row.eidolon_level}で追加`
+        note: `星魂${row.eidolon_level}で追加`,
+        is_stackable: false,
+        max_stacks: 1
       }));
 
     return NextResponse.json({
