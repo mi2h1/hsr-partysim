@@ -201,7 +201,7 @@ export default function PartyPage() {
                             {/* 基礎ステータス（左列） */}
                             <div className="col-7">
                               <div className="d-flex flex-column" style={{ gap: '4px' }}>
-                                <div className="d-flex align-items-center">
+                                <div className="d-flex align-items-center" style={{ minHeight: '20px' }}>
                                   <img 
                                     src="/imgs/i_stat_HP.webp" 
                                     alt="HP" 
@@ -219,7 +219,7 @@ export default function PartyPage() {
                                   <span className="text-muted">HP</span>
                                   <span className="ms-1 fw-bold">{slot.character.hp || '---'}</span>
                                 </div>
-                                <div className="d-flex align-items-center">
+                                <div className="d-flex align-items-center" style={{ minHeight: '20px' }}>
                                   <img 
                                     src="/imgs/i_stat_攻撃力.webp" 
                                     alt="攻撃力" 
@@ -237,7 +237,7 @@ export default function PartyPage() {
                                   <span className="text-muted">攻撃</span>
                                   <span className="ms-1 fw-bold">{slot.character.attack || '---'}</span>
                                 </div>
-                                <div className="d-flex align-items-center">
+                                <div className="d-flex align-items-center" style={{ minHeight: '20px' }}>
                                   <img 
                                     src="/imgs/i_stat_防御力.webp" 
                                     alt="防御力" 
@@ -255,7 +255,7 @@ export default function PartyPage() {
                                   <span className="text-muted">防御</span>
                                   <span className="ms-1 fw-bold">{slot.character.defense || '---'}</span>
                                 </div>
-                                <div className="d-flex align-items-center">
+                                <div className="d-flex align-items-center" style={{ minHeight: '20px' }}>
                                   <img 
                                     src="/imgs/i_stat_速度.webp" 
                                     alt="速度" 
@@ -273,7 +273,7 @@ export default function PartyPage() {
                                   <span className="text-muted">速度</span>
                                   <span className="ms-1 fw-bold">{slot.character.speed || '---'}</span>
                                 </div>
-                                <div className="d-flex align-items-center">
+                                <div className="d-flex align-items-center" style={{ minHeight: '20px' }}>
                                   <img 
                                     src="/imgs/i_stat_EP.webp" 
                                     alt="EP" 
@@ -298,22 +298,22 @@ export default function PartyPage() {
                             <div className="col-5">
                               <div className="d-flex flex-column" style={{ gap: '4px' }}>
                                 {slot.character.stat_boost_1_type && (
-                                  <div className="d-flex align-items-center">
+                                  <div className="d-flex align-items-center" style={{ minHeight: '20px' }}>
                                     <img 
                                       src={`/imgs/i_sb_${slot.character.stat_boost_1_type}.webp`}
                                       alt={slot.character.stat_boost_1_type}
                                       style={{ 
-                                        width: '12px', 
-                                        height: '12px',
+                                        width: '16px', 
+                                        height: '16px',
                                         filter: 'brightness(0) saturate(100%) invert(30%)',
-                                        marginRight: '3px'
+                                        marginRight: '5px'
                                       }}
                                       onError={(e) => {
                                         const img = e.target as HTMLImageElement;
                                         img.style.display = 'none';
                                       }}
                                     />
-                                    <span className="text-muted" style={{ fontSize: '10px' }}>
+                                    <span className="text-muted" style={{ fontSize: '12px', whiteSpace: 'nowrap', flex: '1' }}>
                                       {slot.character.stat_boost_1_type}
                                     </span>
                                     <span className="ms-1 fw-bold text-success">
@@ -322,22 +322,22 @@ export default function PartyPage() {
                                   </div>
                                 )}
                                 {slot.character.stat_boost_2_type && (
-                                  <div className="d-flex align-items-center">
+                                  <div className="d-flex align-items-center" style={{ minHeight: '20px' }}>
                                     <img 
                                       src={`/imgs/i_sb_${slot.character.stat_boost_2_type}.webp`}
                                       alt={slot.character.stat_boost_2_type}
                                       style={{ 
-                                        width: '12px', 
-                                        height: '12px',
+                                        width: '16px', 
+                                        height: '16px',
                                         filter: 'brightness(0) saturate(100%) invert(30%)',
-                                        marginRight: '3px'
+                                        marginRight: '5px'
                                       }}
                                       onError={(e) => {
                                         const img = e.target as HTMLImageElement;
                                         img.style.display = 'none';
                                       }}
                                     />
-                                    <span className="text-muted" style={{ fontSize: '10px' }}>
+                                    <span className="text-muted" style={{ fontSize: '12px', whiteSpace: 'nowrap', flex: '1' }}>
                                       {slot.character.stat_boost_2_type}
                                     </span>
                                     <span className="ms-1 fw-bold text-success">
@@ -346,22 +346,22 @@ export default function PartyPage() {
                                   </div>
                                 )}
                                 {slot.character.stat_boost_3_type && (
-                                  <div className="d-flex align-items-center">
+                                  <div className="d-flex align-items-center" style={{ minHeight: '20px' }}>
                                     <img 
                                       src={`/imgs/i_sb_${slot.character.stat_boost_3_type}.webp`}
                                       alt={slot.character.stat_boost_3_type}
                                       style={{ 
-                                        width: '12px', 
-                                        height: '12px',
+                                        width: '16px', 
+                                        height: '16px',
                                         filter: 'brightness(0) saturate(100%) invert(30%)',
-                                        marginRight: '3px'
+                                        marginRight: '5px'
                                       }}
                                       onError={(e) => {
                                         const img = e.target as HTMLImageElement;
                                         img.style.display = 'none';
                                       }}
                                     />
-                                    <span className="text-muted" style={{ fontSize: '10px' }}>
+                                    <span className="text-muted" style={{ fontSize: '12px', whiteSpace: 'nowrap', flex: '1' }}>
                                       {slot.character.stat_boost_3_type}
                                     </span>
                                     <span className="ms-1 fw-bold text-success">
