@@ -196,20 +196,20 @@ export default function PartyPage() {
                         </div>
                         
                         {/* ステータス表示 */}
-                        <div className="mb-3">
-                          <div className="row g-2" style={{ fontSize: '11px' }}>
+                        <div className="mb-3 px-3">
+                          <div className="row g-3" style={{ fontSize: '14px' }}>
                             {/* 基礎ステータス（左列） */}
-                            <div className="col-6">
-                              <div className="d-flex flex-column" style={{ gap: '2px' }}>
+                            <div className="col-7">
+                              <div className="d-flex flex-column" style={{ gap: '4px' }}>
                                 <div className="d-flex align-items-center">
                                   <img 
                                     src="/imgs/i_stat_HP.webp" 
                                     alt="HP" 
                                     style={{ 
-                                      width: '12px', 
-                                      height: '12px',
+                                      width: '16px', 
+                                      height: '16px',
                                       filter: 'brightness(0) saturate(100%) invert(30%)',
-                                      marginRight: '3px'
+                                      marginRight: '5px'
                                     }}
                                     onError={(e) => {
                                       const img = e.target as HTMLImageElement;
@@ -224,10 +224,10 @@ export default function PartyPage() {
                                     src="/imgs/i_stat_攻撃力.webp" 
                                     alt="攻撃力" 
                                     style={{ 
-                                      width: '12px', 
-                                      height: '12px',
+                                      width: '16px', 
+                                      height: '16px',
                                       filter: 'brightness(0) saturate(100%) invert(30%)',
-                                      marginRight: '3px'
+                                      marginRight: '5px'
                                     }}
                                     onError={(e) => {
                                       const img = e.target as HTMLImageElement;
@@ -242,10 +242,10 @@ export default function PartyPage() {
                                     src="/imgs/i_stat_防御力.webp" 
                                     alt="防御力" 
                                     style={{ 
-                                      width: '12px', 
-                                      height: '12px',
+                                      width: '16px', 
+                                      height: '16px',
                                       filter: 'brightness(0) saturate(100%) invert(30%)',
-                                      marginRight: '3px'
+                                      marginRight: '5px'
                                     }}
                                     onError={(e) => {
                                       const img = e.target as HTMLImageElement;
@@ -260,10 +260,10 @@ export default function PartyPage() {
                                     src="/imgs/i_stat_速度.webp" 
                                     alt="速度" 
                                     style={{ 
-                                      width: '12px', 
-                                      height: '12px',
+                                      width: '16px', 
+                                      height: '16px',
                                       filter: 'brightness(0) saturate(100%) invert(30%)',
-                                      marginRight: '3px'
+                                      marginRight: '5px'
                                     }}
                                     onError={(e) => {
                                       const img = e.target as HTMLImageElement;
@@ -278,10 +278,10 @@ export default function PartyPage() {
                                     src="/imgs/i_stat_EP.webp" 
                                     alt="EP" 
                                     style={{ 
-                                      width: '12px', 
-                                      height: '12px',
+                                      width: '16px', 
+                                      height: '16px',
                                       filter: 'brightness(0) saturate(100%) invert(30%)',
-                                      marginRight: '3px'
+                                      marginRight: '5px'
                                     }}
                                     onError={(e) => {
                                       const img = e.target as HTMLImageElement;
@@ -295,8 +295,8 @@ export default function PartyPage() {
                             </div>
 
                             {/* ステータスブースト（右列） */}
-                            <div className="col-6">
-                              <div className="d-flex flex-column" style={{ gap: '2px' }}>
+                            <div className="col-5">
+                              <div className="d-flex flex-column" style={{ gap: '4px' }}>
                                 {slot.character.stat_boost_1_type && (
                                   <div className="d-flex align-items-center">
                                     <img 
