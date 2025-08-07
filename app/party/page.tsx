@@ -153,55 +153,60 @@ export default function PartyPage() {
                 <div className="card h-100">
                   <div className="card-body d-flex flex-column justify-content-center align-items-center" style={{ minHeight: '300px' }}>
                     {slot.character ? (
-                      <div className="text-center">
-                        <div className="mb-3">
-                          <img 
-                            src={`/imgs/${slot.character.id}.webp`}
-                            alt={slot.character.name}
-                            className="img-fluid rounded-circle"
-                            style={{ width: '80px', height: '80px', objectFit: 'cover' }}
-                            onError={(e) => {
-                              const img = e.target as HTMLImageElement;
-                              img.style.display = 'none';
-                              const fallback = img.nextElementSibling as HTMLDivElement;
-                              if (fallback) fallback.style.display = 'block';
-                            }}
-                          />
-                          <div style={{ display: 'none' }}>
-                            <i className="bi bi-person-circle" style={{ fontSize: '80px', color: '#0d6efd' }}></i>
+                      <div>
+                        {/* 上部レイアウト：キャラクター情報（左）+ 基礎ステータス（右） */}
+                        <div className="row mb-3">
+                          {/* 左側：キャラクター情報 */}
+                          <div className="col-6">
+                            <div className="text-center">
+                              <div className="mb-2">
+                                <img 
+                                  src={`/imgs/${slot.character.id}.webp`}
+                                  alt={slot.character.name}
+                                  className="img-fluid rounded-circle"
+                                  style={{ width: '80px', height: '80px', objectFit: 'cover' }}
+                                  onError={(e) => {
+                                    const img = e.target as HTMLImageElement;
+                                    img.style.display = 'none';
+                                    const fallback = img.nextElementSibling as HTMLDivElement;
+                                    if (fallback) fallback.style.display = 'block';
+                                  }}
+                                />
+                                <div style={{ display: 'none' }}>
+                                  <i className="bi bi-person-circle" style={{ fontSize: '80px', color: '#0d6efd' }}></i>
+                                </div>
+                              </div>
+                              <h6 className="mb-2 fw-bold">{slot.character.name}</h6>
+                              <div className="d-flex justify-content-center gap-2">
+                                <img 
+                                  src={`/imgs/i_${slot.character.element}.webp`}
+                                  alt={slot.character.element}
+                                  title={slot.character.element}
+                                  style={{ width: '20px', height: '20px' }}
+                                  onError={(e) => {
+                                    const img = e.target as HTMLImageElement;
+                                    img.style.display = 'none';
+                                  }}
+                                />
+                                <img 
+                                  src={`/imgs/i_${slot.character.path}.webp`}
+                                  alt={slot.character.path}
+                                  title={slot.character.path}
+                                  style={{ width: '20px', height: '20px' }}
+                                  onError={(e) => {
+                                    const img = e.target as HTMLImageElement;
+                                    img.style.display = 'none';
+                                  }}
+                                />
+                              </div>
+                            </div>
                           </div>
-                        </div>
-                        <h5 className="card-title">{slot.character.name}</h5>
-                        <div className="d-flex justify-content-center gap-3 mb-2">
-                          <img 
-                            src={`/imgs/i_${slot.character.element}.webp`}
-                            alt={slot.character.element}
-                            title={slot.character.element}
-                            style={{ width: '20px', height: '20px' }}
-                            onError={(e) => {
-                              const img = e.target as HTMLImageElement;
-                              img.style.display = 'none';
-                            }}
-                          />
-                          <img 
-                            src={`/imgs/i_${slot.character.path}.webp`}
-                            alt={slot.character.path}
-                            title={slot.character.path}
-                            style={{ width: '20px', height: '20px' }}
-                            onError={(e) => {
-                              const img = e.target as HTMLImageElement;
-                              img.style.display = 'none';
-                            }}
-                          />
-                        </div>
-                        
-                        {/* ステータス表示 */}
-                        <div className="mb-3 px-2">
-                          <div className="row g-2 justify-content-center" style={{ fontSize: '14px' }}>
-                            {/* 基礎ステータス（左列） */}
-                            <div className="col-6">
-                              <div className="d-flex flex-column" style={{ gap: '4px' }}>
-                                <div className="d-flex align-items-center" style={{ minHeight: '20px' }}>
+
+                          {/* 右側：基礎ステータス */}
+                          <div className="col-6">
+                            <div className="d-flex flex-column justify-content-center h-100" style={{ fontSize: '14px', gap: '4px' }}>
+                              <div className="d-flex align-items-center justify-content-between">
+                                <div className="d-flex align-items-center">
                                   <img 
                                     src="/imgs/i_stat_HP.webp" 
                                     alt="HP" 
@@ -216,10 +221,12 @@ export default function PartyPage() {
                                       img.style.display = 'none';
                                     }}
                                   />
-                                  <span className="text-muted" style={{ minWidth: '40px', textAlign: 'left' }}>HP</span>
-                                  <span className="fw-bold">{slot.character.hp || '---'}</span>
+                                  <span className="text-muted">HP</span>
                                 </div>
-                                <div className="d-flex align-items-center" style={{ minHeight: '20px' }}>
+                                <span className="fw-bold">{slot.character.hp || '---'}</span>
+                              </div>
+                              <div className="d-flex align-items-center justify-content-between">
+                                <div className="d-flex align-items-center">
                                   <img 
                                     src="/imgs/i_stat_攻撃力.webp" 
                                     alt="攻撃力" 
@@ -234,10 +241,12 @@ export default function PartyPage() {
                                       img.style.display = 'none';
                                     }}
                                   />
-                                  <span className="text-muted" style={{ minWidth: '40px', textAlign: 'left' }}>攻撃</span>
-                                  <span className="fw-bold">{slot.character.attack || '---'}</span>
+                                  <span className="text-muted">攻撃</span>
                                 </div>
-                                <div className="d-flex align-items-center" style={{ minHeight: '20px' }}>
+                                <span className="fw-bold">{slot.character.attack || '---'}</span>
+                              </div>
+                              <div className="d-flex align-items-center justify-content-between">
+                                <div className="d-flex align-items-center">
                                   <img 
                                     src="/imgs/i_stat_防御力.webp" 
                                     alt="防御力" 
@@ -252,10 +261,12 @@ export default function PartyPage() {
                                       img.style.display = 'none';
                                     }}
                                   />
-                                  <span className="text-muted" style={{ minWidth: '40px', textAlign: 'left' }}>防御</span>
-                                  <span className="fw-bold">{slot.character.defense || '---'}</span>
+                                  <span className="text-muted">防御</span>
                                 </div>
-                                <div className="d-flex align-items-center" style={{ minHeight: '20px' }}>
+                                <span className="fw-bold">{slot.character.defense || '---'}</span>
+                              </div>
+                              <div className="d-flex align-items-center justify-content-between">
+                                <div className="d-flex align-items-center">
                                   <img 
                                     src="/imgs/i_stat_速度.webp" 
                                     alt="速度" 
@@ -270,10 +281,12 @@ export default function PartyPage() {
                                       img.style.display = 'none';
                                     }}
                                   />
-                                  <span className="text-muted" style={{ minWidth: '40px', textAlign: 'left' }}>速度</span>
-                                  <span className="fw-bold">{slot.character.speed || '---'}</span>
+                                  <span className="text-muted">速度</span>
                                 </div>
-                                <div className="d-flex align-items-center" style={{ minHeight: '20px' }}>
+                                <span className="fw-bold">{slot.character.speed || '---'}</span>
+                              </div>
+                              <div className="d-flex align-items-center justify-content-between">
+                                <div className="d-flex align-items-center">
                                   <img 
                                     src="/imgs/i_stat_EP.webp" 
                                     alt="EP" 
@@ -288,98 +301,91 @@ export default function PartyPage() {
                                       img.style.display = 'none';
                                     }}
                                   />
-                                  <span className="text-muted" style={{ minWidth: '40px', textAlign: 'left' }}>EP</span>
-                                  <span className="fw-bold">{slot.character.ep || '---'}</span>
+                                  <span className="text-muted">EP</span>
                                 </div>
-                              </div>
-                            </div>
-
-                            {/* ステータスブースト（右列） */}
-                            <div className="col-6">
-                              <div className="d-flex flex-column" style={{ gap: '4px' }}>
-                                {slot.character.stat_boost_1_type && (
-                                  <div className="d-flex align-items-center" style={{ minHeight: '20px' }}>
-                                    <img 
-                                      src={`/imgs/i_sb_${slot.character.stat_boost_1_type}.webp`}
-                                      alt={slot.character.stat_boost_1_type}
-                                      style={{ 
-                                        width: '16px', 
-                                        height: '16px',
-                                        filter: 'brightness(0) saturate(100%) invert(30%)',
-                                        marginRight: '5px'
-                                      }}
-                                      onError={(e) => {
-                                        const img = e.target as HTMLImageElement;
-                                        img.style.display = 'none';
-                                      }}
-                                    />
-                                    <span className="text-muted" style={{ fontSize: '12px', whiteSpace: 'nowrap', minWidth: '60px', textAlign: 'left' }}>
-                                      {slot.character.stat_boost_1_type}
-                                    </span>
-                                    <span className="fw-bold text-success">
-                                      +{slot.character.stat_boost_1_value}
-                                    </span>
-                                  </div>
-                                )}
-                                {slot.character.stat_boost_2_type && (
-                                  <div className="d-flex align-items-center" style={{ minHeight: '20px' }}>
-                                    <img 
-                                      src={`/imgs/i_sb_${slot.character.stat_boost_2_type}.webp`}
-                                      alt={slot.character.stat_boost_2_type}
-                                      style={{ 
-                                        width: '16px', 
-                                        height: '16px',
-                                        filter: 'brightness(0) saturate(100%) invert(30%)',
-                                        marginRight: '5px'
-                                      }}
-                                      onError={(e) => {
-                                        const img = e.target as HTMLImageElement;
-                                        img.style.display = 'none';
-                                      }}
-                                    />
-                                    <span className="text-muted" style={{ fontSize: '12px', whiteSpace: 'nowrap', minWidth: '60px', textAlign: 'left' }}>
-                                      {slot.character.stat_boost_2_type}
-                                    </span>
-                                    <span className="fw-bold text-success">
-                                      +{slot.character.stat_boost_2_value}
-                                    </span>
-                                  </div>
-                                )}
-                                {slot.character.stat_boost_3_type && (
-                                  <div className="d-flex align-items-center" style={{ minHeight: '20px' }}>
-                                    <img 
-                                      src={`/imgs/i_sb_${slot.character.stat_boost_3_type}.webp`}
-                                      alt={slot.character.stat_boost_3_type}
-                                      style={{ 
-                                        width: '16px', 
-                                        height: '16px',
-                                        filter: 'brightness(0) saturate(100%) invert(30%)',
-                                        marginRight: '5px'
-                                      }}
-                                      onError={(e) => {
-                                        const img = e.target as HTMLImageElement;
-                                        img.style.display = 'none';
-                                      }}
-                                    />
-                                    <span className="text-muted" style={{ fontSize: '12px', whiteSpace: 'nowrap', minWidth: '60px', textAlign: 'left' }}>
-                                      {slot.character.stat_boost_3_type}
-                                    </span>
-                                    <span className="fw-bold text-success">
-                                      +{slot.character.stat_boost_3_value}
-                                    </span>
-                                  </div>
-                                )}
+                                <span className="fw-bold">{slot.character.ep || '---'}</span>
                               </div>
                             </div>
                           </div>
                         </div>
+
+                        {/* 下部：ステータスブースト（横並び） */}
+                        {(slot.character.stat_boost_1_type || slot.character.stat_boost_2_type || slot.character.stat_boost_3_type) && (
+                          <div className="mb-3">
+                            <div className="d-flex justify-content-center gap-3 flex-wrap" style={{ fontSize: '14px' }}>
+                              {slot.character.stat_boost_1_type && (
+                                <div className="d-flex align-items-center">
+                                  <img 
+                                    src={`/imgs/i_sb_${slot.character.stat_boost_1_type}.webp`}
+                                    alt={slot.character.stat_boost_1_type}
+                                    style={{ 
+                                      width: '16px', 
+                                      height: '16px',
+                                      filter: 'brightness(0) saturate(100%) invert(30%)',
+                                      marginRight: '5px'
+                                    }}
+                                    onError={(e) => {
+                                      const img = e.target as HTMLImageElement;
+                                      img.style.display = 'none';
+                                    }}
+                                  />
+                                  <span className="text-muted me-1">{slot.character.stat_boost_1_type}</span>
+                                  <span className="fw-bold text-success">+{slot.character.stat_boost_1_value}</span>
+                                </div>
+                              )}
+                              {slot.character.stat_boost_2_type && (
+                                <div className="d-flex align-items-center">
+                                  <img 
+                                    src={`/imgs/i_sb_${slot.character.stat_boost_2_type}.webp`}
+                                    alt={slot.character.stat_boost_2_type}
+                                    style={{ 
+                                      width: '16px', 
+                                      height: '16px',
+                                      filter: 'brightness(0) saturate(100%) invert(30%)',
+                                      marginRight: '5px'
+                                    }}
+                                    onError={(e) => {
+                                      const img = e.target as HTMLImageElement;
+                                      img.style.display = 'none';
+                                    }}
+                                  />
+                                  <span className="text-muted me-1">{slot.character.stat_boost_2_type}</span>
+                                  <span className="fw-bold text-success">+{slot.character.stat_boost_2_value}</span>
+                                </div>
+                              )}
+                              {slot.character.stat_boost_3_type && (
+                                <div className="d-flex align-items-center">
+                                  <img 
+                                    src={`/imgs/i_sb_${slot.character.stat_boost_3_type}.webp`}
+                                    alt={slot.character.stat_boost_3_type}
+                                    style={{ 
+                                      width: '16px', 
+                                      height: '16px',
+                                      filter: 'brightness(0) saturate(100%) invert(30%)',
+                                      marginRight: '5px'
+                                    }}
+                                    onError={(e) => {
+                                      const img = e.target as HTMLImageElement;
+                                      img.style.display = 'none';
+                                    }}
+                                  />
+                                  <span className="text-muted me-1">{slot.character.stat_boost_3_type}</span>
+                                  <span className="fw-bold text-success">+{slot.character.stat_boost_3_value}</span>
+                                </div>
+                              )}
+                            </div>
+                          </div>
+                        )}
                         
-                        <button 
-                          className="btn btn-outline-danger btn-sm"
-                          onClick={() => handleCharacterSelect(slot.id, null)}
-                        >
-                          外す
-                        </button>
+                        {/* 外すボタン */}
+                        <div className="text-center">
+                          <button 
+                            className="btn btn-outline-danger btn-sm"
+                            onClick={() => handleCharacterSelect(slot.id, null)}
+                          >
+                            外す
+                          </button>
+                        </div>
                       </div>
                     ) : (
                       <div className="text-center text-muted">
