@@ -41,7 +41,7 @@ export default function PartyPage() {
   // 最大積層数表示のヘルパー関数
   const formatMaxStacks = (buff: BuffDebuff) => {
     if (buff.is_stackable && buff.max_stacks && buff.max_stacks > 1) {
-      return `最大${buff.max_stacks}層 ${buff.value}`;
+      return `${buff.value} 最大${buff.max_stacks}層`;
     }
     return buff.value;
   };
