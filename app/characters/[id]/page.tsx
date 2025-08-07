@@ -257,10 +257,10 @@ export default function CharacterDetailPage() {
           </div>
           <div className="col-8 d-flex align-items-center">
             <div className="flex-grow-1 px-4">
-              <h1 className="display-6 text-dark fw-bold mb-2">
-                {characterData.character.name}
-              </h1>
-              <div className="d-flex gap-3 mb-3">
+              <div className="d-flex align-items-center gap-3 mb-3">
+                <h1 className="display-6 text-dark fw-bold mb-0">
+                  {characterData.character.name}
+                </h1>
                 <img 
                   src={`/imgs/i_${characterData.character.element}.webp`}
                   alt={characterData.character.element}
