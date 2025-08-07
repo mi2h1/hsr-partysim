@@ -41,10 +41,26 @@ export default function RootLayout({
                   <i className="bi bi-person-lines-fill me-1"></i>
                   パーティ編成
                 </a>
-                <a className="nav-link" href="/upload">
-                  <i className="bi bi-upload me-1"></i>
-                  データアップロード
-                </a>
+                <div className="nav-item dropdown">
+                  <a className="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
+                    <i className="bi bi-upload me-1"></i>
+                    データ管理
+                  </a>
+                  <ul className="dropdown-menu">
+                    <li>
+                      <a className="dropdown-item" href="/upload">
+                        <i className="bi bi-file-earmark-plus me-2"></i>
+                        新規キャラ追加
+                      </a>
+                    </li>
+                    <li>
+                      <a className="dropdown-item" href="/update-stats">
+                        <i className="bi bi-speedometer2 me-2"></i>
+                        ステータス更新
+                      </a>
+                    </li>
+                  </ul>
+                </div>
               </div>
             </div>
           </nav>
