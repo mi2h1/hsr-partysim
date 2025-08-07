@@ -37,7 +37,7 @@ export async function POST(request: NextRequest) {
         // 既存のスキル・バフデバフデータを削除
         const deleteBuffsResult = await query('DELETE FROM buffs_debuffs WHERE character_id = $1', [characterId]);
         const deleteSkillsResult = await query('DELETE FROM skills WHERE character_id = $1', [characterId]);
-        console.log('削除結果 - バフ/デバフ:', deleteBuffsResult.rowCount, 'スキル:', deleteSkillsResult.rowCount);
+        console.log('削除結果 - バフ/デバフ:', (deleteBuffsResult as any).rowCount || 0, 'スキル:', (deleteSkillsResult as any).rowCount || 0);
         
         // キャラクター基本情報を更新
         const updateResult = await query(`
@@ -46,7 +46,7 @@ export async function POST(request: NextRequest) {
           WHERE id = $5
         `, [characterData.name, characterData.element, characterData.path, characterData.version, characterId]);
         
-        if (updateResult.rowCount === 0) {
+        if ((updateResult as any).rowCount === 0) {
           throw new Error(`キャラクターID ${characterId} が見つかりません`);
         }
         console.log('キャラクター情報更新完了:', characterData.name);
