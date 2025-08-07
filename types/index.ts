@@ -7,6 +7,18 @@ export interface Character {
   path: string;
   version: string | null;
   created_at: string;
+  // ステータス項目追加
+  hp: number | null;
+  attack: number | null;
+  defense: number | null;
+  speed: number | null;
+  ep: number | null;
+  stat_boost_1_type: string | null;
+  stat_boost_1_value: number | null;
+  stat_boost_2_type: string | null;
+  stat_boost_2_value: number | null;
+  stat_boost_3_type: string | null;
+  stat_boost_3_value: number | null;
 }
 
 export interface Skill {
@@ -67,4 +79,16 @@ export interface CSVCharacterData {
     name: string;
     description: string;
   }[];
+  // ステータス項目追加
+  hp: number | null;
+  attack: number | null;
+  defense: number | null;
+  speed: number | null;
+  ep: number | null;
+  stat_boost_1_type: string | null;
+  stat_boost_1_value: number | null;
+  stat_boost_2_type: string | null;
+  stat_boost_2_value: number | null;
+  stat_boost_3_type: string | null;
+  stat_boost_3_value: number | null;
 }

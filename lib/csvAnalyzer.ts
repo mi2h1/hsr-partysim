@@ -47,7 +47,19 @@ export class CSVAnalyzer {
       element: '',
       path: '',
       version: null, // デフォルトはnull
-      skills: []
+      skills: [],
+      // ステータス項目追加
+      hp: null,
+      attack: null,
+      defense: null,
+      speed: null,
+      ep: null,
+      stat_boost_1_type: null,
+      stat_boost_1_value: null,
+      stat_boost_2_type: null,
+      stat_boost_2_value: null,
+      stat_boost_3_type: null,
+      stat_boost_3_value: null
     };
 
     const buffsDebuffs: ParsedBuffDebuff[] = [];
@@ -68,6 +80,29 @@ export class CSVAnalyzer {
         characterData.path = parts[1].trim();
       } else if (type === 'バージョン') {
         characterData.version = parts[1].trim();
+      }
+      // ステータス項目
+      else if (type === 'HP') {
+        characterData.hp = parseInt(parts[1].trim());
+      } else if (type === '攻撃力') {
+        characterData.attack = parseInt(parts[1].trim());
+      } else if (type === '防御力') {
+        characterData.defense = parseInt(parts[1].trim());
+      } else if (type === '速度') {
+        characterData.speed = parseInt(parts[1].trim());
+      } else if (type === 'EP') {
+        characterData.ep = parseInt(parts[1].trim());
+      }
+      // ステータスブースト項目
+      else if (type === 'ステータスブースト1' && parts.length >= 4) {
+        characterData.stat_boost_1_type = parts[1].trim();
+        characterData.stat_boost_1_value = parseFloat(parts[2].trim());
+      } else if (type === 'ステータスブースト2' && parts.length >= 4) {
+        characterData.stat_boost_2_type = parts[1].trim();
+        characterData.stat_boost_2_value = parseFloat(parts[2].trim());
+      } else if (type === 'ステータスブースト3' && parts.length >= 4) {
+        characterData.stat_boost_3_type = parts[1].trim();
+        characterData.stat_boost_3_value = parseFloat(parts[2].trim());
       }
       // スキル情報  
       else if (type === 'スキル' && parts.length >= 4) {

@@ -59,9 +59,19 @@ export async function POST(request: NextRequest) {
         // キャラクター基本情報を更新
         const updateResult = await query(`
           UPDATE characters 
-          SET name = $1, element = $2, path = $3, version = COALESCE($4, version)
+          SET name = $1, element = $2, path = $3, version = COALESCE($4, version),
+              hp = $6, attack = $7, defense = $8, speed = $9, ep = $10,
+              stat_boost_1_type = $11, stat_boost_1_value = $12,
+              stat_boost_2_type = $13, stat_boost_2_value = $14,
+              stat_boost_3_type = $15, stat_boost_3_value = $16
           WHERE id = $5
-        `, [characterData.name, characterData.element, characterData.path, characterData.version, characterId]);
+        `, [
+          characterData.name, characterData.element, characterData.path, characterData.version, characterId,
+          characterData.hp, characterData.attack, characterData.defense, characterData.speed, characterData.ep,
+          characterData.stat_boost_1_type, characterData.stat_boost_1_value,
+          characterData.stat_boost_2_type, characterData.stat_boost_2_value,
+          characterData.stat_boost_3_type, characterData.stat_boost_3_value
+        ]);
         
         if ((updateResult as any).rowCount === 0) {
           throw new Error(`キャラクターID ${characterId} が見つかりません`);
@@ -71,14 +81,33 @@ export async function POST(request: NextRequest) {
       } else {
         // 通常の新規登録
         const characterResult = await query(`
-          INSERT INTO characters (name, element, path, version)
-          VALUES ($1, $2, $3, $4)
+          INSERT INTO characters (name, element, path, version, hp, attack, defense, speed, ep,
+                                 stat_boost_1_type, stat_boost_1_value, stat_boost_2_type, stat_boost_2_value,
+                                 stat_boost_3_type, stat_boost_3_value)
+          VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15)
           ON CONFLICT (name) DO UPDATE SET
             element = EXCLUDED.element,
             path = EXCLUDED.path,
-            version = COALESCE(EXCLUDED.version, characters.version)
+            version = COALESCE(EXCLUDED.version, characters.version),
+            hp = EXCLUDED.hp,
+            attack = EXCLUDED.attack,
+            defense = EXCLUDED.defense,
+            speed = EXCLUDED.speed,
+            ep = EXCLUDED.ep,
+            stat_boost_1_type = EXCLUDED.stat_boost_1_type,
+            stat_boost_1_value = EXCLUDED.stat_boost_1_value,
+            stat_boost_2_type = EXCLUDED.stat_boost_2_type,
+            stat_boost_2_value = EXCLUDED.stat_boost_2_value,
+            stat_boost_3_type = EXCLUDED.stat_boost_3_type,
+            stat_boost_3_value = EXCLUDED.stat_boost_3_value
           RETURNING id
-        `, [characterData.name, characterData.element, characterData.path, characterData.version]);
+        `, [
+          characterData.name, characterData.element, characterData.path, characterData.version,
+          characterData.hp, characterData.attack, characterData.defense, characterData.speed, characterData.ep,
+          characterData.stat_boost_1_type, characterData.stat_boost_1_value,
+          characterData.stat_boost_2_type, characterData.stat_boost_2_value,
+          characterData.stat_boost_3_type, characterData.stat_boost_3_value
+        ]);
         
         characterId = characterResult.rows[0].id;
 

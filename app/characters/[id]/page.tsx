@@ -29,6 +29,17 @@ interface CharacterData {
     name: string;
     element: string;
     path: string;
+    hp: number | null;
+    attack: number | null;
+    defense: number | null;
+    speed: number | null;
+    ep: number | null;
+    stat_boost_1_type: string | null;
+    stat_boost_1_value: number | null;
+    stat_boost_2_type: string | null;
+    stat_boost_2_value: number | null;
+    stat_boost_3_type: string | null;
+    stat_boost_3_value: number | null;
   };
   eidolon_level: number;
   buffs_debuffs: BuffDebuff[];
@@ -262,6 +273,76 @@ export default function CharacterDetailPage() {
                   title={`運命: ${characterData.character.path}`}
                   style={{ width: '24px', height: '24px' }}
                 />
+              </div>
+
+              {/* 基礎ステータス表示 */}
+              <div className="mb-3">
+                <h6 className="fw-bold text-secondary mb-2">基礎ステータス</h6>
+                <div className="row g-2">
+                  <div className="col-6">
+                    <div className="d-flex justify-content-between">
+                      <small className="text-muted">HP</small>
+                      <small className="fw-bold">{characterData.character.hp || '---'}</small>
+                    </div>
+                  </div>
+                  <div className="col-6">
+                    <div className="d-flex justify-content-between">
+                      <small className="text-muted">攻撃力</small>
+                      <small className="fw-bold">{characterData.character.attack || '---'}</small>
+                    </div>
+                  </div>
+                  <div className="col-6">
+                    <div className="d-flex justify-content-between">
+                      <small className="text-muted">防御力</small>
+                      <small className="fw-bold">{characterData.character.defense || '---'}</small>
+                    </div>
+                  </div>
+                  <div className="col-6">
+                    <div className="d-flex justify-content-between">
+                      <small className="text-muted">速度</small>
+                      <small className="fw-bold">{characterData.character.speed || '---'}</small>
+                    </div>
+                  </div>
+                  <div className="col-6">
+                    <div className="d-flex justify-content-between">
+                      <small className="text-muted">EP</small>
+                      <small className="fw-bold">{characterData.character.ep || '---'}</small>
+                    </div>
+                  </div>
+                </div>
+                
+                {/* ステータスブースト表示 */}
+                {(characterData.character.stat_boost_1_type || characterData.character.stat_boost_2_type || characterData.character.stat_boost_3_type) && (
+                  <>
+                    <h6 className="fw-bold text-secondary mb-2 mt-3">ステータスブースト</h6>
+                    <div className="row g-2">
+                      {characterData.character.stat_boost_1_type && (
+                        <div className="col-12">
+                          <div className="d-flex justify-content-between">
+                            <small className="text-muted">{characterData.character.stat_boost_1_type}</small>
+                            <small className="fw-bold text-success">+{characterData.character.stat_boost_1_value}</small>
+                          </div>
+                        </div>
+                      )}
+                      {characterData.character.stat_boost_2_type && (
+                        <div className="col-12">
+                          <div className="d-flex justify-content-between">
+                            <small className="text-muted">{characterData.character.stat_boost_2_type}</small>
+                            <small className="fw-bold text-success">+{characterData.character.stat_boost_2_value}</small>
+                          </div>
+                        </div>
+                      )}
+                      {characterData.character.stat_boost_3_type && (
+                        <div className="col-12">
+                          <div className="d-flex justify-content-between">
+                            <small className="text-muted">{characterData.character.stat_boost_3_type}</small>
+                            <small className="fw-bold text-success">+{characterData.character.stat_boost_3_value}</small>
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                  </>
+                )}
               </div>
             </div>
             <div className="pe-4">

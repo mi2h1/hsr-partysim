@@ -18,7 +18,11 @@ export async function GET(
 
     // キャラクター基本情報取得
     const characterResult = await query(`
-      SELECT id, name, element, path, version
+      SELECT id, name, element, path, version,
+             hp, attack, defense, speed, ep,
+             stat_boost_1_type, stat_boost_1_value,
+             stat_boost_2_type, stat_boost_2_value,
+             stat_boost_3_type, stat_boost_3_value
       FROM characters
       WHERE id = $1
     `, [characterId]);

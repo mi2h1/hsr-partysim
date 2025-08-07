@@ -7,6 +7,17 @@ interface Character {
   name: string;
   element: string;
   path: string;
+  hp: number | null;
+  attack: number | null;
+  defense: number | null;
+  speed: number | null;
+  ep: number | null;
+  stat_boost_1_type: string | null;
+  stat_boost_1_value: number | null;
+  stat_boost_2_type: string | null;
+  stat_boost_2_value: number | null;
+  stat_boost_3_type: string | null;
+  stat_boost_3_value: number | null;
 }
 
 interface BuffDebuff {
@@ -140,7 +151,7 @@ export default function PartyPage() {
             {partySlots.map((slot) => (
               <div key={slot.id} className="col-md-3">
                 <div className="card h-100">
-                  <div className="card-body d-flex flex-column justify-content-center align-items-center" style={{ minHeight: '200px' }}>
+                  <div className="card-body d-flex flex-column justify-content-center align-items-center" style={{ minHeight: '300px' }}>
                     {slot.character ? (
                       <div className="text-center">
                         <div className="mb-3">
@@ -183,6 +194,49 @@ export default function PartyPage() {
                             }}
                           />
                         </div>
+                        
+                        {/* ステータス表示 */}
+                        <div className="mb-3">
+                          <div className="row g-1 small">
+                            <div className="col-6 text-start">HP: {slot.character.hp || '---'}</div>
+                            <div className="col-6 text-start">攻撃: {slot.character.attack || '---'}</div>
+                            <div className="col-6 text-start">防御: {slot.character.defense || '---'}</div>
+                            <div className="col-6 text-start">速度: {slot.character.speed || '---'}</div>
+                            <div className="col-12 text-center">
+                              <small className="text-muted">EP: {slot.character.ep || '---'}</small>
+                            </div>
+                          </div>
+                          
+                          {/* ステータスブースト表示 */}
+                          {(slot.character.stat_boost_1_type || slot.character.stat_boost_2_type || slot.character.stat_boost_3_type) && (
+                            <div className="mt-2">
+                              <div className="row g-0">
+                                {slot.character.stat_boost_1_type && (
+                                  <div className="col-12">
+                                    <small className="text-success">
+                                      {slot.character.stat_boost_1_type} +{slot.character.stat_boost_1_value}
+                                    </small>
+                                  </div>
+                                )}
+                                {slot.character.stat_boost_2_type && (
+                                  <div className="col-12">
+                                    <small className="text-success">
+                                      {slot.character.stat_boost_2_type} +{slot.character.stat_boost_2_value}
+                                    </small>
+                                  </div>
+                                )}
+                                {slot.character.stat_boost_3_type && (
+                                  <div className="col-12">
+                                    <small className="text-success">
+                                      {slot.character.stat_boost_3_type} +{slot.character.stat_boost_3_value}
+                                    </small>
+                                  </div>
+                                )}
+                              </div>
+                            </div>
+                          )}
+                        </div>
+                        
                         <button 
                           className="btn btn-outline-danger btn-sm"
                           onClick={() => handleCharacterSelect(slot.id, null)}
@@ -403,6 +457,56 @@ export default function PartyPage() {
                   return (
                     <div key={character.id} className="col-lg-6 col-xl-3 mb-4">
                       <div className="card h-100">
+                        <div className="card-header p-2">
+                          <div className="d-flex justify-content-between align-items-center">
+                            <h6 className="mb-0 fw-bold">{character.name}</h6>
+                            <div className="d-flex gap-1">
+                              <img 
+                                src={`/imgs/i_${character.element}.webp`}
+                                alt={character.element}
+                                style={{ width: '16px', height: '16px' }}
+                              />
+                              <img 
+                                src={`/imgs/i_${character.path}.webp`}
+                                alt={character.path}
+                                style={{ width: '16px', height: '16px' }}
+                              />
+                            </div>
+                          </div>
+                          
+                          {/* ステータス表示 */}
+                          <div className="mt-2">
+                            <div className="row g-1 small">
+                              <div className="col-4 text-center">
+                                <small className="text-muted d-block">HP</small>
+                                <small className="fw-bold">{character.hp || '---'}</small>
+                              </div>
+                              <div className="col-4 text-center">
+                                <small className="text-muted d-block">攻撃</small>
+                                <small className="fw-bold">{character.attack || '---'}</small>
+                              </div>
+                              <div className="col-4 text-center">
+                                <small className="text-muted d-block">速度</small>
+                                <small className="fw-bold">{character.speed || '---'}</small>
+                              </div>
+                            </div>
+                            
+                            {/* ステータスブースト表示 */}
+                            {(character.stat_boost_1_type || character.stat_boost_2_type || character.stat_boost_3_type) && (
+                              <div className="mt-1">
+                                {character.stat_boost_1_type && (
+                                  <div><small className="text-success">{character.stat_boost_1_type} +{character.stat_boost_1_value}</small></div>
+                                )}
+                                {character.stat_boost_2_type && (
+                                  <div><small className="text-success">{character.stat_boost_2_type} +{character.stat_boost_2_value}</small></div>
+                                )}
+                                {character.stat_boost_3_type && (
+                                  <div><small className="text-success">{character.stat_boost_3_type} +{character.stat_boost_3_value}</small></div>
+                                )}
+                              </div>
+                            )}
+                          </div>
+                        </div>
                         <div className="card-body">
                           {/* バフ効果 */}
                           {buffEffects.length > 0 && (
