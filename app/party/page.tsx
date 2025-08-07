@@ -417,10 +417,9 @@ export default function PartyPage() {
 
           {/* バフ・デバフ表示 */}
           {partySlots.some(slot => slot.character) && (
-            <>
-              {displayMode === 'unified' ? (
-                // 統合表示
-                <>
+            displayMode === 'unified' ? (
+              // 統合表示
+              <>
                   <div className="row mb-4">
                 <div className="col">
                   <h3 className="mb-3">バフ効果 
@@ -907,6 +906,7 @@ export default function PartyPage() {
                 })}
               </div>
             </>
+          )
           )}
         </div>
       </div>
