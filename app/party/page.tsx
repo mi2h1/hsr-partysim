@@ -216,7 +216,7 @@ export default function PartyPage() {
                                       img.style.display = 'none';
                                     }}
                                   />
-                                  <span className="text-muted" style={{ minWidth: '30px' }}>HP</span>
+                                  <span className="text-muted" style={{ minWidth: '40px' }}>HP</span>
                                   <span className="fw-bold">{slot.character.hp || '---'}</span>
                                 </div>
                                 <div className="d-flex align-items-center" style={{ minHeight: '20px' }}>
@@ -234,7 +234,7 @@ export default function PartyPage() {
                                       img.style.display = 'none';
                                     }}
                                   />
-                                  <span className="text-muted" style={{ minWidth: '30px' }}>攻撃</span>
+                                  <span className="text-muted" style={{ minWidth: '40px' }}>攻撃</span>
                                   <span className="fw-bold">{slot.character.attack || '---'}</span>
                                 </div>
                                 <div className="d-flex align-items-center" style={{ minHeight: '20px' }}>
@@ -252,7 +252,7 @@ export default function PartyPage() {
                                       img.style.display = 'none';
                                     }}
                                   />
-                                  <span className="text-muted" style={{ minWidth: '30px' }}>防御</span>
+                                  <span className="text-muted" style={{ minWidth: '40px' }}>防御</span>
                                   <span className="fw-bold">{slot.character.defense || '---'}</span>
                                 </div>
                                 <div className="d-flex align-items-center" style={{ minHeight: '20px' }}>
@@ -270,7 +270,7 @@ export default function PartyPage() {
                                       img.style.display = 'none';
                                     }}
                                   />
-                                  <span className="text-muted" style={{ minWidth: '30px' }}>速度</span>
+                                  <span className="text-muted" style={{ minWidth: '40px' }}>速度</span>
                                   <span className="fw-bold">{slot.character.speed || '---'}</span>
                                 </div>
                                 <div className="d-flex align-items-center" style={{ minHeight: '20px' }}>
@@ -288,7 +288,7 @@ export default function PartyPage() {
                                       img.style.display = 'none';
                                     }}
                                   />
-                                  <span className="text-muted" style={{ minWidth: '30px' }}>EP</span>
+                                  <span className="text-muted" style={{ minWidth: '40px' }}>EP</span>
                                   <span className="fw-bold">{slot.character.ep || '---'}</span>
                                 </div>
                               </div>
@@ -313,7 +313,7 @@ export default function PartyPage() {
                                         img.style.display = 'none';
                                       }}
                                     />
-                                    <span className="text-muted" style={{ fontSize: '12px', whiteSpace: 'nowrap', minWidth: '60px' }}>
+                                    <span className="text-muted" style={{ fontSize: '12px', whiteSpace: 'nowrap', minWidth: '60px', textAlign: 'left' }}>
                                       {slot.character.stat_boost_1_type}
                                     </span>
                                     <span className="fw-bold text-success">
@@ -337,7 +337,7 @@ export default function PartyPage() {
                                         img.style.display = 'none';
                                       }}
                                     />
-                                    <span className="text-muted" style={{ fontSize: '12px', whiteSpace: 'nowrap', minWidth: '60px' }}>
+                                    <span className="text-muted" style={{ fontSize: '12px', whiteSpace: 'nowrap', minWidth: '60px', textAlign: 'left' }}>
                                       {slot.character.stat_boost_2_type}
                                     </span>
                                     <span className="fw-bold text-success">
@@ -361,7 +361,7 @@ export default function PartyPage() {
                                         img.style.display = 'none';
                                       }}
                                     />
-                                    <span className="text-muted" style={{ fontSize: '12px', whiteSpace: 'nowrap', minWidth: '60px' }}>
+                                    <span className="text-muted" style={{ fontSize: '12px', whiteSpace: 'nowrap', minWidth: '60px', textAlign: 'left' }}>
                                       {slot.character.stat_boost_3_type}
                                     </span>
                                     <span className="fw-bold text-success">
