@@ -32,17 +32,24 @@ export async function POST(request: NextRequest) {
       if (replaceCharacterId) {
         // 既存キャラクターIDが指定された場合（再取り込み）
         characterId = parseInt(replaceCharacterId);
+        console.log('再取り込みモード: キャラクターID', characterId);
         
         // 既存のスキル・バフデバフデータを削除
-        await query('DELETE FROM buffs_debuffs WHERE character_id = $1', [characterId]);
-        await query('DELETE FROM skills WHERE character_id = $1', [characterId]);
+        const deleteBuffsResult = await query('DELETE FROM buffs_debuffs WHERE character_id = $1', [characterId]);
+        const deleteSkillsResult = await query('DELETE FROM skills WHERE character_id = $1', [characterId]);
+        console.log('削除結果 - バフ/デバフ:', deleteBuffsResult.rowCount, 'スキル:', deleteSkillsResult.rowCount);
         
         // キャラクター基本情報を更新
-        await query(`
+        const updateResult = await query(`
           UPDATE characters 
           SET name = $1, element = $2, path = $3, version = COALESCE($4, version)
           WHERE id = $5
         `, [characterData.name, characterData.element, characterData.path, characterData.version, characterId]);
+        
+        if (updateResult.rowCount === 0) {
+          throw new Error(`キャラクターID ${characterId} が見つかりません`);
+        }
+        console.log('キャラクター情報更新完了:', characterData.name);
         
       } else {
         // 通常の新規登録

@@ -138,7 +138,8 @@ export default function CharacterDetailPage() {
         // 成功時は画面を更新
         window.location.reload();
       } else {
-        throw new Error(result.error || 'CSV取り込みに失敗しました');
+        const errorMessage = result.details ? `${result.error}: ${result.details}` : result.error || 'CSV取り込みに失敗しました';
+        throw new Error(errorMessage);
       }
     } catch (err) {
       console.error('CSV再取り込みエラー:', err);
