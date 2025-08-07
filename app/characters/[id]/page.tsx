@@ -122,18 +122,10 @@ export default function CharacterDetailPage() {
 
     setReimportLoading(true);
     try {
-      // まず既存データを削除
-      const deleteResponse = await fetch(`/api/characters/${characterId}`, {
-        method: 'DELETE',
-      });
-
-      if (!deleteResponse.ok) {
-        throw new Error('既存データの削除に失敗しました');
-      }
-
-      // CSVファイルを再アップロード
+      // CSVファイルを再アップロード（既存キャラクターIDを指定）
       const formData = new FormData();
       formData.append('csvFile', selectedFile);
+      formData.append('replaceCharacterId', characterId); // 既存キャラIDを指定
 
       const uploadResponse = await fetch('/api/upload', {
         method: 'POST',

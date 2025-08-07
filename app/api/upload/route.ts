@@ -6,7 +6,8 @@ import { CSVAnalyzer } from '@/lib/csvAnalyzer';
 export async function POST(request: NextRequest) {
   try {
     const formData = await request.formData();
-    const file = formData.get('csv') as File;
+    const file = formData.get('csvFile') as File || formData.get('csv') as File;
+    const replaceCharacterId = formData.get('replaceCharacterId') as string;
     
     if (!file) {
       return NextResponse.json(
@@ -26,21 +27,41 @@ export async function POST(request: NextRequest) {
     await query('BEGIN');
     
     try {
-      // キャラクター情報を保存
-      const characterResult = await query(`
-        INSERT INTO characters (name, element, path, version)
-        VALUES ($1, $2, $3, $4)
-        ON CONFLICT (name) DO UPDATE SET
-          element = EXCLUDED.element,
-          path = EXCLUDED.path,
-          version = COALESCE(EXCLUDED.version, characters.version)
-        RETURNING id
-      `, [characterData.name, characterData.element, characterData.path, characterData.version]);
-      
-      const characterId = characterResult.rows[0].id;
-      
-      // 既存のスキルデータを削除
-      await query('DELETE FROM skills WHERE character_id = $1', [characterId]);
+      let characterId: number;
+
+      if (replaceCharacterId) {
+        // 既存キャラクターIDが指定された場合（再取り込み）
+        characterId = parseInt(replaceCharacterId);
+        
+        // 既存のスキル・バフデバフデータを削除
+        await query('DELETE FROM buffs_debuffs WHERE character_id = $1', [characterId]);
+        await query('DELETE FROM skills WHERE character_id = $1', [characterId]);
+        
+        // キャラクター基本情報を更新
+        await query(`
+          UPDATE characters 
+          SET name = $1, element = $2, path = $3, version = COALESCE($4, version)
+          WHERE id = $5
+        `, [characterData.name, characterData.element, characterData.path, characterData.version, characterId]);
+        
+      } else {
+        // 通常の新規登録
+        const characterResult = await query(`
+          INSERT INTO characters (name, element, path, version)
+          VALUES ($1, $2, $3, $4)
+          ON CONFLICT (name) DO UPDATE SET
+            element = EXCLUDED.element,
+            path = EXCLUDED.path,
+            version = COALESCE(EXCLUDED.version, characters.version)
+          RETURNING id
+        `, [characterData.name, characterData.element, characterData.path, characterData.version]);
+        
+        characterId = characterResult.rows[0].id;
+
+        // 既存のスキル・バフデバフデータを削除（通常の更新時）
+        await query('DELETE FROM buffs_debuffs WHERE character_id = $1', [characterId]);
+        await query('DELETE FROM skills WHERE character_id = $1', [characterId]);
+      }
       
       // スキル情報を保存
       const skillIdMap = new Map<string, number>();
