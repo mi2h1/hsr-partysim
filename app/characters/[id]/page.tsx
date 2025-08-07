@@ -285,7 +285,11 @@ export default function CharacterDetailPage() {
                         <img 
                           src="/imgs/i_stat_HP.webp" 
                           alt="HP" 
-                          style={{ width: '16px', height: '16px' }}
+                          style={{ 
+                            width: '16px', 
+                            height: '16px',
+                            filter: 'brightness(0) saturate(100%) invert(40%) sepia(52%) saturate(500%) hue-rotate(180deg) brightness(90%) contrast(90%)'
+                          }}
                           onError={(e) => {
                             const img = e.target as HTMLImageElement;
                             img.style.display = 'none';
@@ -302,7 +306,11 @@ export default function CharacterDetailPage() {
                         <img 
                           src="/imgs/i_stat_攻撃力.webp" 
                           alt="攻撃力" 
-                          style={{ width: '16px', height: '16px' }}
+                          style={{ 
+                            width: '16px', 
+                            height: '16px',
+                            filter: 'brightness(0) saturate(100%) invert(40%) sepia(52%) saturate(500%) hue-rotate(180deg) brightness(90%) contrast(90%)'
+                          }}
                           onError={(e) => {
                             const img = e.target as HTMLImageElement;
                             img.style.display = 'none';
@@ -319,7 +327,11 @@ export default function CharacterDetailPage() {
                         <img 
                           src="/imgs/i_stat_防御力.webp" 
                           alt="防御力" 
-                          style={{ width: '16px', height: '16px' }}
+                          style={{ 
+                            width: '16px', 
+                            height: '16px',
+                            filter: 'brightness(0) saturate(100%) invert(40%) sepia(52%) saturate(500%) hue-rotate(180deg) brightness(90%) contrast(90%)'
+                          }}
                           onError={(e) => {
                             const img = e.target as HTMLImageElement;
                             img.style.display = 'none';
@@ -336,7 +348,11 @@ export default function CharacterDetailPage() {
                         <img 
                           src="/imgs/i_stat_速度.webp" 
                           alt="速度" 
-                          style={{ width: '16px', height: '16px' }}
+                          style={{ 
+                            width: '16px', 
+                            height: '16px',
+                            filter: 'brightness(0) saturate(100%) invert(40%) sepia(52%) saturate(500%) hue-rotate(180deg) brightness(90%) contrast(90%)'
+                          }}
                           onError={(e) => {
                             const img = e.target as HTMLImageElement;
                             img.style.display = 'none';
@@ -353,7 +369,11 @@ export default function CharacterDetailPage() {
                         <img 
                           src="/imgs/i_stat_EP.webp" 
                           alt="EP" 
-                          style={{ width: '16px', height: '16px' }}
+                          style={{ 
+                            width: '16px', 
+                            height: '16px',
+                            filter: 'brightness(0) saturate(100%) invert(40%) sepia(52%) saturate(500%) hue-rotate(180deg) brightness(90%) contrast(90%)'
+                          }}
                           onError={(e) => {
                             const img = e.target as HTMLImageElement;
                             img.style.display = 'none';
@@ -378,7 +398,11 @@ export default function CharacterDetailPage() {
                               <img 
                                 src={`/imgs/i_sb_${characterData.character.stat_boost_1_type}.webp`}
                                 alt={characterData.character.stat_boost_1_type}
-                                style={{ width: '16px', height: '16px' }}
+                                style={{ 
+                                  width: '16px', 
+                                  height: '16px',
+                                  filter: 'brightness(0) saturate(100%) invert(50%) sepia(100%) saturate(1000%) hue-rotate(90deg) brightness(90%) contrast(90%)'
+                                }}
                                 onError={(e) => {
                                   const img = e.target as HTMLImageElement;
                                   img.style.display = 'none';
@@ -397,7 +421,11 @@ export default function CharacterDetailPage() {
                               <img 
                                 src={`/imgs/i_sb_${characterData.character.stat_boost_2_type}.webp`}
                                 alt={characterData.character.stat_boost_2_type}
-                                style={{ width: '16px', height: '16px' }}
+                                style={{ 
+                                  width: '16px', 
+                                  height: '16px',
+                                  filter: 'brightness(0) saturate(100%) invert(50%) sepia(100%) saturate(1000%) hue-rotate(90deg) brightness(90%) contrast(90%)'
+                                }}
                                 onError={(e) => {
                                   const img = e.target as HTMLImageElement;
                                   img.style.display = 'none';
@@ -416,7 +444,11 @@ export default function CharacterDetailPage() {
                               <img 
                                 src={`/imgs/i_sb_${characterData.character.stat_boost_3_type}.webp`}
                                 alt={characterData.character.stat_boost_3_type}
-                                style={{ width: '16px', height: '16px' }}
+                                style={{ 
+                                  width: '16px', 
+                                  height: '16px',
+                                  filter: 'brightness(0) saturate(100%) invert(50%) sepia(100%) saturate(1000%) hue-rotate(90deg) brightness(90%) contrast(90%)'
+                                }}
                                 onError={(e) => {
                                   const img = e.target as HTMLImageElement;
                                   img.style.display = 'none';
