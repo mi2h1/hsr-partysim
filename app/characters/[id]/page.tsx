@@ -280,32 +280,87 @@ export default function CharacterDetailPage() {
                 <h6 className="fw-bold text-secondary mb-2">基礎ステータス</h6>
                 <div className="row g-2">
                   <div className="col-6">
-                    <div className="d-flex justify-content-between">
-                      <small className="text-muted">HP</small>
+                    <div className="d-flex justify-content-between align-items-center">
+                      <div className="d-flex align-items-center gap-1">
+                        <img 
+                          src="/imgs/i_stat_HP.webp" 
+                          alt="HP" 
+                          style={{ width: '16px', height: '16px' }}
+                          onError={(e) => {
+                            const img = e.target as HTMLImageElement;
+                            img.style.display = 'none';
+                          }}
+                        />
+                        <small className="text-muted">HP</small>
+                      </div>
                       <small className="fw-bold">{characterData.character.hp || '---'}</small>
                     </div>
                   </div>
                   <div className="col-6">
-                    <div className="d-flex justify-content-between">
-                      <small className="text-muted">攻撃力</small>
+                    <div className="d-flex justify-content-between align-items-center">
+                      <div className="d-flex align-items-center gap-1">
+                        <img 
+                          src="/imgs/i_stat_攻撃力.webp" 
+                          alt="攻撃力" 
+                          style={{ width: '16px', height: '16px' }}
+                          onError={(e) => {
+                            const img = e.target as HTMLImageElement;
+                            img.style.display = 'none';
+                          }}
+                        />
+                        <small className="text-muted">攻撃力</small>
+                      </div>
                       <small className="fw-bold">{characterData.character.attack || '---'}</small>
                     </div>
                   </div>
                   <div className="col-6">
-                    <div className="d-flex justify-content-between">
-                      <small className="text-muted">防御力</small>
+                    <div className="d-flex justify-content-between align-items-center">
+                      <div className="d-flex align-items-center gap-1">
+                        <img 
+                          src="/imgs/i_stat_防御力.webp" 
+                          alt="防御力" 
+                          style={{ width: '16px', height: '16px' }}
+                          onError={(e) => {
+                            const img = e.target as HTMLImageElement;
+                            img.style.display = 'none';
+                          }}
+                        />
+                        <small className="text-muted">防御力</small>
+                      </div>
                       <small className="fw-bold">{characterData.character.defense || '---'}</small>
                     </div>
                   </div>
                   <div className="col-6">
-                    <div className="d-flex justify-content-between">
-                      <small className="text-muted">速度</small>
+                    <div className="d-flex justify-content-between align-items-center">
+                      <div className="d-flex align-items-center gap-1">
+                        <img 
+                          src="/imgs/i_stat_速度.webp" 
+                          alt="速度" 
+                          style={{ width: '16px', height: '16px' }}
+                          onError={(e) => {
+                            const img = e.target as HTMLImageElement;
+                            img.style.display = 'none';
+                          }}
+                        />
+                        <small className="text-muted">速度</small>
+                      </div>
                       <small className="fw-bold">{characterData.character.speed || '---'}</small>
                     </div>
                   </div>
                   <div className="col-6">
-                    <div className="d-flex justify-content-between">
-                      <small className="text-muted">EP</small>
+                    <div className="d-flex justify-content-between align-items-center">
+                      <div className="d-flex align-items-center gap-1">
+                        <img 
+                          src="/imgs/i_stat_EP.webp" 
+                          alt="EP" 
+                          style={{ width: '16px', height: '16px' }}
+                          onError={(e) => {
+                            const img = e.target as HTMLImageElement;
+                            img.style.display = 'none';
+                          }}
+                        />
+                        <small className="text-muted">EP</small>
+                      </div>
                       <small className="fw-bold">{characterData.character.ep || '---'}</small>
                     </div>
                   </div>
@@ -318,24 +373,57 @@ export default function CharacterDetailPage() {
                     <div className="row g-2">
                       {characterData.character.stat_boost_1_type && (
                         <div className="col-12">
-                          <div className="d-flex justify-content-between">
-                            <small className="text-muted">{characterData.character.stat_boost_1_type}</small>
+                          <div className="d-flex justify-content-between align-items-center">
+                            <div className="d-flex align-items-center gap-1">
+                              <img 
+                                src={`/imgs/i_sb_${characterData.character.stat_boost_1_type}.webp`}
+                                alt={characterData.character.stat_boost_1_type}
+                                style={{ width: '16px', height: '16px' }}
+                                onError={(e) => {
+                                  const img = e.target as HTMLImageElement;
+                                  img.style.display = 'none';
+                                }}
+                              />
+                              <small className="text-muted">{characterData.character.stat_boost_1_type}</small>
+                            </div>
                             <small className="fw-bold text-success">+{characterData.character.stat_boost_1_value}</small>
                           </div>
                         </div>
                       )}
                       {characterData.character.stat_boost_2_type && (
                         <div className="col-12">
-                          <div className="d-flex justify-content-between">
-                            <small className="text-muted">{characterData.character.stat_boost_2_type}</small>
+                          <div className="d-flex justify-content-between align-items-center">
+                            <div className="d-flex align-items-center gap-1">
+                              <img 
+                                src={`/imgs/i_sb_${characterData.character.stat_boost_2_type}.webp`}
+                                alt={characterData.character.stat_boost_2_type}
+                                style={{ width: '16px', height: '16px' }}
+                                onError={(e) => {
+                                  const img = e.target as HTMLImageElement;
+                                  img.style.display = 'none';
+                                }}
+                              />
+                              <small className="text-muted">{characterData.character.stat_boost_2_type}</small>
+                            </div>
                             <small className="fw-bold text-success">+{characterData.character.stat_boost_2_value}</small>
                           </div>
                         </div>
                       )}
                       {characterData.character.stat_boost_3_type && (
                         <div className="col-12">
-                          <div className="d-flex justify-content-between">
-                            <small className="text-muted">{characterData.character.stat_boost_3_type}</small>
+                          <div className="d-flex justify-content-between align-items-center">
+                            <div className="d-flex align-items-center gap-1">
+                              <img 
+                                src={`/imgs/i_sb_${characterData.character.stat_boost_3_type}.webp`}
+                                alt={characterData.character.stat_boost_3_type}
+                                style={{ width: '16px', height: '16px' }}
+                                onError={(e) => {
+                                  const img = e.target as HTMLImageElement;
+                                  img.style.display = 'none';
+                                }}
+                              />
+                              <small className="text-muted">{characterData.character.stat_boost_3_type}</small>
+                            </div>
                             <small className="fw-bold text-success">+{characterData.character.stat_boost_3_value}</small>
                           </div>
                         </div>
