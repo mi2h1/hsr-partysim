@@ -197,44 +197,181 @@ export default function PartyPage() {
                         
                         {/* ステータス表示 */}
                         <div className="mb-3">
-                          <div className="row g-1 small">
-                            <div className="col-6 text-start">HP: {slot.character.hp || '---'}</div>
-                            <div className="col-6 text-start">攻撃: {slot.character.attack || '---'}</div>
-                            <div className="col-6 text-start">防御: {slot.character.defense || '---'}</div>
-                            <div className="col-6 text-start">速度: {slot.character.speed || '---'}</div>
-                            <div className="col-12 text-center">
-                              <small className="text-muted">EP: {slot.character.ep || '---'}</small>
+                          <div className="row g-2" style={{ fontSize: '11px' }}>
+                            {/* 基礎ステータス（左列） */}
+                            <div className="col-6">
+                              <div className="d-flex flex-column" style={{ gap: '2px' }}>
+                                <div className="d-flex align-items-center">
+                                  <img 
+                                    src="/imgs/i_stat_HP.webp" 
+                                    alt="HP" 
+                                    style={{ 
+                                      width: '12px', 
+                                      height: '12px',
+                                      filter: 'brightness(0) saturate(100%) invert(30%)',
+                                      marginRight: '3px'
+                                    }}
+                                    onError={(e) => {
+                                      const img = e.target as HTMLImageElement;
+                                      img.style.display = 'none';
+                                    }}
+                                  />
+                                  <span className="text-muted">HP</span>
+                                  <span className="ms-1 fw-bold">{slot.character.hp || '---'}</span>
+                                </div>
+                                <div className="d-flex align-items-center">
+                                  <img 
+                                    src="/imgs/i_stat_攻撃力.webp" 
+                                    alt="攻撃力" 
+                                    style={{ 
+                                      width: '12px', 
+                                      height: '12px',
+                                      filter: 'brightness(0) saturate(100%) invert(30%)',
+                                      marginRight: '3px'
+                                    }}
+                                    onError={(e) => {
+                                      const img = e.target as HTMLImageElement;
+                                      img.style.display = 'none';
+                                    }}
+                                  />
+                                  <span className="text-muted">攻撃</span>
+                                  <span className="ms-1 fw-bold">{slot.character.attack || '---'}</span>
+                                </div>
+                                <div className="d-flex align-items-center">
+                                  <img 
+                                    src="/imgs/i_stat_防御力.webp" 
+                                    alt="防御力" 
+                                    style={{ 
+                                      width: '12px', 
+                                      height: '12px',
+                                      filter: 'brightness(0) saturate(100%) invert(30%)',
+                                      marginRight: '3px'
+                                    }}
+                                    onError={(e) => {
+                                      const img = e.target as HTMLImageElement;
+                                      img.style.display = 'none';
+                                    }}
+                                  />
+                                  <span className="text-muted">防御</span>
+                                  <span className="ms-1 fw-bold">{slot.character.defense || '---'}</span>
+                                </div>
+                                <div className="d-flex align-items-center">
+                                  <img 
+                                    src="/imgs/i_stat_速度.webp" 
+                                    alt="速度" 
+                                    style={{ 
+                                      width: '12px', 
+                                      height: '12px',
+                                      filter: 'brightness(0) saturate(100%) invert(30%)',
+                                      marginRight: '3px'
+                                    }}
+                                    onError={(e) => {
+                                      const img = e.target as HTMLImageElement;
+                                      img.style.display = 'none';
+                                    }}
+                                  />
+                                  <span className="text-muted">速度</span>
+                                  <span className="ms-1 fw-bold">{slot.character.speed || '---'}</span>
+                                </div>
+                                <div className="d-flex align-items-center">
+                                  <img 
+                                    src="/imgs/i_stat_EP.webp" 
+                                    alt="EP" 
+                                    style={{ 
+                                      width: '12px', 
+                                      height: '12px',
+                                      filter: 'brightness(0) saturate(100%) invert(30%)',
+                                      marginRight: '3px'
+                                    }}
+                                    onError={(e) => {
+                                      const img = e.target as HTMLImageElement;
+                                      img.style.display = 'none';
+                                    }}
+                                  />
+                                  <span className="text-muted">EP</span>
+                                  <span className="ms-1 fw-bold">{slot.character.ep || '---'}</span>
+                                </div>
+                              </div>
                             </div>
-                          </div>
-                          
-                          {/* ステータスブースト表示 */}
-                          {(slot.character.stat_boost_1_type || slot.character.stat_boost_2_type || slot.character.stat_boost_3_type) && (
-                            <div className="mt-2">
-                              <div className="row g-0">
+
+                            {/* ステータスブースト（右列） */}
+                            <div className="col-6">
+                              <div className="d-flex flex-column" style={{ gap: '2px' }}>
                                 {slot.character.stat_boost_1_type && (
-                                  <div className="col-12">
-                                    <small className="text-success">
-                                      {slot.character.stat_boost_1_type} +{slot.character.stat_boost_1_value}
-                                    </small>
+                                  <div className="d-flex align-items-center">
+                                    <img 
+                                      src={`/imgs/i_sb_${slot.character.stat_boost_1_type}.webp`}
+                                      alt={slot.character.stat_boost_1_type}
+                                      style={{ 
+                                        width: '12px', 
+                                        height: '12px',
+                                        filter: 'brightness(0) saturate(100%) invert(30%)',
+                                        marginRight: '3px'
+                                      }}
+                                      onError={(e) => {
+                                        const img = e.target as HTMLImageElement;
+                                        img.style.display = 'none';
+                                      }}
+                                    />
+                                    <span className="text-muted" style={{ fontSize: '10px' }}>
+                                      {slot.character.stat_boost_1_type}
+                                    </span>
+                                    <span className="ms-1 fw-bold text-success">
+                                      +{slot.character.stat_boost_1_value}
+                                    </span>
                                   </div>
                                 )}
                                 {slot.character.stat_boost_2_type && (
-                                  <div className="col-12">
-                                    <small className="text-success">
-                                      {slot.character.stat_boost_2_type} +{slot.character.stat_boost_2_value}
-                                    </small>
+                                  <div className="d-flex align-items-center">
+                                    <img 
+                                      src={`/imgs/i_sb_${slot.character.stat_boost_2_type}.webp`}
+                                      alt={slot.character.stat_boost_2_type}
+                                      style={{ 
+                                        width: '12px', 
+                                        height: '12px',
+                                        filter: 'brightness(0) saturate(100%) invert(30%)',
+                                        marginRight: '3px'
+                                      }}
+                                      onError={(e) => {
+                                        const img = e.target as HTMLImageElement;
+                                        img.style.display = 'none';
+                                      }}
+                                    />
+                                    <span className="text-muted" style={{ fontSize: '10px' }}>
+                                      {slot.character.stat_boost_2_type}
+                                    </span>
+                                    <span className="ms-1 fw-bold text-success">
+                                      +{slot.character.stat_boost_2_value}
+                                    </span>
                                   </div>
                                 )}
                                 {slot.character.stat_boost_3_type && (
-                                  <div className="col-12">
-                                    <small className="text-success">
-                                      {slot.character.stat_boost_3_type} +{slot.character.stat_boost_3_value}
-                                    </small>
+                                  <div className="d-flex align-items-center">
+                                    <img 
+                                      src={`/imgs/i_sb_${slot.character.stat_boost_3_type}.webp`}
+                                      alt={slot.character.stat_boost_3_type}
+                                      style={{ 
+                                        width: '12px', 
+                                        height: '12px',
+                                        filter: 'brightness(0) saturate(100%) invert(30%)',
+                                        marginRight: '3px'
+                                      }}
+                                      onError={(e) => {
+                                        const img = e.target as HTMLImageElement;
+                                        img.style.display = 'none';
+                                      }}
+                                    />
+                                    <span className="text-muted" style={{ fontSize: '10px' }}>
+                                      {slot.character.stat_boost_3_type}
+                                    </span>
+                                    <span className="ms-1 fw-bold text-success">
+                                      +{slot.character.stat_boost_3_value}
+                                    </span>
                                   </div>
                                 )}
                               </div>
                             </div>
-                          )}
+                          </div>
                         </div>
                         
                         <button 
