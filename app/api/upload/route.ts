@@ -34,13 +34,23 @@ export async function POST(request: NextRequest) {
         characterId = parseInt(replaceCharacterId);
         console.log('再取り込みモード: キャラクターID', characterId);
         
-        // 既存のスキル・バフデバフデータを削除（バフ・デバフはskill_idで関連付けられているため、まずバフ・デバフを削除）
+        // 既存データを正しい順序で削除（外部キー制約を考慮）
+        // 1. 星魂強化データを削除（buffs_debuffsを参照している）
+        const deleteEidolonEnhancementsResult = await query(`
+          DELETE FROM eidolon_enhancements 
+          WHERE character_id = $1
+        `, [characterId]);
+        
+        // 2. バフ・デバフデータを削除
         const deleteBuffsResult = await query(`
           DELETE FROM buffs_debuffs 
           WHERE skill_id IN (SELECT id FROM skills WHERE character_id = $1)
         `, [characterId]);
+        
+        // 3. スキルデータを削除
         const deleteSkillsResult = await query('DELETE FROM skills WHERE character_id = $1', [characterId]);
-        console.log('削除結果 - バフ/デバフ:', (deleteBuffsResult as any).rowCount || 0, 'スキル:', (deleteSkillsResult as any).rowCount || 0);
+        
+        console.log('削除結果 - 星魂強化:', (deleteEidolonEnhancementsResult as any).rowCount || 0, 'バフ/デバフ:', (deleteBuffsResult as any).rowCount || 0, 'スキル:', (deleteSkillsResult as any).rowCount || 0);
         
         // キャラクター基本情報を更新
         const updateResult = await query(`
@@ -68,11 +78,17 @@ export async function POST(request: NextRequest) {
         
         characterId = characterResult.rows[0].id;
 
-        // 既存のスキル・バフデバフデータを削除（通常の更新時）
+        // 既存データを正しい順序で削除（通常の更新時）
+        // 1. 星魂強化データを削除
+        await query('DELETE FROM eidolon_enhancements WHERE character_id = $1', [characterId]);
+        
+        // 2. バフ・デバフデータを削除
         await query(`
           DELETE FROM buffs_debuffs 
           WHERE skill_id IN (SELECT id FROM skills WHERE character_id = $1)
         `, [characterId]);
+        
+        // 3. スキルデータを削除
         await query('DELETE FROM skills WHERE character_id = $1', [characterId]);
       }
       
