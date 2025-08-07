@@ -205,8 +205,8 @@ export default function PartyPage() {
                           {/* 右側：基礎ステータス */}
                           <div className="col-6">
                             <div className="d-flex flex-column justify-content-center h-100" style={{ fontSize: '14px', gap: '4px' }}>
-                              <div className="d-flex align-items-center justify-content-between">
-                                <div className="d-flex align-items-center">
+                              <div className="d-flex align-items-center" style={{ gap: '8px' }}>
+                                <div className="d-flex align-items-center" style={{ minWidth: '50px' }}>
                                   <img 
                                     src="/imgs/i_stat_HP.webp" 
                                     alt="HP" 
@@ -225,8 +225,8 @@ export default function PartyPage() {
                                 </div>
                                 <span className="fw-bold">{slot.character.hp || '---'}</span>
                               </div>
-                              <div className="d-flex align-items-center justify-content-between">
-                                <div className="d-flex align-items-center">
+                              <div className="d-flex align-items-center" style={{ gap: '8px' }}>
+                                <div className="d-flex align-items-center" style={{ minWidth: '50px' }}>
                                   <img 
                                     src="/imgs/i_stat_攻撃力.webp" 
                                     alt="攻撃力" 
@@ -245,8 +245,8 @@ export default function PartyPage() {
                                 </div>
                                 <span className="fw-bold">{slot.character.attack || '---'}</span>
                               </div>
-                              <div className="d-flex align-items-center justify-content-between">
-                                <div className="d-flex align-items-center">
+                              <div className="d-flex align-items-center" style={{ gap: '8px' }}>
+                                <div className="d-flex align-items-center" style={{ minWidth: '50px' }}>
                                   <img 
                                     src="/imgs/i_stat_防御力.webp" 
                                     alt="防御力" 
@@ -265,8 +265,8 @@ export default function PartyPage() {
                                 </div>
                                 <span className="fw-bold">{slot.character.defense || '---'}</span>
                               </div>
-                              <div className="d-flex align-items-center justify-content-between">
-                                <div className="d-flex align-items-center">
+                              <div className="d-flex align-items-center" style={{ gap: '8px' }}>
+                                <div className="d-flex align-items-center" style={{ minWidth: '50px' }}>
                                   <img 
                                     src="/imgs/i_stat_速度.webp" 
                                     alt="速度" 
@@ -285,8 +285,8 @@ export default function PartyPage() {
                                 </div>
                                 <span className="fw-bold">{slot.character.speed || '---'}</span>
                               </div>
-                              <div className="d-flex align-items-center justify-content-between">
-                                <div className="d-flex align-items-center">
+                              <div className="d-flex align-items-center" style={{ gap: '8px' }}>
+                                <div className="d-flex align-items-center" style={{ minWidth: '50px' }}>
                                   <img 
                                     src="/imgs/i_stat_EP.webp" 
                                     alt="EP" 
@@ -309,68 +309,74 @@ export default function PartyPage() {
                           </div>
                         </div>
 
-                        {/* 下部：ステータスブースト（横並び） */}
+                        {/* 下部：ステータスブースト（2段構造で横並び） */}
                         {(slot.character.stat_boost_1_type || slot.character.stat_boost_2_type || slot.character.stat_boost_3_type) && (
                           <div className="mb-3">
-                            <div className="d-flex justify-content-center gap-3 flex-wrap" style={{ fontSize: '14px' }}>
+                            <div className="d-flex justify-content-center gap-4" style={{ fontSize: '14px' }}>
                               {slot.character.stat_boost_1_type && (
-                                <div className="d-flex align-items-center">
-                                  <img 
-                                    src={`/imgs/i_sb_${slot.character.stat_boost_1_type}.webp`}
-                                    alt={slot.character.stat_boost_1_type}
-                                    style={{ 
-                                      width: '16px', 
-                                      height: '16px',
-                                      filter: 'brightness(0) saturate(100%) invert(30%)',
-                                      marginRight: '5px'
-                                    }}
-                                    onError={(e) => {
-                                      const img = e.target as HTMLImageElement;
-                                      img.style.display = 'none';
-                                    }}
-                                  />
-                                  <span className="text-muted me-1">{slot.character.stat_boost_1_type}</span>
-                                  <span className="fw-bold text-success">+{slot.character.stat_boost_1_value}</span>
+                                <div className="text-center">
+                                  <div className="d-flex align-items-center justify-content-center mb-1">
+                                    <img 
+                                      src={`/imgs/i_sb_${slot.character.stat_boost_1_type}.webp`}
+                                      alt={slot.character.stat_boost_1_type}
+                                      style={{ 
+                                        width: '16px', 
+                                        height: '16px',
+                                        filter: 'brightness(0) saturate(100%) invert(30%)',
+                                        marginRight: '5px'
+                                      }}
+                                      onError={(e) => {
+                                        const img = e.target as HTMLImageElement;
+                                        img.style.display = 'none';
+                                      }}
+                                    />
+                                    <span className="text-muted">{slot.character.stat_boost_1_type}</span>
+                                  </div>
+                                  <div className="fw-bold text-success">+{slot.character.stat_boost_1_value}</div>
                                 </div>
                               )}
                               {slot.character.stat_boost_2_type && (
-                                <div className="d-flex align-items-center">
-                                  <img 
-                                    src={`/imgs/i_sb_${slot.character.stat_boost_2_type}.webp`}
-                                    alt={slot.character.stat_boost_2_type}
-                                    style={{ 
-                                      width: '16px', 
-                                      height: '16px',
-                                      filter: 'brightness(0) saturate(100%) invert(30%)',
-                                      marginRight: '5px'
-                                    }}
-                                    onError={(e) => {
-                                      const img = e.target as HTMLImageElement;
-                                      img.style.display = 'none';
-                                    }}
-                                  />
-                                  <span className="text-muted me-1">{slot.character.stat_boost_2_type}</span>
-                                  <span className="fw-bold text-success">+{slot.character.stat_boost_2_value}</span>
+                                <div className="text-center">
+                                  <div className="d-flex align-items-center justify-content-center mb-1">
+                                    <img 
+                                      src={`/imgs/i_sb_${slot.character.stat_boost_2_type}.webp`}
+                                      alt={slot.character.stat_boost_2_type}
+                                      style={{ 
+                                        width: '16px', 
+                                        height: '16px',
+                                        filter: 'brightness(0) saturate(100%) invert(30%)',
+                                        marginRight: '5px'
+                                      }}
+                                      onError={(e) => {
+                                        const img = e.target as HTMLImageElement;
+                                        img.style.display = 'none';
+                                      }}
+                                    />
+                                    <span className="text-muted">{slot.character.stat_boost_2_type}</span>
+                                  </div>
+                                  <div className="fw-bold text-success">+{slot.character.stat_boost_2_value}</div>
                                 </div>
                               )}
                               {slot.character.stat_boost_3_type && (
-                                <div className="d-flex align-items-center">
-                                  <img 
-                                    src={`/imgs/i_sb_${slot.character.stat_boost_3_type}.webp`}
-                                    alt={slot.character.stat_boost_3_type}
-                                    style={{ 
-                                      width: '16px', 
-                                      height: '16px',
-                                      filter: 'brightness(0) saturate(100%) invert(30%)',
-                                      marginRight: '5px'
-                                    }}
-                                    onError={(e) => {
-                                      const img = e.target as HTMLImageElement;
-                                      img.style.display = 'none';
-                                    }}
-                                  />
-                                  <span className="text-muted me-1">{slot.character.stat_boost_3_type}</span>
-                                  <span className="fw-bold text-success">+{slot.character.stat_boost_3_value}</span>
+                                <div className="text-center">
+                                  <div className="d-flex align-items-center justify-content-center mb-1">
+                                    <img 
+                                      src={`/imgs/i_sb_${slot.character.stat_boost_3_type}.webp`}
+                                      alt={slot.character.stat_boost_3_type}
+                                      style={{ 
+                                        width: '16px', 
+                                        height: '16px',
+                                        filter: 'brightness(0) saturate(100%) invert(30%)',
+                                        marginRight: '5px'
+                                      }}
+                                      onError={(e) => {
+                                        const img = e.target as HTMLImageElement;
+                                        img.style.display = 'none';
+                                      }}
+                                    />
+                                    <span className="text-muted">{slot.character.stat_boost_3_type}</span>
+                                  </div>
+                                  <div className="fw-bold text-success">+{slot.character.stat_boost_3_value}</div>
                                 </div>
                               )}
                             </div>
